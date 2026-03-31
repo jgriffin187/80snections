@@ -1,0 +1,4890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>'80sNections</title>
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0a0a1a;
+    --teal:     #2de2e6;
+    --magenta:  #c724b1;
+    --yellow:   #f7d716;
+    --green:    #3ddc97;
+    --tile-bg:  #1a1a3a;
+    --tile-hover: #242450;
+    --tile-selected: #2de2e6;
+    --tile-sel-text: #0a0a1a;
+    --text:     #f0f0ff;
+    --subtext:  #a0a0cc;
+    --border:   rgba(45,226,230,0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);
+    pointer-events: none;
+    z-index: 999;
+  }
+  /* Dev menu */
+  .dev-menu {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #12123a;
+    border: 2px solid var(--magenta);
+    border-radius: 12px;
+    padding: 16px 20px;
+    z-index: 500;
+    box-shadow: 0 0 30px rgba(199,36,177,0.5);
+    text-align: center;
+    min-width: 240px;
+  }
+  .dev-menu.open { display: block; }
+  .dev-menu-title { font-family: 'Boogaloo', cursive; color: var(--magenta); font-size: 18px; letter-spacing: 2px; margin-bottom: 12px; text-shadow: 0 0 8px var(--magenta); }
+  .dev-btn {
+    display: block; width: 100%; margin-bottom: 8px; padding: 10px;
+    border-radius: 6px; border: 1.5px solid var(--teal);
+    background: transparent; color: var(--teal);
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+    cursor: pointer; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.15s;
+  }
+  .dev-btn:hover { background: var(--teal); color: #0a0a1a; }
+  .dev-btn.danger { border-color: var(--magenta); color: var(--magenta); }
+  .dev-btn.danger:hover { background: var(--magenta); color: #fff; }
+  .dev-close { margin-top: 4px; font-size: 12px; color: var(--subtext); cursor: pointer; letter-spacing: 1px; text-transform: uppercase; }
+  header {
+    width: 100%; max-width: 600px; padding: 16px 16px 12px;
+    text-align: center; border-bottom: 2px solid var(--teal);
+    position: relative; background: var(--bg);
+  }
+  .logo {
+    font-family: 'Boogaloo', cursive; font-size: 48px; letter-spacing: 2px;
+    line-height: 1; color: var(--teal); cursor: pointer;
+    text-shadow: 0 0 10px var(--teal), 0 0 30px var(--teal), 0 0 60px rgba(45,226,230,0.4);
+  }
+  .logo .apos, .logo .eight { color: var(--magenta); text-shadow: 0 0 10px var(--magenta), 0 0 30px var(--magenta); }
+  .tagline { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--subtext); margin-top: 4px; }
+  .day-label { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--teal); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .instructions { text-align: center; padding: 10px 16px 6px; font-size: 14px; color: var(--subtext); max-width: 600px; width: 100%; background: var(--bg); letter-spacing: 0.5px; }
+  .main { width: 100%; max-width: 600px; padding: 0 16px 24px; flex: 1; background: var(--bg); }
+  .solved-categories { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .solved-cat { border-radius: 6px; padding: 12px 16px; text-align: center; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); border: 1px solid rgba(255,255,255,0.15); }
+  .solved-cat .cat-name { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: #0a0a1a; }
+  .solved-cat .cat-words { font-size: 13px; font-weight: 700; color: #0a0a1a; }
+  .grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 20px; }
+  .tile {
+    background: var(--tile-bg); border: 1px solid var(--border); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    font-weight: 800; font-size: 11px; letter-spacing: 0.3px; text-transform: uppercase;
+    cursor: pointer; padding: 6px 4px; min-height: 76px; transition: all 0.15s;
+    user-select: none; -webkit-user-select: none; line-height: 1.25; color: var(--text); word-break: break-word;
+  }
+  .tile:hover { background: var(--tile-hover); border-color: var(--teal); color: var(--teal); box-shadow: 0 0 8px rgba(45,226,230,0.3); }
+  .tile.selected { background: var(--teal); border-color: var(--teal); color: #0a0a1a; box-shadow: 0 0 16px rgba(45,226,230,0.6); }
+  .tile.shake { animation: shake 0.5s; }
+  .mistakes-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; justify-content: center; font-size: 13px; font-weight: 700; color: var(--subtext); letter-spacing: 0.5px; text-transform: uppercase; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--magenta); display: inline-block; box-shadow: 0 0 6px var(--magenta); transition: opacity 0.3s; }
+  .dot.used { opacity: 0.15; box-shadow: none; }
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .btn { border: 1.5px solid var(--teal); background: transparent; color: var(--teal); border-radius: 999px; padding: 10px 22px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.15s; }
+  .btn:hover { background: var(--teal); color: #0a0a1a; box-shadow: 0 0 12px rgba(45,226,230,0.5); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn.submit { background: var(--magenta); border-color: var(--magenta); color: #fff; box-shadow: 0 0 10px rgba(199,36,177,0.4); }
+  .btn.submit:hover { background: #e030c8; box-shadow: 0 0 20px rgba(199,36,177,0.7); }
+  .btn.submit:disabled { background: var(--magenta); opacity: 0.3; }
+  .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px); background: var(--magenta); color: #fff; padding: 10px 24px; border-radius: 6px; font-weight: 800; font-size: 14px; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 100; white-space: nowrap; box-shadow: 0 0 20px rgba(199,36,177,0.6); }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .locked-screen { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; gap: 16px; flex: 1; background: var(--bg); width: 100%; max-width: 600px; }
+  .locked-screen.show { display: flex; }
+  .locked-icon { font-size: 56px; }
+  .locked-title { font-family: 'Boogaloo', cursive; font-size: 32px; color: var(--teal); text-shadow: 0 0 10px var(--teal); }
+  .locked-msg { color: var(--subtext); font-size: 15px; line-height: 1.5; max-width: 320px; }
+  .countdown { font-family: 'Boogaloo', cursive; font-size: 48px; color: var(--magenta); text-shadow: 0 0 10px var(--magenta), 0 0 30px var(--magenta); letter-spacing: 4px; }
+  .countdown-label { font-size: 12px; color: var(--subtext); letter-spacing: 2px; text-transform: uppercase; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #12123a; border: 2px solid var(--teal); border-radius: 12px; padding: 32px 24px; max-width: 400px; width: 90%; text-align: center; animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 0 40px rgba(45,226,230,0.3); }
+  .modal .emoji { font-size: 48px; margin-bottom: 12px; }
+  .modal h2 { font-family: 'Boogaloo', cursive; font-size: 32px; color: var(--teal); margin-bottom: 8px; text-shadow: 0 0 10px var(--teal); }
+  .modal p { color: var(--subtext); font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
+  .modal .result-cats { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; text-align: left; }
+  .result-cat { border-radius: 6px; padding: 10px 14px; }
+  .result-cat .rcat-name { font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; color: #0a0a1a; }
+  .result-cat .rcat-words { margin-top: 2px; font-weight: 700; font-size: 12px; color: #0a0a1a; }
+  .modal-btns { display: flex; gap: 10px; justify-content: center; }
+  footer { text-align: center; padding: 12px; font-size: 11px; color: #444466; border-top: 1px solid rgba(45,226,230,0.15); width: 100%; max-width: 600px; background: var(--bg); letter-spacing: 1px; text-transform: uppercase; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
+  @keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" id="logoBtn"><span class="apos">'</span><span class="eight">80s</span>Nections</div>
+  <div class="tagline">The Ultimate 80s Music Connections Game</div>
+  <div class="day-label" id="dayLabel">Day 1</div>
+</header>
+
+<div class="instructions">Create four groups of four! &nbsp;&#x1F3B5;</div>
+
+<div class="main" id="gameArea">
+  <div class="solved-categories" id="solvedCats"></div>
+  <div class="grid" id="grid"></div>
+  <div class="mistakes-row">
+    <span>Mistakes remaining:</span>
+    <span id="dots"></span>
+  </div>
+  <div class="controls">
+    <button class="btn" id="shuffleBtn">Shuffle</button>
+    <button class="btn" id="deselectBtn">Deselect All</button>
+    <button class="btn submit" id="submitBtn" disabled>Submit</button>
+  </div>
+</div>
+
+<div class="locked-screen" id="lockedScreen">
+  <div class="locked-icon">&#x1F4FC;</div>
+  <div class="locked-title">Come Back Tomorrow!</div>
+  <div class="locked-msg">You've already played today's '80sNections. A new puzzle drops at midnight!</div>
+  <div class="countdown-label">Next puzzle in</div>
+  <div class="countdown" id="countdown">00:00:00</div>
+</div>
+
+<div class="dev-menu" id="devMenu">
+  <div class="dev-menu-title">&#x1F579; DEV MENU</div>
+  <button class="dev-btn" id="devNext">&#x23ED; Skip to Next Game</button>
+  <button class="dev-btn danger" id="devReset">&#x1F504; Reset to Day 1</button>
+  <div class="dev-close" id="devClose">&#x2715; Close</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="emoji" id="modalEmoji">&#x1F389;</div>
+    <h2 id="modalTitle">Totally Radical!</h2>
+    <p id="modalMsg"></p>
+    <div class="result-cats" id="modalCats"></div>
+    <div class="modal-btns">
+      <button class="btn" id="modalClose">Close</button>
+    </div>
+  </div>
+</div>
+
+<footer>'80sNections &mdash; 100 Days of 80s Music Trivia</footer>
+
+<script>
+var GAMES=[
+ {
+  "cats": [
+   {
+    "name": "Michael Jackson Songs",
+    "color": 1,
+    "words": [
+     "SMOOTH CRIMINAL",
+     "BAD",
+     "DIRTY DIANA",
+     "BEAT IT"
+    ]
+   },
+   {
+    "name": "Madonna Songs",
+    "color": 2,
+    "words": [
+     "INTO THE GROOVE",
+     "LIVE TO TELL",
+     "CRAZY FOR YOU",
+     "HOLIDAY"
+    ]
+   },
+   {
+    "name": "Prince Songs",
+    "color": 3,
+    "words": [
+     "PURPLE RAIN",
+     "1999",
+     "RASPBERRY BERET",
+     "I WOULD DIE 4 U"
+    ]
+   },
+   {
+    "name": "Whitney Houston Songs",
+    "color": 4,
+    "words": [
+     "SAVING ALL MY LOVE",
+     "ONE MOMENT IN TIME",
+     "HOW WILL I KNOW",
+     "WHERE DO BROKEN HEARTS GO"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Cyndi Lauper Songs",
+    "color": 1,
+    "words": [
+     "CHANGE OF HEART",
+     "GIRLS JUST WANT TO HAVE FUN",
+     "TRUE COLORS",
+     "HAT FULL OF STARS"
+    ]
+   },
+   {
+    "name": "George Michael Songs",
+    "color": 2,
+    "words": [
+     "HARD DAY",
+     "FATHER FIGURE",
+     "A DIFFERENT CORNER",
+     "MONKEY"
+    ]
+   },
+   {
+    "name": "Billy Idol Songs",
+    "color": 3,
+    "words": [
+     "DANCING WITH MYSELF",
+     "REBEL YELL",
+     "FLESH FOR FANTASY",
+     "TO BE A LOVER"
+    ]
+   },
+   {
+    "name": "Tina Turner Songs",
+    "color": 4,
+    "words": [
+     "BETTER BE GOOD TO ME",
+     "PRIVATE DANCER",
+     "WHATS LOVE GOT TO DO WITH IT",
+     "WHAT YOU GET IS WHAT YOU SEE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Duran Duran Songs",
+    "color": 1,
+    "words": [
+     "RIO",
+     "NOTORIOUS",
+     "GIRLS ON FILM",
+     "VIEW TO A KILL"
+    ]
+   },
+   {
+    "name": "The Police Songs",
+    "color": 2,
+    "words": [
+     "EVERY BREATH YOU TAKE",
+     "DE DO DO DO",
+     "WRAPPED AROUND YOUR FINGER",
+     "EVERY LITTLE THING SHE DOES IS MAGIC"
+    ]
+   },
+   {
+    "name": "U2 Songs",
+    "color": 3,
+    "words": [
+     "NEW YEARS DAY",
+     "ANGEL OF HARLEM",
+     "I STILL HAVENT FOUND WHAT IM LOOKING FOR",
+     "WITH OR WITHOUT YOU"
+    ]
+   },
+   {
+    "name": "Tears for Fears Songs",
+    "color": 4,
+    "words": [
+     "HEAD OVER HEELS",
+     "PALE SHELTER",
+     "SOWING THE SEEDS OF LOVE",
+     "CHANGE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Bon Jovi Songs",
+    "color": 1,
+    "words": [
+     "RUNAWAY",
+     "BORN TO BE MY BABY",
+     "YOU GIVE LOVE A BAD NAME",
+     "BAD MEDICINE"
+    ]
+   },
+   {
+    "name": "Def Leppard Songs",
+    "color": 2,
+    "words": [
+     "ROCKET",
+     "ANIMAL",
+     "ARMAGEDDON IT",
+     "PHOTOGRAPH"
+    ]
+   },
+   {
+    "name": "Phil Collins Songs",
+    "color": 3,
+    "words": [
+     "DONT LOSE MY NUMBER",
+     "ONE MORE NIGHT",
+     "YOU CANT HURRY LOVE",
+     "IN THE AIR TONIGHT"
+    ]
+   },
+   {
+    "name": "Lionel Richie Songs",
+    "color": 4,
+    "words": [
+     "HELLO",
+     "ENDLESS LOVE",
+     "SAY YOU SAY ME",
+     "SE LA"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Bruce Springsteen Songs",
+    "color": 1,
+    "words": [
+     "BORN IN THE USA",
+     "GLORY DAYS",
+     "DANCING IN THE DARK",
+     "COVER ME"
+    ]
+   },
+   {
+    "name": "INXS Songs",
+    "color": 2,
+    "words": [
+     "THE ONE THING",
+     "NEVER TEAR US APART",
+     "WHAT YOU NEED",
+     "DON'T CHANGE"
+    ]
+   },
+   {
+    "name": "Depeche Mode Songs",
+    "color": 3,
+    "words": [
+     "SHAKE THE DISEASE",
+     "MASTER AND SERVANT",
+     "EVERYTHING COUNTS",
+     "PERSONAL JESUS"
+    ]
+   },
+   {
+    "name": "Talking Heads Songs",
+    "color": 4,
+    "words": [
+     "AND SHE WAS",
+     "ROAD TO NOWHERE",
+     "WILD WILD LIFE",
+     "BURNING DOWN THE HOUSE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "R.E.M. Songs",
+    "color": 1,
+    "words": [
+     "POP SONG 89",
+     "DRIVER 8",
+     "THE END OF THE WORLD",
+     "THE ONE I LOVE"
+    ]
+   },
+   {
+    "name": "Prince Songs",
+    "color": 2,
+    "words": [
+     "1999",
+     "PURPLE RAIN",
+     "KISS",
+     "AROUND THE WORLD IN A DAY"
+    ]
+   },
+   {
+    "name": "Billy Idol Songs",
+    "color": 3,
+    "words": [
+     "DANCING WITH MYSELF",
+     "HOT IN THE CITY",
+     "REBEL YELL",
+     "MONY MONY"
+    ]
+   },
+   {
+    "name": "George Michael / Wham! Songs",
+    "color": 4,
+    "words": [
+     "I WANT YOUR SEX",
+     "KISSING A FOOL",
+     "FATHER FIGURE",
+     "A DIFFERENT CORNER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "New Wave Bands",
+    "color": 1,
+    "words": [
+     "WHAM!",
+     "ULTRAVOX",
+     "BLONDIE",
+     "SIMPLE MINDS"
+    ]
+   },
+   {
+    "name": "Hair Metal Bands",
+    "color": 2,
+    "words": [
+     "WINGER",
+     "WARRANT",
+     "WHITESNAKE",
+     "BON JOVI"
+    ]
+   },
+   {
+    "name": "Female 80s Artists",
+    "color": 3,
+    "words": [
+     "MADONNA",
+     "SADE",
+     "DONNA SUMMER",
+     "GLORIA ESTEFAN"
+    ]
+   },
+   {
+    "name": "80s British Invasion Bands",
+    "color": 4,
+    "words": [
+     "SPANDAU BALLET",
+     "NEW ORDER",
+     "FRANKIE GOES TO HOLLYWOOD",
+     "THE CURE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Power Ballads",
+    "color": 1,
+    "words": [
+     "PATIENCE",
+     "I WANT TO KNOW WHAT LOVE IS",
+     "DONT STOP BELIEVIN",
+     "MORE THAN A WORD"
+    ]
+   },
+   {
+    "name": "80s Synth-Pop Songs",
+    "color": 2,
+    "words": [
+     "TAINTED LOVE",
+     "ALWAYS ON MY MIND",
+     "SWEET DREAMS",
+     "BLUE MONDAY"
+    ]
+   },
+   {
+    "name": "80s One-Hit Wonders",
+    "color": 3,
+    "words": [
+     "99 LUFTBALLONS",
+     "COME ON EILEEN",
+     "EVERYBODY WANTS TO RULE THE WORLD",
+     "99 RED BALLOONS"
+    ]
+   },
+   {
+    "name": "80s Rap & Hip-Hop Songs",
+    "color": 4,
+    "words": [
+     "PUSH IT",
+     "ERIC B IS PRESIDENT",
+     "WALK THIS WAY",
+     "ROCK BOX"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Male Solo Artists",
+    "color": 1,
+    "words": [
+     "DAVID BOWIE",
+     "LIONEL RICHIE",
+     "ELTON JOHN",
+     "BRUCE SPRINGSTEEN"
+    ]
+   },
+   {
+    "name": "80s Female Artists",
+    "color": 2,
+    "words": [
+     "MADONNA",
+     "DONNA SUMMER",
+     "TINA TURNER",
+     "SHEENA EASTON"
+    ]
+   },
+   {
+    "name": "80s New Wave Bands",
+    "color": 3,
+    "words": [
+     "SPANDAU BALLET",
+     "ULTRAVOX",
+     "BLONDIE",
+     "DURAN DURAN"
+    ]
+   },
+   {
+    "name": "80s Hair Metal Bands",
+    "color": 4,
+    "words": [
+     "TWISTED SISTER",
+     "RATT",
+     "DOKKEN",
+     "FASTER PUSSYCAT"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Original MTV VJs",
+    "color": 1,
+    "words": [
+     "DOWNTOWN JULIE BROWN",
+     "NINA BLACKWOOD",
+     "CAROLYNE HELDMAN",
+     "MARK GOODMAN"
+    ]
+   },
+   {
+    "name": "Songs Featured in 80s Movies",
+    "color": 2,
+    "words": [
+     "FOOTLOOSE",
+     "DANGER ZONE",
+     "DONT YOU FORGET ABOUT ME",
+     "FLASHDANCE"
+    ]
+   },
+   {
+    "name": "Famous 80s Albums",
+    "color": 3,
+    "words": [
+     "FAITH",
+     "SLIPPERY WHEN WET",
+     "PURPLE RAIN",
+     "SPORTS"
+    ]
+   },
+   {
+    "name": "80s Movies with Great Soundtracks",
+    "color": 4,
+    "words": [
+     "TOP GUN",
+     "FERRIS BUELLERS DAY OFF",
+     "FAST TIMES",
+     "GHOSTBUSTERS"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Live Aid Performers (1985)",
+    "color": 1,
+    "words": [
+     "TINA TURNER",
+     "THE WHO",
+     "MADONNA",
+     "NEIL YOUNG"
+    ]
+   },
+   {
+    "name": "Songs About Dancing",
+    "color": 2,
+    "words": [
+     "LETS DANCE",
+     "DANCING ON THE CEILING",
+     "DANCING QUEEN",
+     "FOOTLOOSE"
+    ]
+   },
+   {
+    "name": "Songs with Colors in the Title",
+    "color": 3,
+    "words": [
+     "PURPLE RAIN",
+     "RED RED WINE",
+     "BLACK OR WHITE",
+     "99 RED BALLOONS"
+    ]
+   },
+   {
+    "name": "Songs with City Names",
+    "color": 4,
+    "words": [
+     "STREETS OF PHILADELPHIA",
+     "LIVING FOR THE CITY",
+     "PARIS",
+     "LIVING IN AMERICA"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1980",
+    "color": 1,
+    "words": [
+     "STARTING OVER",
+     "WOMAN",
+     "LADY",
+     "CALL ME"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1981",
+    "color": 2,
+    "words": [
+     "JESSIES GIRL",
+     "ENDLESS LOVE",
+     "9 TO 5",
+     "RAPTURE"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1982",
+    "color": 3,
+    "words": [
+     "JACK AND DIANE",
+     "I LOVE ROCK N ROLL",
+     "OPEN ARMS",
+     "CENTERFOLD"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1983",
+    "color": 4,
+    "words": [
+     "ALL NIGHT LONG",
+     "SAY SAY SAY",
+     "ISLANDS IN THE STREAM",
+     "BEAT IT"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1984",
+    "color": 1,
+    "words": [
+     "HELLO",
+     "GHOSTBUSTERS",
+     "LET'S HEAR IT FOR THE BOY",
+     "WHEN DOVES CRY"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1985",
+    "color": 2,
+    "words": [
+     "SEPARATE LIVES",
+     "LIKE A VIRGIN",
+     "CANT FIGHT THIS FEELING",
+     "SAY YOU SAY ME"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1986",
+    "color": 3,
+    "words": [
+     "ROCK ME AMADEUS",
+     "THAT'S WHAT FRIENDS ARE FOR",
+     "I MISS YOU",
+     "KISS"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1987",
+    "color": 4,
+    "words": [
+     "LA BAMBA",
+     "I KNEW YOU WERE WAITING",
+     "WALK LIKE AN EGYPTIAN",
+     "SHAKE YOU DOWN"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1988",
+    "color": 1,
+    "words": [
+     "ONE MORE TRY",
+     "GET OUTTA MY DREAMS",
+     "NEED YOU TONIGHT",
+     "COULD'VE BEEN"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1989",
+    "color": 2,
+    "words": [
+     "LIKE A PRAYER",
+     "ENDLESS SUMMER NIGHTS",
+     "TWO HEARTS",
+     "MY PREROGATIVE"
+    ]
+   },
+   {
+    "name": "Songs About Dancing",
+    "color": 3,
+    "words": [
+     "COME ON EILEEN",
+     "I WANNA DANCE WITH SOMEBODY",
+     "DANCING IN THE DARK",
+     "SHAKE YOUR LOVE"
+    ]
+   },
+   {
+    "name": "Songs About Love",
+    "color": 4,
+    "words": [
+     "WITH OR WITHOUT YOU",
+     "FAITHFULLY",
+     "EVERY BREATH YOU TAKE",
+     "ENDLESS LOVE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs About Dancing",
+    "color": 1,
+    "words": [
+     "TWIST AND SHOUT",
+     "DANCE HALL DAYS",
+     "FOOTLOOSE",
+     "COME ON EILEEN"
+    ]
+   },
+   {
+    "name": "Songs About Love",
+    "color": 2,
+    "words": [
+     "TRUE",
+     "TOTAL ECLIPSE OF THE HEART",
+     "ALWAYS",
+     "WITH OR WITHOUT YOU"
+    ]
+   },
+   {
+    "name": "Songs About the Night",
+    "color": 3,
+    "words": [
+     "ROCK THE NIGHT",
+     "NIGHT MOVES",
+     "DANCING IN THE DARK",
+     "BLINDED BY THE LIGHT"
+    ]
+   },
+   {
+    "name": "Songs with Animals",
+    "color": 4,
+    "words": [
+     "CROCODILE ROCK",
+     "CROCODILE DUNDEE",
+     "OLD MacDONALD",
+     "BUNGLE IN THE JUNGLE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs with Girls' Names",
+    "color": 1,
+    "words": [
+     "JOLENE",
+     "ROXANNE",
+     "SANDY",
+     "JESSIES GIRL"
+    ]
+   },
+   {
+    "name": "Songs with Colors",
+    "color": 2,
+    "words": [
+     "99 RED BALLOONS",
+     "SILVER SPRINGS",
+     "PURPLE RAIN",
+     "GREEN ONIONS"
+    ]
+   },
+   {
+    "name": "Songs with Numbers",
+    "color": 3,
+    "words": [
+     "THREE TIMES A LADY",
+     "SEVEN NATION ARMY",
+     "ONE IN A MILLION",
+     "FOUR TO THE FLOOR"
+    ]
+   },
+   {
+    "name": "Songs with City Names",
+    "color": 4,
+    "words": [
+     "VIENNA",
+     "CHICAGO",
+     "LIVING IN AMERICA",
+     "WALKING IN MEMPHIS"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s TV Theme Songs",
+    "color": 1,
+    "words": [
+     "CHEERS THEME",
+     "MAGNUM PI THEME",
+     "GOLDEN GIRLS THEME",
+     "ALF THEME"
+    ]
+   },
+   {
+    "name": "Songs in 80s Movies",
+    "color": 2,
+    "words": [
+     "OLD TIME ROCK AND ROLL",
+     "IN YOUR EYES",
+     "ST ELMOS FIRE",
+     "TAKE MY BREATH AWAY"
+    ]
+   },
+   {
+    "name": "80s Movies with Great Soundtracks",
+    "color": 3,
+    "words": [
+     "FOOTLOOSE",
+     "GHOSTBUSTERS",
+     "FLASHDANCE",
+     "FAST TIMES"
+    ]
+   },
+   {
+    "name": "Songs That Became Movies",
+    "color": 4,
+    "words": [
+     "BEAT STREET",
+     "BREAKIN",
+     "FAST FORWARD",
+     "GIRLS JUST WANT TO HAVE FUN"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "One-Word Band Names",
+    "color": 1,
+    "words": [
+     "JOURNEY",
+     "EUROPE",
+     "BLONDIE",
+     "DEVO"
+    ]
+   },
+   {
+    "name": "80s Power Ballads",
+    "color": 2,
+    "words": [
+     "OPEN ARMS",
+     "MORE THAN A WORD",
+     "EVERY ROSE HAS ITS THORN",
+     "HERE I GO AGAIN"
+    ]
+   },
+   {
+    "name": "80s One-Hit Wonders",
+    "color": 3,
+    "words": [
+     "I RAN",
+     "867-5309",
+     "COME ON EILEEN",
+     "WALKING ON SUNSHINE"
+    ]
+   },
+   {
+    "name": "Songs About Money",
+    "color": 4,
+    "words": [
+     "MONEY CHANGES EVERYTHING",
+     "GOLD",
+     "MATERIAL GIRL",
+     "WORKING FOR THE WEEKEND"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with A",
+    "color": 1,
+    "words": [
+     "ALLENTOWN",
+     "ALL NIGHT LONG",
+     "ALWAYS",
+     "ANOTHER ONE BITES THE DUST"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with B",
+    "color": 2,
+    "words": [
+     "BILLIE JEAN",
+     "BLUE MONDAY",
+     "BORN IN THE USA",
+     "BEAT STREET"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with C",
+    "color": 3,
+    "words": [
+     "CRAZY FOR YOU",
+     "COME ON EILEEN",
+     "CARELESS WHISPER",
+     "COVER ME"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with D",
+    "color": 4,
+    "words": [
+     "DANGER ZONE",
+     "DANCING QUEEN",
+     "DONT YOU FORGET ABOUT ME",
+     "DIRTY DIANA"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with E",
+    "color": 1,
+    "words": [
+     "EVA MARIE",
+     "ENOLA GAY",
+     "EASY LOVER",
+     "EYES WITHOUT A FACE"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with F",
+    "color": 2,
+    "words": [
+     "FREE FALLIN",
+     "FAME",
+     "FOOLISH BEAT",
+     "FAITH"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with G",
+    "color": 3,
+    "words": [
+     "GUILTY",
+     "GHOSTBUSTERS",
+     "GREAT BALLS OF FIRE",
+     "GONNA MAKE YOU SWEAT"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with H",
+    "color": 4,
+    "words": [
+     "HARD HABIT TO BREAK",
+     "HEART OF GLASS",
+     "HIT ME WITH YOUR BEST SHOT",
+     "HOT FOR TEACHER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with I",
+    "color": 1,
+    "words": [
+     "I NEED LOVE",
+     "IN THE AIR TONIGHT",
+     "I LOVE ROCK N ROLL",
+     "I STILL HAVENT FOUND"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with J",
+    "color": 2,
+    "words": [
+     "JUST CANT GET ENOUGH",
+     "JUMP",
+     "JOLENE",
+     "JESSIES GIRL"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with L",
+    "color": 3,
+    "words": [
+     "LETS DANCE",
+     "LIKE A ROLLING STONE",
+     "LIVIN ON A PRAYER",
+     "LOSING MY RELIGION"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with M",
+    "color": 4,
+    "words": [
+     "MANIC MONDAY",
+     "MIRACLE",
+     "MONKEY",
+     "MANIAC"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with N",
+    "color": 1,
+    "words": [
+     "NEW SENSATION",
+     "NEW YEARS DAY",
+     "NOTHING COMPARES 2 U",
+     "NEVER TEAR US APART"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with O",
+    "color": 2,
+    "words": [
+     "OPEN ARMS",
+     "OWNER OF A LONELY HEART",
+     "OPPOSITES ATTRACT",
+     "ONE MORE NIGHT"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with P",
+    "color": 3,
+    "words": [
+     "PURPLE RAIN",
+     "PUSH IT",
+     "PHYSICAL",
+     "PINK HOUSES"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with R",
+    "color": 4,
+    "words": [
+     "ROCK ME AMADEUS",
+     "ROMANCE",
+     "ROXANNE",
+     "RED RED WINE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with S",
+    "color": 1,
+    "words": [
+     "SIGN O THE TIMES",
+     "SUNGLASSES AT NIGHT",
+     "SUSSUDIO",
+     "SHE BOP"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with T",
+    "color": 2,
+    "words": [
+     "TENDER IS THE NIGHT",
+     "TAINTED LOVE",
+     "TAKE ON ME",
+     "TIME AFTER TIME"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with W",
+    "color": 3,
+    "words": [
+     "WIND BENEATH MY WINGS",
+     "WALK LIKE AN EGYPTIAN",
+     "WHEN DOVES CRY",
+     "WHAT I AM"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with Y",
+    "color": 4,
+    "words": [
+     "YOU SHOOK ME ALL NIGHT LONG",
+     "YOU GIVE LOVE A BAD NAME",
+     "YOUR WILDEST DREAMS",
+     "YOURE THE INSPIRATION"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Michael Jackson Songs",
+    "color": 1,
+    "words": [
+     "HUMAN NATURE",
+     "THE WAY YOU MAKE ME FEEL",
+     "DONT STOP TIL YOU GET ENOUGH",
+     "MAN IN THE MIRROR"
+    ]
+   },
+   {
+    "name": "Madonna Songs",
+    "color": 2,
+    "words": [
+     "LUCKY STAR",
+     "DRESS YOU UP",
+     "LIVE TO TELL",
+     "CRAZY FOR YOU"
+    ]
+   },
+   {
+    "name": "Prince Songs",
+    "color": 3,
+    "words": [
+     "AROUND THE WORLD IN A DAY",
+     "TAKE ME WITH U",
+     "U GOT THE LOOK",
+     "1999"
+    ]
+   },
+   {
+    "name": "Whitney Houston Songs",
+    "color": 4,
+    "words": [
+     "DIDNT WE ALMOST HAVE IT ALL",
+     "WHERE DO BROKEN HEARTS GO",
+     "ONE MOMENT IN TIME",
+     "SO EMOTIONAL"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Duran Duran Songs",
+    "color": 1,
+    "words": [
+     "NOTORIOUS",
+     "ORDINARY WORLD",
+     "IS THERE SOMETHING I SHOULD KNOW",
+     "VIEW TO A KILL"
+    ]
+   },
+   {
+    "name": "The Police Songs",
+    "color": 2,
+    "words": [
+     "WRAPPED AROUND YOUR FINGER",
+     "DE DO DO DO",
+     "SPIRITS IN THE MATERIAL WORLD",
+     "EVERY LITTLE THING SHE DOES IS MAGIC"
+    ]
+   },
+   {
+    "name": "U2 Songs",
+    "color": 3,
+    "words": [
+     "DESIRE",
+     "IN GODS COUNTRY",
+     "ONE TREE HILL",
+     "PRIDE"
+    ]
+   },
+   {
+    "name": "Bon Jovi Songs",
+    "color": 4,
+    "words": [
+     "ALWAYS",
+     "RUNAWAY",
+     "ILL BE THERE FOR YOU",
+     "BORN TO BE MY BABY"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Def Leppard Songs",
+    "color": 1,
+    "words": [
+     "ROCK OF AGES",
+     "ARMAGEDDON IT",
+     "TOO LATE FOR LOVE",
+     "PHOTOGRAPH"
+    ]
+   },
+   {
+    "name": "Phil Collins Songs",
+    "color": 2,
+    "words": [
+     "DONT LOSE MY NUMBER",
+     "TWO HEARTS",
+     "ONE MORE NIGHT",
+     "YOU CANT HURRY LOVE"
+    ]
+   },
+   {
+    "name": "Lionel Richie Songs",
+    "color": 3,
+    "words": [
+     "ENDLESS LOVE",
+     "BALLERINA GIRL",
+     "DANCING ON THE CEILING",
+     "STUCK ON YOU"
+    ]
+   },
+   {
+    "name": "Cyndi Lauper Songs",
+    "color": 4,
+    "words": [
+     "HAT FULL OF STARS",
+     "TRUE COLORS",
+     "CHANGE OF HEART",
+     "I DROVE ALL NIGHT"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Depeche Mode Songs",
+    "color": 1,
+    "words": [
+     "NEW LIFE",
+     "ENJOY THE SILENCE",
+     "POLICY OF TRUTH",
+     "EVERYTHING COUNTS"
+    ]
+   },
+   {
+    "name": "Talking Heads Songs",
+    "color": 2,
+    "words": [
+     "THIS MUST BE THE PLACE",
+     "ROAD TO NOWHERE",
+     "AND SHE WAS",
+     "SLIPPERY PEOPLE"
+    ]
+   },
+   {
+    "name": "R.E.M. Songs",
+    "color": 3,
+    "words": [
+     "POP SONG 89",
+     "THE END OF THE WORLD",
+     "STAND",
+     "DRIVER 8"
+    ]
+   },
+   {
+    "name": "INXS Songs",
+    "color": 4,
+    "words": [
+     "DON'T CHANGE",
+     "LISTEN LIKE THIEVES",
+     "THE ONE THING",
+     "I SEND A MESSAGE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Bruce Springsteen Songs",
+    "color": 1,
+    "words": [
+     "TUNNEL OF LOVE",
+     "ONE STEP UP",
+     "COVER ME",
+     "BRILLIANT DISGUISE"
+    ]
+   },
+   {
+    "name": "Tina Turner Songs",
+    "color": 2,
+    "words": [
+     "WHAT YOU GET IS WHAT YOU SEE",
+     "STEAMY WINDOWS",
+     "TWO PEOPLE",
+     "THE BEST"
+    ]
+   },
+   {
+    "name": "Billy Idol Songs",
+    "color": 3,
+    "words": [
+     "TO BE A LOVER",
+     "DANCING WITH MYSELF",
+     "CRADLE OF LOVE",
+     "FLESH FOR FANTASY"
+    ]
+   },
+   {
+    "name": "George Michael Songs",
+    "color": 4,
+    "words": [
+     "KISSING A FOOL",
+     "HARD DAY",
+     "I WANT YOUR SEX",
+     "A DIFFERENT CORNER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1980",
+    "color": 1,
+    "words": [
+     "THE TIDE IS HIGH",
+     "LADY",
+     "CELEBRATION",
+     "STARTING OVER"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1982",
+    "color": 2,
+    "words": [
+     "CENTERFOLD",
+     "OPEN ARMS",
+     "HARD TO SAY IM SORRY",
+     "DON'T YOU WANT ME"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1984",
+    "color": 3,
+    "words": [
+     "I JUST CALLED TO SAY I LOVE YOU",
+     "HELLO",
+     "LET'S HEAR IT FOR THE BOY",
+     "WHAT'S LOVE GOT TO DO WITH IT"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1986",
+    "color": 4,
+    "words": [
+     "KISS",
+     "GREATEST LOVE OF ALL",
+     "ADDICTED TO LOVE",
+     "GLORY OF LOVE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1981",
+    "color": 1,
+    "words": [
+     "9 TO 5",
+     "JESSIES GIRL",
+     "KISS ON MY LIST",
+     "RAPTURE"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1983",
+    "color": 2,
+    "words": [
+     "MANIAC",
+     "ALL NIGHT LONG",
+     "SAY SAY SAY",
+     "ISLANDS IN THE STREAM"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1985",
+    "color": 3,
+    "words": [
+     "PART-TIME LOVER",
+     "THAT'S WHAT FRIENDS ARE FOR",
+     "SAY YOU SAY ME",
+     "SEPARATE LIVES"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1987",
+    "color": 4,
+    "words": [
+     "I WANNA DANCE WITH SOMEBODY",
+     "SHAKEDOWN",
+     "WITH OR WITHOUT YOU",
+     "LA BAMBA"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs About Girls",
+    "color": 1,
+    "words": [
+     "JESSIES GIRL",
+     "UPTOWN GIRL",
+     "GIRLS ON FILM",
+     "GLORIA"
+    ]
+   },
+   {
+    "name": "Songs About Money",
+    "color": 2,
+    "words": [
+     "MONEY CHANGES EVERYTHING",
+     "FOR THE LOVE OF MONEY",
+     "WORKING FOR THE WEEKEND",
+     "CANT BUY ME LOVE"
+    ]
+   },
+   {
+    "name": "Songs About Night",
+    "color": 3,
+    "words": [
+     "IN THE AIR TONIGHT",
+     "DANCING IN THE DARK",
+     "MIDNIGHT HOUR",
+     "NIGHT MOVES"
+    ]
+   },
+   {
+    "name": "Songs with Animals",
+    "color": 4,
+    "words": [
+     "OLD MacDONALD",
+     "HUNGRY LIKE THE WOLF",
+     "HOUND DOG",
+     "EYE OF THE TIGER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Power Ballads",
+    "color": 1,
+    "words": [
+     "MORE THAN A WORD",
+     "IS THIS LOVE",
+     "WITH OR WITHOUT YOU",
+     "DONT STOP BELIEVIN"
+    ]
+   },
+   {
+    "name": "80s Synth-Pop Songs",
+    "color": 2,
+    "words": [
+     "WORDS",
+     "ALWAYS ON MY MIND",
+     "THERE SHE GOES",
+     "SMALLTOWN BOY"
+    ]
+   },
+   {
+    "name": "80s Rap & Hip-Hop",
+    "color": 3,
+    "words": [
+     "PARENTS JUST DONT UNDERSTAND",
+     "LA DI DA DI",
+     "ROCK BOX",
+     "FIGHT FOR YOUR RIGHT"
+    ]
+   },
+   {
+    "name": "80s One-Hit Wonders",
+    "color": 4,
+    "words": [
+     "MELT WITH YOU",
+     "I RAN",
+     "SAFETY DANCE",
+     "867-5309"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "New Wave Bands",
+    "color": 1,
+    "words": [
+     "ABC",
+     "SIMPLE MINDS",
+     "THE PRETENDERS",
+     "XTC"
+    ]
+   },
+   {
+    "name": "Hair Metal Bands",
+    "color": 2,
+    "words": [
+     "CINDERELLA",
+     "SKID ROW",
+     "QUIET RIOT",
+     "GREAT WHITE"
+    ]
+   },
+   {
+    "name": "British Invasion Bands",
+    "color": 3,
+    "words": [
+     "SOFT CELL",
+     "THE POLICE",
+     "TEARS FOR FEARS",
+     "DEPECHE MODE"
+    ]
+   },
+   {
+    "name": "Female 80s Artists",
+    "color": 4,
+    "words": [
+     "LAURA BRANIGAN",
+     "CHAKA KHAN",
+     "SADE",
+     "GLORIA ESTEFAN"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs in 80s Movies",
+    "color": 1,
+    "words": [
+     "SHOUT",
+     "DANGER ZONE",
+     "OH YEAH",
+     "IN YOUR EYES"
+    ]
+   },
+   {
+    "name": "Famous 80s Albums",
+    "color": 2,
+    "words": [
+     "HYSTERIA",
+     "THE JOSHUA TREE",
+     "SLIPPERY WHEN WET",
+     "GRACELAND"
+    ]
+   },
+   {
+    "name": "80s TV Theme Songs",
+    "color": 3,
+    "words": [
+     "SAVED BY THE BELL",
+     "ALF THEME",
+     "GROWING PAINS",
+     "DIFFERENT WORLD"
+    ]
+   },
+   {
+    "name": "Live Aid Performers",
+    "color": 4,
+    "words": [
+     "MICK JAGGER",
+     "MADONNA",
+     "TINA TURNER",
+     "LED ZEPPELIN"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Michael Jackson Songs",
+    "color": 1,
+    "words": [
+     "PYT",
+     "MAN IN THE MIRROR",
+     "DONT STOP TIL YOU GET ENOUGH",
+     "OFF THE WALL"
+    ]
+   },
+   {
+    "name": "Cyndi Lauper Songs",
+    "color": 2,
+    "words": [
+     "GIRLS JUST WANT TO HAVE FUN",
+     "SHE BOP",
+     "TRUE COLORS",
+     "TIME AFTER TIME"
+    ]
+   },
+   {
+    "name": "Bruce Springsteen Songs",
+    "color": 3,
+    "words": [
+     "GLORY DAYS",
+     "COVER ME",
+     "BRILLIANT DISGUISE",
+     "BORN IN THE USA"
+    ]
+   },
+   {
+    "name": "Whitney Houston Songs",
+    "color": 4,
+    "words": [
+     "SO EMOTIONAL",
+     "DIDNT WE ALMOST HAVE IT ALL",
+     "I WANNA DANCE WITH SOMEBODY",
+     "WHERE DO BROKEN HEARTS GO"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Madonna Songs",
+    "color": 1,
+    "words": [
+     "CRAZY FOR YOU",
+     "BORDERLINE",
+     "LIKE A VIRGIN",
+     "DRESS YOU UP"
+    ]
+   },
+   {
+    "name": "Prince Songs",
+    "color": 2,
+    "words": [
+     "PURPLE RAIN",
+     "1999",
+     "SIGN O THE TIMES",
+     "U GOT THE LOOK"
+    ]
+   },
+   {
+    "name": "George Michael Songs",
+    "color": 3,
+    "words": [
+     "FATHER FIGURE",
+     "HARD DAY",
+     "I WANT YOUR SEX",
+     "FAITH"
+    ]
+   },
+   {
+    "name": "Tina Turner Songs",
+    "color": 4,
+    "words": [
+     "WHATS LOVE GOT TO DO WITH IT",
+     "TYPICAL MALE",
+     "WHAT YOU GET IS WHAT YOU SEE",
+     "TWO PEOPLE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "U2 Songs",
+    "color": 1,
+    "words": [
+     "ONE TREE HILL",
+     "WHERE THE STREETS HAVE NO NAME",
+     "IN GODS COUNTRY",
+     "NEW YEARS DAY"
+    ]
+   },
+   {
+    "name": "The Police Songs",
+    "color": 2,
+    "words": [
+     "KING OF PAIN",
+     "WRAPPED AROUND YOUR FINGER",
+     "EVERY LITTLE THING SHE DOES IS MAGIC",
+     "DONT STAND SO CLOSE TO ME"
+    ]
+   },
+   {
+    "name": "Duran Duran Songs",
+    "color": 3,
+    "words": [
+     "NOTORIOUS",
+     "RIO",
+     "HUNGRY LIKE THE WOLF",
+     "IS THERE SOMETHING I SHOULD KNOW"
+    ]
+   },
+   {
+    "name": "Tears for Fears Songs",
+    "color": 4,
+    "words": [
+     "MAD WORLD",
+     "SOWING THE SEEDS OF LOVE",
+     "PALE SHELTER",
+     "MOTHERS TALK"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Bon Jovi Songs",
+    "color": 1,
+    "words": [
+     "WANTED DEAD OR ALIVE",
+     "LIVIN ON A PRAYER",
+     "ALWAYS",
+     "SHOT THROUGH THE HEART"
+    ]
+   },
+   {
+    "name": "Def Leppard Songs",
+    "color": 2,
+    "words": [
+     "HYSTERIA",
+     "ROCK OF AGES",
+     "PHOTOGRAPH",
+     "BRINGIN ON THE HEARTBREAK"
+    ]
+   },
+   {
+    "name": "Billy Idol Songs",
+    "color": 3,
+    "words": [
+     "FLESH FOR FANTASY",
+     "CRADLE OF LOVE",
+     "MONY MONY",
+     "WHITE WEDDING"
+    ]
+   },
+   {
+    "name": "Hair Metal Bands",
+    "color": 4,
+    "words": [
+     "MOTLEY CRUE",
+     "POISON",
+     "RATT",
+     "EUROPE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "R.E.M. Songs",
+    "color": 1,
+    "words": [
+     "FALL ON ME",
+     "THE ONE I LOVE",
+     "DRIVER 8",
+     "STAND"
+    ]
+   },
+   {
+    "name": "Talking Heads Songs",
+    "color": 2,
+    "words": [
+     "WILD WILD LIFE",
+     "AND SHE WAS",
+     "LIFE DURING WARTIME",
+     "THIS MUST BE THE PLACE"
+    ]
+   },
+   {
+    "name": "Depeche Mode Songs",
+    "color": 3,
+    "words": [
+     "PERSONAL JESUS",
+     "ENJOY THE SILENCE",
+     "NEW LIFE",
+     "EVERYTHING COUNTS"
+    ]
+   },
+   {
+    "name": "INXS Songs",
+    "color": 4,
+    "words": [
+     "WHAT YOU NEED",
+     "DEVIL INSIDE",
+     "NEVER TEAR US APART",
+     "NEW SENSATION"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs with Colors",
+    "color": 1,
+    "words": [
+     "PINK CADILLAC",
+     "PURPLE RAIN",
+     "LADY IN RED",
+     "99 RED BALLOONS"
+    ]
+   },
+   {
+    "name": "Songs About Dancing",
+    "color": 2,
+    "words": [
+     "FOOTLOOSE",
+     "I WANNA DANCE WITH SOMEBODY",
+     "LETS DANCE",
+     "COME ON EILEEN"
+    ]
+   },
+   {
+    "name": "Songs About Love",
+    "color": 3,
+    "words": [
+     "I JUST CALLED TO SAY I LOVE YOU",
+     "TOTAL ECLIPSE OF THE HEART",
+     "FAITHFULLY",
+     "EVERY BREATH YOU TAKE"
+    ]
+   },
+   {
+    "name": "Songs About the Night",
+    "color": 4,
+    "words": [
+     "NIGHT MOVES",
+     "BLINDED BY THE LIGHT",
+     "SATURDAY NIGHT",
+     "MIDNIGHT HOUR"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with A",
+    "color": 1,
+    "words": [
+     "ALLENTOWN",
+     "ALL NIGHT LONG",
+     "ALL I WANT FOR CHRISTMAS",
+     "AFRICA"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with S",
+    "color": 2,
+    "words": [
+     "SWEET DREAMS",
+     "SEPARATE LIVES",
+     "SHOUT",
+     "SUSSUDIO"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with M",
+    "color": 3,
+    "words": [
+     "MATERIAL GIRL",
+     "MIRACLE",
+     "MESSAGE IN A BOTTLE",
+     "MANIAC"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with L",
+    "color": 4,
+    "words": [
+     "LIKE A VIRGIN",
+     "LA BAMBA",
+     "LIKE A ROLLING STONE",
+     "LIVIN ON A PRAYER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with B",
+    "color": 1,
+    "words": [
+     "BILLIE JEAN",
+     "BLUE MONDAY",
+     "BEAT IT",
+     "BORN IN THE USA"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with T",
+    "color": 2,
+    "words": [
+     "THRILLER",
+     "TWIST OF FATE",
+     "TAINTED LOVE",
+     "TYPICAL MALE"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with W",
+    "color": 3,
+    "words": [
+     "WIND BENEATH MY WINGS",
+     "WHITE WEDDING",
+     "WITH OR WITHOUT YOU",
+     "WHATS LOVE GOT TO DO WITH IT"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with G",
+    "color": 4,
+    "words": [
+     "GLORY OF LOVE",
+     "GREAT BALLS OF FIRE",
+     "GONNA MAKE YOU SWEAT",
+     "GOOD TIMES"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with C",
+    "color": 1,
+    "words": [
+     "COME ON EILEEN",
+     "CALL ME",
+     "COVER ME",
+     "CARELESS WHISPER"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with P",
+    "color": 2,
+    "words": [
+     "PURPLE RAIN",
+     "PROUD MARY",
+     "PAPA DONT PREACH",
+     "PUSH IT"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with H",
+    "color": 3,
+    "words": [
+     "HERE I GO AGAIN",
+     "HOW WILL I KNOW",
+     "HEART OF GLASS",
+     "HEAD OVER HEELS"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with F",
+    "color": 4,
+    "words": [
+     "FOREVER YOUNG",
+     "FIGHT THE POWER",
+     "FOOTLOOSE",
+     "FOOLISH BEAT"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with D",
+    "color": 1,
+    "words": [
+     "DOWN UNDER",
+     "DONT STOP ME NOW",
+     "DONT YOU FORGET ABOUT ME",
+     "DANCING QUEEN"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with N",
+    "color": 2,
+    "words": [
+     "NOTORIOUS",
+     "NEVER TEAR US APART",
+     "NOTHING COMPARES 2 U",
+     "NEED YOU TONIGHT"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with R",
+    "color": 3,
+    "words": [
+     "RIDE LIKE THE WIND",
+     "RUNNING WITH THE NIGHT",
+     "ROXANNE",
+     "ROCK ME AMADEUS"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with E",
+    "color": 4,
+    "words": [
+     "EVERYBODY WANTS TO RULE THE WORLD",
+     "ENOLA GAY",
+     "EYE OF THE TIGER",
+     "EVERY BREATH YOU TAKE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with I",
+    "color": 1,
+    "words": [
+     "INTO THE GROOVE",
+     "I JUST CALLED TO SAY I LOVE YOU",
+     "I NEED LOVE",
+     "I LOVE ROCK N ROLL"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with J",
+    "color": 2,
+    "words": [
+     "JUST LIKE HEAVEN",
+     "JUMP",
+     "JESSIES GIRL",
+     "JAMAICAN FAREWELL"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with O",
+    "color": 3,
+    "words": [
+     "OPPOSITES ATTRACT",
+     "OPEN ARMS",
+     "OWNER OF A LONELY HEART",
+     "ONE IN A MILLION"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with Y",
+    "color": 4,
+    "words": [
+     "YESTERDAY",
+     "YOUVE LOST THAT LOVIN FEELIN",
+     "YOUR WILDEST DREAMS",
+     "YOU CANT HURRY LOVE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1980",
+    "color": 1,
+    "words": [
+     "WOMAN",
+     "LADY",
+     "THE TIDE IS HIGH",
+     "STARTING OVER"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1983",
+    "color": 2,
+    "words": [
+     "ISLANDS IN THE STREAM",
+     "TOTAL ECLIPSE OF THE HEART",
+     "MANIAC",
+     "EVERY BREATH YOU TAKE"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1986",
+    "color": 3,
+    "words": [
+     "ROCK ME AMADEUS",
+     "KISS",
+     "GREATEST LOVE OF ALL",
+     "THAT'S WHAT FRIENDS ARE FOR"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1989",
+    "color": 4,
+    "words": [
+     "SUPER FREAK",
+     "LOOK AWAY",
+     "MY PREROGATIVE",
+     "ENDLESS SUMMER NIGHTS"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1981",
+    "color": 1,
+    "words": [
+     "ENDLESS LOVE",
+     "9 TO 5",
+     "PHYSICAL",
+     "RAPTURE"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1984",
+    "color": 2,
+    "words": [
+     "WHEN DOVES CRY",
+     "MISSING YOU",
+     "LET'S HEAR IT FOR THE BOY",
+     "HELLO"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1987",
+    "color": 3,
+    "words": [
+     "NOTHING'S GONNA STOP US NOW",
+     "I WANNA DANCE WITH SOMEBODY",
+     "SHAKE YOU DOWN",
+     "LA BAMBA"
+    ]
+   },
+   {
+    "name": "Songs About Love",
+    "color": 4,
+    "words": [
+     "WITH OR WITHOUT YOU",
+     "TRUE",
+     "ALWAYS",
+     "CRAZY FOR YOU"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1982",
+    "color": 1,
+    "words": [
+     "EYE OF THE TIGER",
+     "DON'T YOU WANT ME",
+     "JACK AND DIANE",
+     "EBONY AND IVORY"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1985",
+    "color": 2,
+    "words": [
+     "LIKE A VIRGIN",
+     "PART-TIME LOVER",
+     "CANT FIGHT THIS FEELING",
+     "SAY YOU SAY ME"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1988",
+    "color": 3,
+    "words": [
+     "ONE MORE TRY",
+     "ANYTHING FOR YOU",
+     "COULD'VE BEEN",
+     "NEED YOU TONIGHT"
+    ]
+   },
+   {
+    "name": "Songs About Girls",
+    "color": 4,
+    "words": [
+     "JESSIES GIRL",
+     "GLORIA",
+     "VENUS",
+     "PRIVATE DANCER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "New Wave Bands",
+    "color": 1,
+    "words": [
+     "TEARS FOR FEARS",
+     "BLONDIE",
+     "THE CURE",
+     "TALKING HEADS"
+    ]
+   },
+   {
+    "name": "Hair Metal Bands",
+    "color": 2,
+    "words": [
+     "WARRANT",
+     "EUROPE",
+     "WHITESNAKE",
+     "FASTER PUSSYCAT"
+    ]
+   },
+   {
+    "name": "One-Word Band Names",
+    "color": 3,
+    "words": [
+     "INXS",
+     "ASIA",
+     "DEVO",
+     "SURVIVOR"
+    ]
+   },
+   {
+    "name": "British Invasion 80s",
+    "color": 4,
+    "words": [
+     "WHAM!",
+     "DEPECHE MODE",
+     "THE POLICE",
+     "MADNESS"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Michael Jackson Songs",
+    "color": 1,
+    "words": [
+     "ROCK WITH YOU",
+     "THRILLER",
+     "OFF THE WALL",
+     "THE WAY YOU MAKE ME FEEL"
+    ]
+   },
+   {
+    "name": "Bon Jovi Songs",
+    "color": 2,
+    "words": [
+     "BORN TO BE MY BABY",
+     "YOU GIVE LOVE A BAD NAME",
+     "SHOT THROUGH THE HEART",
+     "LIVIN ON A PRAYER"
+    ]
+   },
+   {
+    "name": "Madonna Songs",
+    "color": 3,
+    "words": [
+     "CRAZY FOR YOU",
+     "LIKE A PRAYER",
+     "PAPA DONT PREACH",
+     "LIKE A VIRGIN"
+    ]
+   },
+   {
+    "name": "U2 Songs",
+    "color": 4,
+    "words": [
+     "ANGEL OF HARLEM",
+     "PRIDE",
+     "I STILL HAVENT FOUND WHAT IM LOOKING FOR",
+     "SUNDAY BLOODY SUNDAY"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Phil Collins Songs",
+    "color": 1,
+    "words": [
+     "SUSSUDIO",
+     "ONE MORE NIGHT",
+     "EASY LOVER",
+     "YOU CANT HURRY LOVE"
+    ]
+   },
+   {
+    "name": "Lionel Richie Songs",
+    "color": 2,
+    "words": [
+     "RUNNING WITH THE NIGHT",
+     "DANCING ON THE CEILING",
+     "STUCK ON YOU",
+     "SAY YOU SAY ME"
+    ]
+   },
+   {
+    "name": "The Police Songs",
+    "color": 3,
+    "words": [
+     "WRAPPED AROUND YOUR FINGER",
+     "KING OF PAIN",
+     "DONT STAND SO CLOSE TO ME",
+     "EVERY BREATH YOU TAKE"
+    ]
+   },
+   {
+    "name": "Bruce Springsteen Songs",
+    "color": 4,
+    "words": [
+     "BRILLIANT DISGUISE",
+     "BORN IN THE USA",
+     "GLORY DAYS",
+     "DANCING IN THE DARK"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs About Money",
+    "color": 1,
+    "words": [
+     "POOR SOME SUGAR ON ME",
+     "TAXMAN",
+     "MONEY CHANGES EVERYTHING",
+     "WORKING FOR THE WEEKEND"
+    ]
+   },
+   {
+    "name": "Songs with Animals",
+    "color": 2,
+    "words": [
+     "CROCODILE DUNDEE",
+     "OLD MacDONALD",
+     "GIRLS ON FILM",
+     "THE LION SLEEPS TONIGHT"
+    ]
+   },
+   {
+    "name": "Songs with Numbers",
+    "color": 3,
+    "words": [
+     "JUMP (FOR MY LOVE)",
+     "THREE TIMES A LADY",
+     "1999",
+     "SEVEN NATION ARMY"
+    ]
+   },
+   {
+    "name": "Songs with City Names",
+    "color": 4,
+    "words": [
+     "WEST END GIRLS",
+     "CHICAGO",
+     "LIVING IN AMERICA",
+     "VIVA LAS VEGAS"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Power Ballads",
+    "color": 1,
+    "words": [
+     "HEAVEN",
+     "HERE I GO AGAIN",
+     "MORE THAN A WORD",
+     "PATIENCE"
+    ]
+   },
+   {
+    "name": "80s One-Hit Wonders",
+    "color": 2,
+    "words": [
+     "TAKE ON ME",
+     "TAINTED LOVE",
+     "867-5309",
+     "COME ON EILEEN"
+    ]
+   },
+   {
+    "name": "Famous 80s Albums",
+    "color": 3,
+    "words": [
+     "HYSTERIA",
+     "SPORTS",
+     "BORN IN THE USA",
+     "1984"
+    ]
+   },
+   {
+    "name": "Live Aid Performers",
+    "color": 4,
+    "words": [
+     "NEIL YOUNG",
+     "DIRE STRAITS",
+     "LED ZEPPELIN",
+     "DAVID BOWIE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Original MTV VJs",
+    "color": 1,
+    "words": [
+     "DOWNTOWN JULIE BROWN",
+     "J.J. JACKSON",
+     "CAROLYNE HELDMAN",
+     "ALAN HUNTER"
+    ]
+   },
+   {
+    "name": "Songs in 80s Movies",
+    "color": 2,
+    "words": [
+     "FOOTLOOSE",
+     "DANGER ZONE",
+     "OLD TIME ROCK AND ROLL",
+     "IN YOUR EYES"
+    ]
+   },
+   {
+    "name": "80s Movies with Great Soundtracks",
+    "color": 3,
+    "words": [
+     "PRETTY IN PINK",
+     "BREAKFAST CLUB",
+     "FERRIS BUELLERS DAY OFF",
+     "RISKY BUSINESS"
+    ]
+   },
+   {
+    "name": "80s TV Theme Songs",
+    "color": 4,
+    "words": [
+     "MIAMI VICE THEME",
+     "SAVED BY THE BELL",
+     "CHEERS THEME",
+     "GOLDEN GIRLS THEME"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Duran Duran Songs",
+    "color": 1,
+    "words": [
+     "HUNGRY LIKE THE WOLF",
+     "REFLEX",
+     "NOTORIOUS",
+     "IS THERE SOMETHING I SHOULD KNOW"
+    ]
+   },
+   {
+    "name": "Depeche Mode Songs",
+    "color": 2,
+    "words": [
+     "JUST CANT GET ENOUGH",
+     "PERSONAL JESUS",
+     "EVERYTHING COUNTS",
+     "NEW LIFE"
+    ]
+   },
+   {
+    "name": "Cyndi Lauper Songs",
+    "color": 3,
+    "words": [
+     "I DROVE ALL NIGHT",
+     "HAT FULL OF STARS",
+     "SHE BOP",
+     "GIRLS JUST WANT TO HAVE FUN"
+    ]
+   },
+   {
+    "name": "Tears for Fears Songs",
+    "color": 4,
+    "words": [
+     "MAD WORLD",
+     "HEAD OVER HEELS",
+     "CHANGE",
+     "EVERYBODY WANTS TO RULE THE WORLD"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Prince Songs",
+    "color": 1,
+    "words": [
+     "PURPLE RAIN",
+     "LETS GO CRAZY",
+     "1999",
+     "U GOT THE LOOK"
+    ]
+   },
+   {
+    "name": "Whitney Houston Songs",
+    "color": 2,
+    "words": [
+     "HOW WILL I KNOW",
+     "SAVING ALL MY LOVE",
+     "DIDNT WE ALMOST HAVE IT ALL",
+     "GREATEST LOVE OF ALL"
+    ]
+   },
+   {
+    "name": "Tina Turner Songs",
+    "color": 3,
+    "words": [
+     "THE BEST",
+     "TWO PEOPLE",
+     "STEAMY WINDOWS",
+     "TYPICAL MALE"
+    ]
+   },
+   {
+    "name": "Lionel Richie Songs",
+    "color": 4,
+    "words": [
+     "DANCING ON THE CEILING",
+     "SE LA",
+     "RUNNING WITH THE NIGHT",
+     "STUCK ON YOU"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "INXS Songs",
+    "color": 1,
+    "words": [
+     "LISTEN LIKE THIEVES",
+     "WHAT YOU NEED",
+     "NEW SENSATION",
+     "DON'T CHANGE"
+    ]
+   },
+   {
+    "name": "R.E.M. Songs",
+    "color": 2,
+    "words": [
+     "RADIO FREE EUROPE",
+     "POP SONG 89",
+     "DRIVER 8",
+     "FALL ON ME"
+    ]
+   },
+   {
+    "name": "Talking Heads Songs",
+    "color": 3,
+    "words": [
+     "PSYCHO KILLER",
+     "THIS MUST BE THE PLACE",
+     "ONCE IN A LIFETIME",
+     "WILD WILD LIFE"
+    ]
+   },
+   {
+    "name": "George Michael Songs",
+    "color": 4,
+    "words": [
+     "CARELESS WHISPER",
+     "FAITH",
+     "FATHER FIGURE",
+     "KISSING A FOOL"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Rap & Hip-Hop Songs",
+    "color": 1,
+    "words": [
+     "PARENTS JUST DONT UNDERSTAND",
+     "FIGHT THE POWER",
+     "ROCK BOX",
+     "FIGHT FOR YOUR RIGHT"
+    ]
+   },
+   {
+    "name": "80s Synth-Pop Songs",
+    "color": 2,
+    "words": [
+     "JUST CANT GET ENOUGH",
+     "TAKE ON ME",
+     "TAINTED LOVE",
+     "THERE SHE GOES"
+    ]
+   },
+   {
+    "name": "Female 80s Artists",
+    "color": 3,
+    "words": [
+     "DEBBIE HARRY",
+     "CHAKA KHAN",
+     "WHITNEY HOUSTON",
+     "TINA TURNER"
+    ]
+   },
+   {
+    "name": "Male 80s Solo Artists",
+    "color": 4,
+    "words": [
+     "BILLY OCEAN",
+     "PHIL COLLINS",
+     "PAUL YOUNG",
+     "ELTON JOHN"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs About Girls",
+    "color": 1,
+    "words": [
+     "JESSIES GIRL",
+     "VENUS",
+     "GIRLS ON FILM",
+     "LIKE A VIRGIN"
+    ]
+   },
+   {
+    "name": "Songs About Dancing",
+    "color": 2,
+    "words": [
+     "COME ON EILEEN",
+     "FOOTLOOSE",
+     "DANCING IN THE DARK",
+     "I WANNA DANCE WITH SOMEBODY"
+    ]
+   },
+   {
+    "name": "Songs About Love",
+    "color": 3,
+    "words": [
+     "OPEN ARMS",
+     "FAITHFULLY",
+     "TRUE",
+     "ENDLESS LOVE"
+    ]
+   },
+   {
+    "name": "Songs About Night",
+    "color": 4,
+    "words": [
+     "ALL NIGHT LONG",
+     "IN THE AIR TONIGHT",
+     "STAYING ALIVE",
+     "BLINDED BY THE LIGHT"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Michael Jackson Songs",
+    "color": 1,
+    "words": [
+     "BAD",
+     "HUMAN NATURE",
+     "OFF THE WALL",
+     "ROCK WITH YOU"
+    ]
+   },
+   {
+    "name": "Prince Songs",
+    "color": 2,
+    "words": [
+     "1999",
+     "RASPBERRY BERET",
+     "WHEN DOVES CRY",
+     "I WOULD DIE 4 U"
+    ]
+   },
+   {
+    "name": "Def Leppard Songs",
+    "color": 3,
+    "words": [
+     "TOO LATE FOR LOVE",
+     "PHOTOGRAPH",
+     "ROCK OF AGES",
+     "LOVE BITES"
+    ]
+   },
+   {
+    "name": "Bon Jovi Songs",
+    "color": 4,
+    "words": [
+     "BAD MEDICINE",
+     "BORN TO BE MY BABY",
+     "LAY YOUR HANDS ON ME",
+     "LIVIN ON A PRAYER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs with Colors",
+    "color": 1,
+    "words": [
+     "99 RED BALLOONS",
+     "PINK HOUSES",
+     "RED RED WINE",
+     "ORANGE CRUSH"
+    ]
+   },
+   {
+    "name": "Songs with Numbers",
+    "color": 2,
+    "words": [
+     "FIVE TO ONE",
+     "TWO OF HEARTS",
+     "JUMP (FOR MY LOVE)",
+     "99 LUFTBALLONS"
+    ]
+   },
+   {
+    "name": "Songs with City Names",
+    "color": 3,
+    "words": [
+     "CHICAGO",
+     "VIENNA",
+     "PARIS",
+     "LIVING IN AMERICA"
+    ]
+   },
+   {
+    "name": "Songs with Animals",
+    "color": 4,
+    "words": [
+     "CROCODILE ROCK",
+     "EYE OF THE TIGER",
+     "HOUND DOG",
+     "GIRLS ON FILM"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1980",
+    "color": 1,
+    "words": [
+     "LADY",
+     "MAGIC",
+     "WOMAN",
+     "ANOTHER ONE BITES THE DUST"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1981",
+    "color": 2,
+    "words": [
+     "KISS ON MY LIST",
+     "ENDLESS LOVE",
+     "KEEP ON LOVING YOU",
+     "PHYSICAL"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1988",
+    "color": 3,
+    "words": [
+     "NEED YOU TONIGHT",
+     "GET OUTTA MY DREAMS",
+     "TOGETHER FOREVER",
+     "ANYTHING FOR YOU"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1989",
+    "color": 4,
+    "words": [
+     "LIKE A PRAYER",
+     "TWO HEARTS",
+     "ENDLESS SUMMER NIGHTS",
+     "LOST IN YOUR EYES"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "New Wave Bands",
+    "color": 1,
+    "words": [
+     "SIMPLE MINDS",
+     "HOWARD JONES",
+     "THE CURE",
+     "BLONDIE"
+    ]
+   },
+   {
+    "name": "80s Synth-Pop Songs",
+    "color": 2,
+    "words": [
+     "THERE SHE GOES",
+     "DONT YOU WANT ME",
+     "SWEET DREAMS",
+     "TAINTED LOVE"
+    ]
+   },
+   {
+    "name": "Songs About Money",
+    "color": 3,
+    "words": [
+     "MONEY CHANGES EVERYTHING",
+     "MATERIAL GIRL",
+     "TAXMAN",
+     "WORKING FOR THE WEEKEND"
+    ]
+   },
+   {
+    "name": "One-Word Band Names",
+    "color": 4,
+    "words": [
+     "SURVIVOR",
+     "POISON",
+     "KANSAS",
+     "HEART"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Cyndi Lauper Songs",
+    "color": 1,
+    "words": [
+     "TRUE COLORS",
+     "ALL THROUGH THE NIGHT",
+     "GIRLS JUST WANT TO HAVE FUN",
+     "TIME AFTER TIME"
+    ]
+   },
+   {
+    "name": "Madonna Songs",
+    "color": 2,
+    "words": [
+     "CRAZY FOR YOU",
+     "LIVE TO TELL",
+     "OPEN YOUR HEART",
+     "LA ISLA BONITA"
+    ]
+   },
+   {
+    "name": "Whitney Houston Songs",
+    "color": 3,
+    "words": [
+     "SO EMOTIONAL",
+     "GREATEST LOVE OF ALL",
+     "I WANNA DANCE WITH SOMEBODY",
+     "WHERE DO BROKEN HEARTS GO"
+    ]
+   },
+   {
+    "name": "Tina Turner Songs",
+    "color": 4,
+    "words": [
+     "BETTER BE GOOD TO ME",
+     "ADDICTED TO LOVE",
+     "WHATS LOVE GOT TO DO WITH IT",
+     "STEAMY WINDOWS"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Bon Jovi Songs",
+    "color": 1,
+    "words": [
+     "ILL BE THERE FOR YOU",
+     "WANTED DEAD OR ALIVE",
+     "YOU GIVE LOVE A BAD NAME",
+     "BORN TO BE MY BABY"
+    ]
+   },
+   {
+    "name": "Def Leppard Songs",
+    "color": 2,
+    "words": [
+     "ARMAGEDDON IT",
+     "LOVE BITES",
+     "ROCKET",
+     "TOO LATE FOR LOVE"
+    ]
+   },
+   {
+    "name": "Bruce Springsteen Songs",
+    "color": 3,
+    "words": [
+     "TUNNEL OF LOVE",
+     "BORN IN THE USA",
+     "COVER ME",
+     "ONE STEP UP"
+    ]
+   },
+   {
+    "name": "Billy Idol Songs",
+    "color": 4,
+    "words": [
+     "WHITE WEDDING",
+     "DANCING WITH MYSELF",
+     "FLESH FOR FANTASY",
+     "MONY MONY"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "U2 Songs",
+    "color": 1,
+    "words": [
+     "ONE TREE HILL",
+     "ANGEL OF HARLEM",
+     "WHERE THE STREETS HAVE NO NAME",
+     "SUNDAY BLOODY SUNDAY"
+    ]
+   },
+   {
+    "name": "R.E.M. Songs",
+    "color": 2,
+    "words": [
+     "RADIO FREE EUROPE",
+     "FALL ON ME",
+     "STAND",
+     "ORANGE CRUSH"
+    ]
+   },
+   {
+    "name": "Talking Heads Songs",
+    "color": 3,
+    "words": [
+     "ROAD TO NOWHERE",
+     "AND SHE WAS",
+     "BURNING DOWN THE HOUSE",
+     "SLIPPERY PEOPLE"
+    ]
+   },
+   {
+    "name": "Depeche Mode Songs",
+    "color": 4,
+    "words": [
+     "EVERYTHING COUNTS",
+     "POLICY OF TRUTH",
+     "PEOPLE ARE PEOPLE",
+     "NEW LIFE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Phil Collins Songs",
+    "color": 1,
+    "words": [
+     "A GROOVY KIND OF LOVE",
+     "TWO HEARTS",
+     "SUSSUDIO",
+     "EASY LOVER"
+    ]
+   },
+   {
+    "name": "George Michael Songs",
+    "color": 2,
+    "words": [
+     "MONKEY",
+     "I WANT YOUR SEX",
+     "HARD DAY",
+     "FATHER FIGURE"
+    ]
+   },
+   {
+    "name": "Lionel Richie Songs",
+    "color": 3,
+    "words": [
+     "STUCK ON YOU",
+     "RUNNING WITH THE NIGHT",
+     "SAY YOU SAY ME",
+     "SE LA"
+    ]
+   },
+   {
+    "name": "80s Power Ballads",
+    "color": 4,
+    "words": [
+     "OPEN ARMS",
+     "IS THIS LOVE",
+     "PATIENCE",
+     "MORE THAN A WORD"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s One-Hit Wonders",
+    "color": 1,
+    "words": [
+     "EVERYBODY WANTS TO RULE THE WORLD",
+     "WALKING ON SUNSHINE",
+     "SUNGLASSES AT NIGHT",
+     "COME ON EILEEN"
+    ]
+   },
+   {
+    "name": "Live Aid Performers",
+    "color": 2,
+    "words": [
+     "LED ZEPPELIN",
+     "TINA TURNER",
+     "SANTANA",
+     "THE WHO"
+    ]
+   },
+   {
+    "name": "Famous 80s Albums",
+    "color": 3,
+    "words": [
+     "BAD",
+     "BORN IN THE USA",
+     "HYSTERIA",
+     "THE JOSHUA TREE"
+    ]
+   },
+   {
+    "name": "Hair Metal Bands",
+    "color": 4,
+    "words": [
+     "EUROPE",
+     "DOKKEN",
+     "MOTLEY CRUE",
+     "GREAT WHITE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs in 80s Movies",
+    "color": 1,
+    "words": [
+     "DONT YOU FORGET ABOUT ME",
+     "FLASHDANCE",
+     "SHOUT",
+     "OLD TIME ROCK AND ROLL"
+    ]
+   },
+   {
+    "name": "80s TV Theme Songs",
+    "color": 2,
+    "words": [
+     "NIGHT COURT",
+     "GROWING PAINS",
+     "FAMILY TIES THEME",
+     "SAVED BY THE BELL"
+    ]
+   },
+   {
+    "name": "Songs About Night",
+    "color": 3,
+    "words": [
+     "NIGHTSHIFT",
+     "DANCING IN THE DARK",
+     "SATURDAY NIGHT",
+     "IN THE AIR TONIGHT"
+    ]
+   },
+   {
+    "name": "Songs About Girls",
+    "color": 4,
+    "words": [
+     "PRIVATE DANCER",
+     "MATERIAL GIRL",
+     "GIRLS ON FILM",
+     "LIKE A VIRGIN"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Michael Jackson Songs",
+    "color": 1,
+    "words": [
+     "OFF THE WALL",
+     "DIRTY DIANA",
+     "THRILLER",
+     "THE WAY YOU MAKE ME FEEL"
+    ]
+   },
+   {
+    "name": "Whitney Houston Songs",
+    "color": 2,
+    "words": [
+     "I WANNA DANCE WITH SOMEBODY",
+     "SAVING ALL MY LOVE",
+     "DIDNT WE ALMOST HAVE IT ALL",
+     "ONE MOMENT IN TIME"
+    ]
+   },
+   {
+    "name": "Lionel Richie Songs",
+    "color": 3,
+    "words": [
+     "RUNNING WITH THE NIGHT",
+     "SE LA",
+     "DANCING ON THE CEILING",
+     "SAY YOU SAY ME"
+    ]
+   },
+   {
+    "name": "Prince Songs",
+    "color": 4,
+    "words": [
+     "I WOULD DIE 4 U",
+     "U GOT THE LOOK",
+     "WHEN DOVES CRY",
+     "AROUND THE WORLD IN A DAY"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "The Police Songs",
+    "color": 1,
+    "words": [
+     "EVERY LITTLE THING SHE DOES IS MAGIC",
+     "ROXANNE",
+     "SPIRITS IN THE MATERIAL WORLD",
+     "DE DO DO DO"
+    ]
+   },
+   {
+    "name": "Duran Duran Songs",
+    "color": 2,
+    "words": [
+     "IS THERE SOMETHING I SHOULD KNOW",
+     "GIRLS ON FILM",
+     "RIO",
+     "NOTORIOUS"
+    ]
+   },
+   {
+    "name": "Tears for Fears Songs",
+    "color": 3,
+    "words": [
+     "SOWING THE SEEDS OF LOVE",
+     "CHANGE",
+     "SHOUT",
+     "MAD WORLD"
+    ]
+   },
+   {
+    "name": "INXS Songs",
+    "color": 4,
+    "words": [
+     "DON'T CHANGE",
+     "NEED YOU TONIGHT",
+     "NEW SENSATION",
+     "DEVIL INSIDE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with A",
+    "color": 1,
+    "words": [
+     "ALL I WANT FOR CHRISTMAS",
+     "ALEJANDRO",
+     "AFRICA",
+     "ANGEL"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with B",
+    "color": 2,
+    "words": [
+     "BORDERLINE",
+     "BILLIE JEAN",
+     "BORN IN THE USA",
+     "BLUE MONDAY"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with D",
+    "color": 3,
+    "words": [
+     "DONT YOU WANT ME",
+     "DOWN UNDER",
+     "DANGER ZONE",
+     "DONT STOP ME NOW"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with F",
+    "color": 4,
+    "words": [
+     "FREE FALLIN",
+     "FLASHDANCE",
+     "FOOTLOOSE",
+     "FANTASTIC VOYAGE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with G",
+    "color": 1,
+    "words": [
+     "GROOVY KIND OF LOVE",
+     "GIRLS JUST WANT TO HAVE FUN",
+     "GREATEST LOVE OF ALL",
+     "GUILTY"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with H",
+    "color": 2,
+    "words": [
+     "HEAD OVER HEELS",
+     "HERE I GO AGAIN",
+     "HUMAN",
+     "HEART OF GLASS"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with I",
+    "color": 3,
+    "words": [
+     "ISLANDS IN THE STREAM",
+     "I JUST CALLED TO SAY I LOVE YOU",
+     "I LOVE ROCK N ROLL",
+     "INVISIBLE TOUCH"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with J",
+    "color": 4,
+    "words": [
+     "JUNGLE LOVE",
+     "JUST CANT GET ENOUGH",
+     "JUMPING JACK FLASH",
+     "JUST LIKE HEAVEN"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with L",
+    "color": 1,
+    "words": [
+     "LIKE A ROLLING STONE",
+     "LA BAMBA",
+     "LIKE A VIRGIN",
+     "LETS GO CRAZY"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with M",
+    "color": 2,
+    "words": [
+     "MONKEY",
+     "MIRACLE",
+     "MAD WORLD",
+     "MATERIAL GIRL"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with N",
+    "color": 3,
+    "words": [
+     "NO ONE IS TO BLAME",
+     "NINE TO FIVE",
+     "NEVER GONNA GIVE YOU UP",
+     "NEW YEARS DAY"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with O",
+    "color": 4,
+    "words": [
+     "ONLY THE LONELY",
+     "OH SHERRIE",
+     "OPPOSITES ATTRACT",
+     "OWNER OF A LONELY HEART"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with P",
+    "color": 1,
+    "words": [
+     "PATIENCE",
+     "PROUD MARY",
+     "PHYSICAL",
+     "PINK HOUSES"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with R",
+    "color": 2,
+    "words": [
+     "RUNNING WITH THE NIGHT",
+     "RIO",
+     "ROMANCE",
+     "REBEL YELL"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with S",
+    "color": 3,
+    "words": [
+     "SMOOTH CRIMINAL",
+     "SHE BOP",
+     "SAFETY DANCE",
+     "SEPARATE LIVES"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with T",
+    "color": 4,
+    "words": [
+     "TALKING IN YOUR SLEEP",
+     "TRUE COLORS",
+     "TENDER IS THE NIGHT",
+     "TAINTED LOVE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "80s Songs Starting with W",
+    "color": 1,
+    "words": [
+     "WHAT I AM",
+     "WAKE ME UP BEFORE YOU GO GO",
+     "WITH OR WITHOUT YOU",
+     "WHEN DOVES CRY"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with Y",
+    "color": 2,
+    "words": [
+     "YOUR WILDEST DREAMS",
+     "YOUD BE SO NICE TO COME HOME TO",
+     "YOUR LOVE",
+     "YOU GIVE LOVE A BAD NAME"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with C",
+    "color": 3,
+    "words": [
+     "CARELESS WHISPER",
+     "CHINA GIRL",
+     "CRAZY FOR YOU",
+     "CARIBBEAN QUEEN"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with E",
+    "color": 4,
+    "words": [
+     "EBONY AND IVORY",
+     "EVERY BREATH YOU TAKE",
+     "EVA MARIE",
+     "EASY LOVER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1982",
+    "color": 1,
+    "words": [
+     "OPEN ARMS",
+     "EYE OF THE TIGER",
+     "I LOVE ROCK N ROLL",
+     "JACK AND DIANE"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1984",
+    "color": 2,
+    "words": [
+     "HELLO",
+     "LET'S HEAR IT FOR THE BOY",
+     "MISSING YOU",
+     "JUMP"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1986",
+    "color": 3,
+    "words": [
+     "GREATEST LOVE OF ALL",
+     "THAT'S WHAT FRIENDS ARE FOR",
+     "SAY YOU SAY ME",
+     "ROCK ME AMADEUS"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1988",
+    "color": 4,
+    "words": [
+     "GOT MY MIND SET ON YOU",
+     "COULD'VE BEEN",
+     "ONE MORE TRY",
+     "FAITH"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "#1 Hits of 1983",
+    "color": 1,
+    "words": [
+     "MANIAC",
+     "SAY SAY SAY",
+     "EVERY BREATH YOU TAKE",
+     "BILLIE JEAN"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1985",
+    "color": 2,
+    "words": [
+     "I WANT TO KNOW WHAT LOVE IS",
+     "PART-TIME LOVER",
+     "CARELESS WHISPER",
+     "SAY YOU SAY ME"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1987",
+    "color": 3,
+    "words": [
+     "WALK LIKE AN EGYPTIAN",
+     "LA BAMBA",
+     "I KNEW YOU WERE WAITING",
+     "WITH OR WITHOUT YOU"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1989",
+    "color": 4,
+    "words": [
+     "WHEN I'M WITH YOU",
+     "SUPER FREAK",
+     "LIKE A PRAYER",
+     "MY PREROGATIVE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Madonna Songs",
+    "color": 1,
+    "words": [
+     "CAUSING A COMMOTION",
+     "WHO'S THAT GIRL",
+     "LUCKY STAR",
+     "OPEN YOUR HEART"
+    ]
+   },
+   {
+    "name": "Cyndi Lauper Songs",
+    "color": 2,
+    "words": [
+     "I DROVE ALL NIGHT",
+     "HAT FULL OF STARS",
+     "TRUE COLORS",
+     "CHANGE OF HEART"
+    ]
+   },
+   {
+    "name": "Tina Turner Songs",
+    "color": 3,
+    "words": [
+     "STEAMY WINDOWS",
+     "THE BEST",
+     "BETTER BE GOOD TO ME",
+     "ADDICTED TO LOVE"
+    ]
+   },
+   {
+    "name": "Bruce Springsteen Songs",
+    "color": 4,
+    "words": [
+     "TUNNEL OF LOVE",
+     "COVER ME",
+     "BORN IN THE USA",
+     "BRILLIANT DISGUISE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Bon Jovi Songs",
+    "color": 1,
+    "words": [
+     "RUNAWAY",
+     "WANTED DEAD OR ALIVE",
+     "BAD MEDICINE",
+     "SHOT THROUGH THE HEART"
+    ]
+   },
+   {
+    "name": "George Michael Songs",
+    "color": 2,
+    "words": [
+     "FAITH",
+     "I WANT YOUR SEX",
+     "KISSING A FOOL",
+     "ONE MORE TRY"
+    ]
+   },
+   {
+    "name": "INXS Songs",
+    "color": 3,
+    "words": [
+     "NEW SENSATION",
+     "NEED YOU TONIGHT",
+     "WHAT YOU NEED",
+     "I SEND A MESSAGE"
+    ]
+   },
+   {
+    "name": "Talking Heads Songs",
+    "color": 4,
+    "words": [
+     "AND SHE WAS",
+     "ONCE IN A LIFETIME",
+     "SLIPPERY PEOPLE",
+     "WILD WILD LIFE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "British Invasion 80s Bands",
+    "color": 1,
+    "words": [
+     "SOFT CELL",
+     "CULTURE CLUB",
+     "NEW ORDER",
+     "THE POLICE"
+    ]
+   },
+   {
+    "name": "80s Rap & Hip-Hop",
+    "color": 2,
+    "words": [
+     "WALK THIS WAY",
+     "ERIC B IS PRESIDENT",
+     "PARENTS JUST DONT UNDERSTAND",
+     "FIGHT THE POWER"
+    ]
+   },
+   {
+    "name": "80s Power Ballads",
+    "color": 3,
+    "words": [
+     "OPEN ARMS",
+     "DONT STOP BELIEVIN",
+     "PATIENCE",
+     "I WANT TO KNOW WHAT LOVE IS"
+    ]
+   },
+   {
+    "name": "80s Synth-Pop Songs",
+    "color": 4,
+    "words": [
+     "JUST CANT GET ENOUGH",
+     "SMALLTOWN BOY",
+     "TAINTED LOVE",
+     "THERE SHE GOES"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs About Love",
+    "color": 1,
+    "words": [
+     "CRAZY FOR YOU",
+     "WITH OR WITHOUT YOU",
+     "TRUE",
+     "TOTAL ECLIPSE OF THE HEART"
+    ]
+   },
+   {
+    "name": "Songs About Dancing",
+    "color": 2,
+    "words": [
+     "DANCING QUEEN",
+     "SHAKE YOUR LOVE",
+     "LETS DANCE",
+     "DANCING IN THE DARK"
+    ]
+   },
+   {
+    "name": "Songs with Colors",
+    "color": 3,
+    "words": [
+     "YELLOW",
+     "BLACK OR WHITE",
+     "PINK HOUSES",
+     "99 RED BALLOONS"
+    ]
+   },
+   {
+    "name": "Songs with City Names",
+    "color": 4,
+    "words": [
+     "STREETS OF PHILADELPHIA",
+     "GOOD MORNING BALTIMORE",
+     "WALKING IN MEMPHIS",
+     "LIVING FOR THE CITY"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Songs About Girls",
+    "color": 1,
+    "words": [
+     "GLORIA",
+     "MANIAC",
+     "LIKE A VIRGIN",
+     "UPTOWN GIRL"
+    ]
+   },
+   {
+    "name": "Songs About Money",
+    "color": 2,
+    "words": [
+     "WORKING FOR THE WEEKEND",
+     "CANT BUY ME LOVE",
+     "MONEY FOR NOTHING",
+     "TAXMAN"
+    ]
+   },
+   {
+    "name": "Songs with Animals",
+    "color": 3,
+    "words": [
+     "HOUND DOG",
+     "EYE OF THE TIGER",
+     "CROCODILE DUNDEE",
+     "GIRLS ON FILM"
+    ]
+   },
+   {
+    "name": "Songs with Numbers",
+    "color": 4,
+    "words": [
+     "99 LUFTBALLONS",
+     "ONE IN A MILLION",
+     "TEN",
+     "1999"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Famous 80s Albums",
+    "color": 1,
+    "words": [
+     "CANT SLOW DOWN",
+     "THE JOSHUA TREE",
+     "HYSTERIA",
+     "INVISIBLE TOUCH"
+    ]
+   },
+   {
+    "name": "Live Aid Performers",
+    "color": 2,
+    "words": [
+     "LED ZEPPELIN",
+     "PAUL MCCARTNEY",
+     "MADONNA",
+     "MICK JAGGER"
+    ]
+   },
+   {
+    "name": "Original MTV VJs",
+    "color": 3,
+    "words": [
+     "KURT LODER",
+     "NINA BLACKWOOD",
+     "J.J. JACKSON",
+     "CAROLYNE HELDMAN"
+    ]
+   },
+   {
+    "name": "80s Movies with Great Soundtracks",
+    "color": 4,
+    "words": [
+     "BREAKFAST CLUB",
+     "TOP GUN",
+     "FLASHDANCE",
+     "RISKY BUSINESS"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Michael Jackson Songs",
+    "color": 1,
+    "words": [
+     "DIRTY DIANA",
+     "SMOOTH CRIMINAL",
+     "THE GIRL IS MINE",
+     "OFF THE WALL"
+    ]
+   },
+   {
+    "name": "Duran Duran Songs",
+    "color": 2,
+    "words": [
+     "RIO",
+     "HUNGRY LIKE THE WOLF",
+     "UNION OF THE SNAKE",
+     "ORDINARY WORLD"
+    ]
+   },
+   {
+    "name": "Phil Collins Songs",
+    "color": 3,
+    "words": [
+     "DONT LOSE MY NUMBER",
+     "A GROOVY KIND OF LOVE",
+     "IN THE AIR TONIGHT",
+     "YOU CANT HURRY LOVE"
+    ]
+   },
+   {
+    "name": "Billy Idol Songs",
+    "color": 4,
+    "words": [
+     "MONY MONY",
+     "REBEL YELL",
+     "HOT IN THE CITY",
+     "TO BE A LOVER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Whitney Houston Songs",
+    "color": 1,
+    "words": [
+     "DIDNT WE ALMOST HAVE IT ALL",
+     "GREATEST LOVE OF ALL",
+     "SO EMOTIONAL",
+     "ONE MOMENT IN TIME"
+    ]
+   },
+   {
+    "name": "Lionel Richie Songs",
+    "color": 2,
+    "words": [
+     "SAY YOU SAY ME",
+     "ENDLESS LOVE",
+     "SE LA",
+     "STUCK ON YOU"
+    ]
+   },
+   {
+    "name": "Depeche Mode Songs",
+    "color": 3,
+    "words": [
+     "MASTER AND SERVANT",
+     "STRIPPED",
+     "JUST CANT GET ENOUGH",
+     "POLICY OF TRUTH"
+    ]
+   },
+   {
+    "name": "R.E.M. Songs",
+    "color": 4,
+    "words": [
+     "STAND",
+     "THE END OF THE WORLD",
+     "FALL ON ME",
+     "IT'S THE END OF THE WORLD AS WE KNOW IT"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Hair Metal Bands",
+    "color": 1,
+    "words": [
+     "QUIET RIOT",
+     "TWISTED SISTER",
+     "EUROPE",
+     "BON JOVI"
+    ]
+   },
+   {
+    "name": "New Wave Bands",
+    "color": 2,
+    "words": [
+     "WHAM!",
+     "A-HA",
+     "THE PRETENDERS",
+     "BLONDIE"
+    ]
+   },
+   {
+    "name": "One-Word Band Names",
+    "color": 3,
+    "words": [
+     "JOURNEY",
+     "KANSAS",
+     "INXS",
+     "DEVO"
+    ]
+   },
+   {
+    "name": "Female 80s Artists",
+    "color": 4,
+    "words": [
+     "LAURA BRANIGAN",
+     "KIM WILDE",
+     "DEBBIE HARRY",
+     "MADONNA"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "U2 Songs",
+    "color": 1,
+    "words": [
+     "DESIRE",
+     "NEW YEARS DAY",
+     "ANGEL OF HARLEM",
+     "IN GODS COUNTRY"
+    ]
+   },
+   {
+    "name": "The Police Songs",
+    "color": 2,
+    "words": [
+     "SYNCHRONICITY",
+     "SPIRITS IN THE MATERIAL WORLD",
+     "EVERY LITTLE THING SHE DOES IS MAGIC",
+     "KING OF PAIN"
+    ]
+   },
+   {
+    "name": "Prince Songs",
+    "color": 3,
+    "words": [
+     "SIGN O THE TIMES",
+     "PURPLE RAIN",
+     "AROUND THE WORLD IN A DAY",
+     "I WOULD DIE 4 U"
+    ]
+   },
+   {
+    "name": "Tina Turner Songs",
+    "color": 4,
+    "words": [
+     "THE BEST",
+     "TWO PEOPLE",
+     "WHAT YOU GET IS WHAT YOU SEE",
+     "TYPICAL MALE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Original MTV VJs",
+    "color": 1,
+    "words": [
+     "MARTHA QUINN",
+     "ALAN HUNTER",
+     "MARK GOODMAN",
+     "NINA BLACKWOOD"
+    ]
+   },
+   {
+    "name": "Live Aid Performers (1985)",
+    "color": 2,
+    "words": [
+     "QUEEN",
+     "U2",
+     "DAVID BOWIE",
+     "ELTON JOHN"
+    ]
+   },
+   {
+    "name": "Famous 80s Albums",
+    "color": 3,
+    "words": [
+     "THRILLER",
+     "BORN IN THE USA",
+     "PURPLE RAIN",
+     "HYSTERIA"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1984",
+    "color": 4,
+    "words": [
+     "JUMP",
+     "WHEN DOVES CRY",
+     "GHOSTBUSTERS",
+     "HELLO"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Michael Jackson Songs",
+    "color": 1,
+    "words": [
+     "ROCK WITH YOU",
+     "DONT STOP TIL YOU GET ENOUGH",
+     "OFF THE WALL",
+     "SHE'S OUT OF MY LIFE"
+    ]
+   },
+   {
+    "name": "Songs About Dancing",
+    "color": 2,
+    "words": [
+     "LETS DANCE",
+     "DANCING QUEEN",
+     "SHAKE YOUR LOVE",
+     "DANCE HALL DAYS"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with B",
+    "color": 3,
+    "words": [
+     "BAD MEDICINE",
+     "BETTE DAVIS EYES",
+     "BORN IN THE USA",
+     "BLUE MONDAY"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1985",
+    "color": 4,
+    "words": [
+     "CARELESS WHISPER",
+     "SAY YOU SAY ME",
+     "PART-TIME LOVER",
+     "SEPARATE LIVES"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Madonna Songs",
+    "color": 1,
+    "words": [
+     "INTO THE GROOVE",
+     "LA ISLA BONITA",
+     "WHO'S THAT GIRL",
+     "CAUSING A COMMOTION"
+    ]
+   },
+   {
+    "name": "New Wave Bands",
+    "color": 2,
+    "words": [
+     "MADNESS",
+     "THE SMITHS",
+     "NEW ORDER",
+     "SOFT CELL"
+    ]
+   },
+   {
+    "name": "Songs with Colors",
+    "color": 3,
+    "words": [
+     "PINK CADILLAC",
+     "RED RED WINE",
+     "GOLDEN YEARS",
+     "ORANGE CRUSH"
+    ]
+   },
+   {
+    "name": "Hair Metal Bands",
+    "color": 4,
+    "words": [
+     "WARRANT",
+     "CINDERELLA",
+     "RATT",
+     "DOKKEN"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Prince Songs",
+    "color": 1,
+    "words": [
+     "AROUND THE WORLD IN A DAY",
+     "TAKE ME WITH U",
+     "I WOULD DIE 4 U",
+     "LITTLE RED CORVETTE"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with R",
+    "color": 2,
+    "words": [
+     "RASPBERRY BERET",
+     "REBEL YELL",
+     "RIDE LIKE THE WIND",
+     "ROUND AND ROUND"
+    ]
+   },
+   {
+    "name": "Songs About Love",
+    "color": 3,
+    "words": [
+     "OPEN ARMS",
+     "CRAZY FOR YOU",
+     "ENDLESS LOVE",
+     "TRUE"
+    ]
+   },
+   {
+    "name": "British Invasion 80s Bands",
+    "color": 4,
+    "words": [
+     "FRANKIE GOES TO HOLLYWOOD",
+     "MADNESS",
+     "THE SMITHS",
+     "NEW ORDER"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Whitney Houston Songs",
+    "color": 1,
+    "words": [
+     "SO EMOTIONAL",
+     "DIDNT WE ALMOST HAVE IT ALL",
+     "WHERE DO BROKEN HEARTS GO",
+     "ONE MOMENT IN TIME"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with S",
+    "color": 2,
+    "words": [
+     "SUSSUDIO",
+     "SAY SAY SAY",
+     "SIGN O THE TIMES",
+     "SHE BOP"
+    ]
+   },
+   {
+    "name": "Famous 80s Albums",
+    "color": 3,
+    "words": [
+     "1984",
+     "FAITH",
+     "GRACELAND",
+     "CONTROL"
+    ]
+   },
+   {
+    "name": "Songs About Girls",
+    "color": 4,
+    "words": [
+     "VENUS",
+     "PRIVATE DANCER",
+     "MANIAC",
+     "GLORIA"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Duran Duran Songs",
+    "color": 1,
+    "words": [
+     "NOTORIOUS",
+     "ORDINARY WORLD",
+     "UNION OF THE SNAKE",
+     "IS THERE SOMETHING I SHOULD KNOW"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with T",
+    "color": 2,
+    "words": [
+     "TALKING IN YOUR SLEEP",
+     "TYPICAL MALE",
+     "TWIST OF FATE",
+     "TENDER IS THE NIGHT"
+    ]
+   },
+   {
+    "name": "Songs About Night",
+    "color": 3,
+    "words": [
+     "NIGHTSHIFT",
+     "ROCK THE NIGHT",
+     "SATURDAY NIGHT",
+     "MIDNIGHT HOUR"
+    ]
+   },
+   {
+    "name": "80s One-Hit Wonders",
+    "color": 4,
+    "words": [
+     "I RAN",
+     "WHIP IT",
+     "ELECTRIC AVENUE",
+     "SUNGLASSES AT NIGHT"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Cyndi Lauper Songs",
+    "color": 1,
+    "words": [
+     "CHANGE OF HEART",
+     "I DROVE ALL NIGHT",
+     "ALL THROUGH THE NIGHT",
+     "HAT FULL OF STARS"
+    ]
+   },
+   {
+    "name": "80s Synth-Pop Songs",
+    "color": 2,
+    "words": [
+     "ALWAYS ON MY MIND",
+     "SMALLTOWN BOY",
+     "THERE SHE GOES",
+     "WORDS"
+    ]
+   },
+   {
+    "name": "Songs with City Names",
+    "color": 3,
+    "words": [
+     "WEST END GIRLS",
+     "VIENNA",
+     "MIDNIGHT IN MOSCOW",
+     "LIVING IN AMERICA"
+    ]
+   },
+   {
+    "name": "Live Aid Performers",
+    "color": 4,
+    "words": [
+     "MICK JAGGER",
+     "TINA TURNER",
+     "BOB DYLAN",
+     "DIRE STRAITS"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "George Michael Songs",
+    "color": 1,
+    "words": [
+     "A DIFFERENT CORNER",
+     "KISSING A FOOL",
+     "HARD DAY",
+     "I WANT YOUR SEX"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with C",
+    "color": 2,
+    "words": [
+     "CENTERFOLD",
+     "CARIBBEAN QUEEN",
+     "CANT FIGHT THIS FEELING",
+     "CHINA GIRL"
+    ]
+   },
+   {
+    "name": "Songs with Animals",
+    "color": 3,
+    "words": [
+     "HUNGRY LIKE THE WOLF",
+     "EYE OF THE TIGER",
+     "CAT PEOPLE",
+     "CROCODILE ROCK"
+    ]
+   },
+   {
+    "name": "80s Rap & Hip-Hop",
+    "color": 4,
+    "words": [
+     "FIGHT THE POWER",
+     "PARENTS JUST DONT UNDERSTAND",
+     "LA DI DA DI",
+     "ROCK BOX"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Bon Jovi Songs",
+    "color": 1,
+    "words": [
+     "ALWAYS",
+     "LAY YOUR HANDS ON ME",
+     "ILL BE THERE FOR YOU",
+     "RUNAWAY"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with E",
+    "color": 2,
+    "words": [
+     "ELECTRIC AVENUE",
+     "ENOLA GAY",
+     "EYES WITHOUT A FACE",
+     "EASY LOVER"
+    ]
+   },
+   {
+    "name": "Songs About Money",
+    "color": 3,
+    "words": [
+     "OPPORTUNITIES",
+     "MONEY CHANGES EVERYTHING",
+     "GOLD",
+     "TAXMAN"
+    ]
+   },
+   {
+    "name": "80s Power Ballads",
+    "color": 4,
+    "words": [
+     "DONT STOP BELIEVIN",
+     "MORE THAN A WORD",
+     "HEAVEN",
+     "IS THIS LOVE"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "The Police Songs",
+    "color": 1,
+    "words": [
+     "SPIRITS IN THE MATERIAL WORLD",
+     "SYNCHRONICITY",
+     "DE DO DO DO",
+     "WRAPPED AROUND YOUR FINGER"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with W",
+    "color": 2,
+    "words": [
+     "WALK LIKE AN EGYPTIAN",
+     "WAKE ME UP BEFORE YOU GO GO",
+     "WHAT I AM",
+     "WIND BENEATH MY WINGS"
+    ]
+   },
+   {
+    "name": "Songs with Numbers",
+    "color": 3,
+    "words": [
+     "TWO OF HEARTS",
+     "ONE IN A MILLION",
+     "NINE TO FIVE",
+     "TEN"
+    ]
+   },
+   {
+    "name": "Male 80s Solo Artists",
+    "color": 4,
+    "words": [
+     "RICK SPRINGFIELD",
+     "BILLY JOEL",
+     "DON HENLEY",
+     "PAUL YOUNG"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Tina Turner Songs",
+    "color": 1,
+    "words": [
+     "TYPICAL MALE",
+     "THE BEST",
+     "TWO PEOPLE",
+     "STEAMY WINDOWS"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with N",
+    "color": 2,
+    "words": [
+     "NOTHING COMPARES 2 U",
+     "NOTORIOUS",
+     "NO ONE IS TO BLAME",
+     "NEON LIGHTS"
+    ]
+   },
+   {
+    "name": "Songs in 80s Movies",
+    "color": 3,
+    "words": [
+     "FOOTLOOSE",
+     "FLASHDANCE",
+     "DANGER ZONE",
+     "ST ELMOS FIRE"
+    ]
+   },
+   {
+    "name": "One-Word Band Names",
+    "color": 4,
+    "words": [
+     "DEVO",
+     "HEART",
+     "TOTO",
+     "ASIA"
+    ]
+   }
+  ]
+ },
+ {
+  "cats": [
+   {
+    "name": "Original MTV VJs",
+    "color": 1,
+    "words": [
+     "CAROLYNE HELDMAN",
+     "KURT LODER",
+     "DOWNTOWN JULIE BROWN",
+     "J.J. JACKSON"
+    ]
+   },
+   {
+    "name": "80s Movies with Great Soundtracks",
+    "color": 2,
+    "words": [
+     "DIRTY DANCING",
+     "BREAKFAST CLUB",
+     "RISKY BUSINESS",
+     "PRETTY IN PINK"
+    ]
+   },
+   {
+    "name": "80s Songs Starting with Y",
+    "color": 3,
+    "words": [
+     "YOU GIVE LOVE A BAD NAME",
+     "YOU SHOOK ME ALL NIGHT LONG",
+     "YOURE THE INSPIRATION",
+     "YOUR LOVE"
+    ]
+   },
+   {
+    "name": "#1 Hits of 1989",
+    "color": 4,
+    "words": [
+     "LOOK AWAY",
+     "MY PREROGATIVE",
+     "TWO HEARTS",
+     "LOST IN YOUR EYES"
+    ]
+   }
+  ]
+ }
+];
+
+var COLOR_CONFIG = {
+  1: { bg: "#2de2e6" },
+  2: { bg: "#c724b1" },
+  3: { bg: "#f7d716" },
+  4: { bg: "#3ddc97" }
+};
+
+// ── Sound Engine ───────────────────────────────────────────────
+var audioCtx = null;
+function getAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+  }
+  return audioCtx;
+}
+function playTone(freq, type, duration, volume, delay) {
+  var ctx = getAudio(); if (!ctx) return;
+  delay = delay || 0; volume = volume || 0.3;
+  var osc = ctx.createOscillator(); var gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.type = type || 'square'; osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+  gain.gain.setValueAtTime(volume, ctx.currentTime + delay);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+  osc.start(ctx.currentTime + delay); osc.stop(ctx.currentTime + delay + duration);
+}
+function playChirp(freq, endFreq, duration, type, delay) {
+  var ctx = getAudio(); if (!ctx) return;
+  delay = delay || 0;
+  var osc = ctx.createOscillator(); var gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.type = type || 'square';
+  osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+  osc.frequency.linearRampToValueAtTime(endFreq, ctx.currentTime + delay + duration);
+  gain.gain.setValueAtTime(0.25, ctx.currentTime + delay);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+  osc.start(ctx.currentTime + delay); osc.stop(ctx.currentTime + delay + duration);
+}
+function soundSelect()  { playTone(880, 'square', 0.05, 0.15); }
+function soundDeselect(){ playTone(440, 'square', 0.05, 0.12); }
+function soundCorrect() {
+  playTone(523,'square',0.1,0.25,0.0); playTone(659,'square',0.1,0.25,0.1);
+  playTone(784,'square',0.1,0.25,0.2); playTone(1047,'square',0.2,0.3,0.3);
+}
+function soundWrong()   { playChirp(400,200,0.15,'sawtooth',0.0); playChirp(350,150,0.15,'sawtooth',0.18); }
+function soundOneAway() { playTone(660,'square',0.08,0.2,0.0); playTone(550,'square',0.08,0.2,0.1); playTone(660,'square',0.08,0.2,0.2); }
+function soundWin() {
+  var notes=[523,659,784,1047,784,1047,1319]; var times=[0,0.12,0.24,0.36,0.5,0.62,0.74];
+  notes.forEach(function(n,i){ playTone(n,'square',0.18,0.3,times[i]); });
+  playTone(130,'sine',0.1,0.4,0.0); playTone(130,'sine',0.1,0.4,0.36); playTone(130,'sine',0.15,0.4,0.74);
+}
+function soundLose() {
+  playChirp(440,220,0.3,'sawtooth',0.0); playChirp(330,165,0.3,'sawtooth',0.32); playChirp(220,110,0.4,'sawtooth',0.65);
+}
+function soundCheat() { playTone(988,'square',0.06,0.3,0.0); playTone(1319,'square',0.1,0.3,0.07); }
+function soundShuffle() { for(var i=0;i<5;i++){ playTone(200+i*80,'square',0.04,0.15,i*0.04); } }
+
+// ── Daily puzzle logic ─────────────────────────────────────────
+var EPOCH = new Date('2026-03-31T00:00:00').getTime();
+
+function getDayIndex() {
+  var now = new Date();
+  var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  var epoch = EPOCH;
+  try { var ov = localStorage.getItem('epoch_override'); if (ov) epoch = parseInt(ov); } catch(e) {}
+  var offset = 0;
+  try { offset = parseInt(localStorage.getItem('day_offset') || '0'); } catch(e) {}
+  var dayNum = Math.floor((midnight - epoch) / 86400000) + offset;
+  return ((dayNum % GAMES.length) + GAMES.length) % GAMES.length;
+}
+
+function getTodayKey() {
+  var now = new Date();
+  var offset = 0;
+  try { offset = parseInt(localStorage.getItem('day_offset') || '0'); } catch(e) {}
+  return 'played_' + now.getFullYear() + '_' + (now.getMonth()+1) + '_' + now.getDate() + '_o' + offset;
+}
+
+function hasPlayedToday() {
+  try { return localStorage.getItem(getTodayKey()) !== null; } catch(e) { return false; }
+}
+
+function markPlayedToday() {
+  try { localStorage.setItem(getTodayKey(), '1'); } catch(e) {}
+}
+
+function updateCountdown() {
+  var now = new Date();
+  var tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  var diff = tomorrow - now;
+  var h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+  var pad = function(n){ return n < 10 ? '0'+n : ''+n; };
+  var el = document.getElementById('countdown');
+  if (el) el.textContent = pad(h)+':'+pad(m)+':'+pad(s);
+}
+
+// ── Game state ─────────────────────────────────────────────────
+var selectedWords = [], mistakes = 4, solvedColors = [], tiles = [], gameOver = false, gameIdx = 0;
+
+function shuffleArr(a) {
+  a = a.slice();
+  for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+
+function getSolvedWords() {
+  var w = [];
+  solvedColors.forEach(function(c) {
+    var cat = GAMES[gameIdx].cats.find(function(x){ return x.color===c; });
+    if (cat) cat.words.forEach(function(word){ w.push(word); });
+  });
+  return w;
+}
+
+function renderGrid() {
+  var grid = document.getElementById('grid'); grid.innerHTML = '';
+  var sw = getSolvedWords();
+  tiles.filter(function(w){ return sw.indexOf(w)===-1; }).forEach(function(word) {
+    var tile = document.createElement('div');
+    tile.className = 'tile' + (selectedWords.indexOf(word)!==-1 ? ' selected' : '');
+    tile.textContent = word;
+    tile.addEventListener('click', function(){ toggleWord(word); });
+    grid.appendChild(tile);
+  });
+}
+
+function renderSolved() {
+  var c = document.getElementById('solvedCats'); c.innerHTML = '';
+  solvedColors.forEach(function(color) {
+    var cat = GAMES[gameIdx].cats.find(function(x){ return x.color===color; });
+    var div = document.createElement('div'); div.className = 'solved-cat';
+    div.style.background = COLOR_CONFIG[color].bg;
+    div.innerHTML = '<div class="cat-name">'+cat.name+'</div><div class="cat-words">'+cat.words.join(', ')+'</div>';
+    c.appendChild(div);
+  });
+}
+
+function renderDots() {
+  var el = document.getElementById('dots'); el.innerHTML = '';
+  for (var i=0;i<4;i++) { var d=document.createElement('span'); d.className='dot'+(i>=mistakes?' used':''); el.appendChild(d); }
+}
+
+function updateButtons() {
+  document.getElementById('submitBtn').disabled = selectedWords.length!==4||gameOver;
+  document.getElementById('deselectBtn').disabled = selectedWords.length===0;
+  document.getElementById('shuffleBtn').disabled = gameOver;
+}
+
+function toggleWord(word) {
+  if (gameOver) return;
+  var idx = selectedWords.indexOf(word);
+  if (idx!==-1) { selectedWords.splice(idx,1); soundDeselect(); }
+  else { if (selectedWords.length>=4) return; selectedWords.push(word); soundSelect(); }
+  renderGrid(); updateButtons();
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast'); t.textContent = msg;
+  t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); }, 2000);
+}
+
+function submit() {
+  if (selectedWords.length!==4) return;
+  var matched = null;
+  GAMES[gameIdx].cats.forEach(function(cat) {
+    if (solvedColors.indexOf(cat.color)!==-1) return;
+    if (selectedWords.every(function(w){ return cat.words.indexOf(w)!==-1; })) matched = cat;
+  });
+  if (matched) {
+    solvedColors.push(matched.color);
+    tiles = tiles.filter(function(w){ return matched.words.indexOf(w)===-1; });
+    selectedWords = [];
+    renderSolved(); renderGrid(); renderDots(); updateButtons();
+    if (solvedColors.length===4) {
+      markPlayedToday(); soundWin();
+      setTimeout(function(){ showModal(true); }, 400);
+    } else {
+      soundCorrect(); showToast('Correct! \uD83C\uDFB6');
+    }
+  } else {
+    var best = 0;
+    GAMES[gameIdx].cats.forEach(function(cat) {
+      if (solvedColors.indexOf(cat.color)!==-1) return;
+      var n = selectedWords.filter(function(w){ return cat.words.indexOf(w)!==-1; }).length;
+      if (n>best) best=n;
+    });
+    mistakes--; renderDots();
+    if (best===3) { soundOneAway(); showToast('One away... \uD83D\uDC40'); }
+    else          { soundWrong();   showToast('Not quite! Try again'); }
+    document.getElementById('grid').querySelectorAll('.tile.selected').forEach(function(t){
+      t.classList.add('shake'); setTimeout(function(){ t.classList.remove('shake'); }, 500);
+    });
+    selectedWords = [];
+    setTimeout(function(){ renderGrid(); updateButtons(); }, 600);
+    if (mistakes<=0) {
+      gameOver = true; markPlayedToday(); soundLose();
+      setTimeout(function(){ showModal(false); }, 700);
+    }
+  }
+}
+
+function showModal(won) {
+  document.getElementById('modalEmoji').textContent = won ? '\uD83C\uDF89' : '\uD83D\uDE22';
+  document.getElementById('modalTitle').textContent = won ? 'Totally Radical!' : 'Bogus!';
+  document.getElementById('modalMsg').textContent = won
+    ? 'You crushed Day '+(gameIdx+1)+' with '+(4-mistakes)+' mistake'+(4-mistakes===1?'':'s')+'! Come back tomorrow for a new puzzle.'
+    : 'Better luck tomorrow! The answers were:';
+  var catsEl = document.getElementById('modalCats'); catsEl.innerHTML = '';
+  GAMES[gameIdx].cats.forEach(function(cat) {
+    var div = document.createElement('div'); div.className = 'result-cat';
+    div.style.background = COLOR_CONFIG[cat.color].bg;
+    div.innerHTML = '<div class="rcat-name">'+cat.name+'</div><div class="rcat-words">'+cat.words.join(', ')+'</div>';
+    catsEl.appendChild(div);
+  });
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function showLocked() {
+  document.getElementById('gameArea').style.display = 'none';
+  document.getElementById('lockedScreen').classList.add('show');
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+}
+
+function startGame() {
+  gameIdx = getDayIndex();
+  document.getElementById('dayLabel').textContent = 'Day ' + (gameIdx+1);
+  if (hasPlayedToday()) { showLocked(); return; }
+  selectedWords = []; mistakes = 4; solvedColors = []; gameOver = false;
+  var words = [];
+  GAMES[gameIdx].cats.forEach(function(cat){ cat.words.forEach(function(w){ words.push(w); }); });
+  tiles = shuffleArr(words);
+  renderSolved(); renderGrid(); renderDots(); updateButtons();
+}
+
+// ── Dev Menu — triple-tap the logo ─────────────────────────────
+var tapCount = 0, tapTimer = null;
+document.getElementById('logoBtn').addEventListener('click', function() {
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer = setTimeout(function(){ tapCount = 0; }, 600);
+  if (tapCount >= 3) {
+    tapCount = 0;
+    soundCheat();
+    document.getElementById('devMenu').classList.toggle('open');
+  }
+});
+
+document.getElementById('devClose').addEventListener('click', function() {
+  document.getElementById('devMenu').classList.remove('open');
+});
+
+document.getElementById('devNext').addEventListener('click', function() {
+  document.getElementById('devMenu').classList.remove('open');
+  try {
+    markPlayedToday();
+    var offset = parseInt(localStorage.getItem('day_offset') || '0');
+    localStorage.setItem('day_offset', offset + 1);
+  } catch(e) {}
+  soundCheat();
+  showToast('Skipping to next game...');
+  setTimeout(function(){ location.reload(); }, 1500);
+});
+
+document.getElementById('devReset').addEventListener('click', function() {
+  document.getElementById('devMenu').classList.remove('open');
+  try {
+    Object.keys(localStorage).forEach(function(k){ if (k.startsWith('played_')) localStorage.removeItem(k); });
+    localStorage.removeItem('day_offset');
+    localStorage.setItem('epoch_override', new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime());
+  } catch(e) {}
+  soundCheat();
+  showToast('Reset! Starting from Day 1');
+  setTimeout(function(){ location.reload(); }, 1500);
+});
+
+document.getElementById('submitBtn').addEventListener('click', submit);
+
+document.getElementById('shuffleBtn').addEventListener('click', function() {
+  soundShuffle();
+  var sw = getSolvedWords();
+  tiles = sw.concat(shuffleArr(tiles.filter(function(w){ return sw.indexOf(w)===-1; })));
+  selectedWords = []; renderGrid(); updateButtons();
+});
+
+document.getElementById('deselectBtn').addEventListener('click', function() {
+  selectedWords = []; renderGrid(); updateButtons();
+});
+
+document.getElementById('modalClose').addEventListener('click', function() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  if (gameOver || solvedColors.length===4) showLocked();
+});
+
+startGame();
+</script>
+</body>
+</html>
