@@ -4599,53 +4599,114 @@ var COLOR_CONFIG = {
 };
 
 // ── Sound Engine ───────────────────────────────────────────────
-var audioCtx = null;
+// ── Sound Engine (iOS Safari compatible) ──────────────────────
+// Create a single shared context, resumed on every user gesture
+var _actx = null;
+
 function getAudio() {
-  if (!audioCtx) {
-    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
-  }
-  return audioCtx;
+  try {
+    if (!_actx) {
+      _actx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    // Always attempt resume — iOS suspends context between gestures
+    if (_actx.state === 'suspended') {
+      _actx.resume();
+    }
+    return _actx;
+  } catch(e) { return null; }
 }
-function playTone(freq, type, duration, volume, delay) {
-  var ctx = getAudio(); if (!ctx) return;
-  delay = delay || 0; volume = volume || 0.3;
-  var osc = ctx.createOscillator(); var gain = ctx.createGain();
-  osc.connect(gain); gain.connect(ctx.destination);
-  osc.type = type || 'square'; osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
-  gain.gain.setValueAtTime(volume, ctx.currentTime + delay);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
-  osc.start(ctx.currentTime + delay); osc.stop(ctx.currentTime + delay + duration);
+
+function playToneAt(ctx, freq, type, startT, dur, vol) {
+  try {
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, startT);
+    gain.gain.setValueAtTime(vol, startT);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startT + dur);
+    osc.start(startT);
+    osc.stop(startT + dur + 0.01);
+  } catch(e) {}
 }
-function playChirp(freq, endFreq, duration, type, delay) {
-  var ctx = getAudio(); if (!ctx) return;
-  delay = delay || 0;
-  var osc = ctx.createOscillator(); var gain = ctx.createGain();
-  osc.connect(gain); gain.connect(ctx.destination);
-  osc.type = type || 'square';
-  osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
-  osc.frequency.linearRampToValueAtTime(endFreq, ctx.currentTime + delay + duration);
-  gain.gain.setValueAtTime(0.25, ctx.currentTime + delay);
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
-  osc.start(ctx.currentTime + delay); osc.stop(ctx.currentTime + delay + duration);
+
+function playChirpAt(ctx, freq, endFreq, type, startT, dur) {
+  try {
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, startT);
+    osc.frequency.linearRampToValueAtTime(endFreq, startT + dur);
+    gain.gain.setValueAtTime(0.25, startT);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startT + dur);
+    osc.start(startT);
+    osc.stop(startT + dur + 0.01);
+  } catch(e) {}
 }
-function soundSelect()  { playTone(880, 'square', 0.05, 0.15); }
-function soundDeselect(){ playTone(440, 'square', 0.05, 0.12); }
+
+function soundSelect() {
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  playToneAt(c, 880, 'square', t, 0.07, 0.2);
+}
+function soundDeselect() {
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  playToneAt(c, 440, 'square', t, 0.07, 0.15);
+}
 function soundCorrect() {
-  playTone(523,'square',0.1,0.25,0.0); playTone(659,'square',0.1,0.25,0.1);
-  playTone(784,'square',0.1,0.25,0.2); playTone(1047,'square',0.2,0.3,0.3);
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  playToneAt(c, 523,  'square', t,      0.12, 0.25);
+  playToneAt(c, 659,  'square', t+0.12, 0.12, 0.25);
+  playToneAt(c, 784,  'square', t+0.24, 0.12, 0.25);
+  playToneAt(c, 1047, 'square', t+0.36, 0.2,  0.3);
 }
-function soundWrong()   { playChirp(400,200,0.15,'sawtooth',0.0); playChirp(350,150,0.15,'sawtooth',0.18); }
-function soundOneAway() { playTone(660,'square',0.08,0.2,0.0); playTone(550,'square',0.08,0.2,0.1); playTone(660,'square',0.08,0.2,0.2); }
+function soundWrong() {
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  playChirpAt(c, 400, 180, 'sawtooth', t,      0.18);
+  playChirpAt(c, 320, 140, 'sawtooth', t+0.2,  0.18);
+}
+function soundOneAway() {
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  playToneAt(c, 660, 'square', t,      0.1, 0.2);
+  playToneAt(c, 550, 'square', t+0.12, 0.1, 0.2);
+  playToneAt(c, 660, 'square', t+0.24, 0.1, 0.2);
+}
 function soundWin() {
-  var notes=[523,659,784,1047,784,1047,1319]; var times=[0,0.12,0.24,0.36,0.5,0.62,0.74];
-  notes.forEach(function(n,i){ playTone(n,'square',0.18,0.3,times[i]); });
-  playTone(130,'sine',0.1,0.4,0.0); playTone(130,'sine',0.1,0.4,0.36); playTone(130,'sine',0.15,0.4,0.74);
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  var notes = [523,659,784,1047,784,1047,1319];
+  notes.forEach(function(n, i) { playToneAt(c, n, 'square', t + i*0.13, 0.18, 0.28); });
+  playToneAt(c, 130, 'sine', t,      0.12, 0.35);
+  playToneAt(c, 130, 'sine', t+0.39, 0.12, 0.35);
+  playToneAt(c, 130, 'sine', t+0.78, 0.16, 0.35);
 }
 function soundLose() {
-  playChirp(440,220,0.3,'sawtooth',0.0); playChirp(330,165,0.3,'sawtooth',0.32); playChirp(220,110,0.4,'sawtooth',0.65);
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  playChirpAt(c, 440, 220, 'sawtooth', t,      0.3);
+  playChirpAt(c, 330, 165, 'sawtooth', t+0.33, 0.3);
+  playChirpAt(c, 220, 110, 'sawtooth', t+0.66, 0.4);
 }
-function soundCheat() { playTone(988,'square',0.06,0.3,0.0); playTone(1319,'square',0.1,0.3,0.07); }
-function soundShuffle() { for(var i=0;i<5;i++){ playTone(200+i*80,'square',0.04,0.15,i*0.04); } }
+function soundCheat() {
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  playToneAt(c, 988,  'square', t,      0.07, 0.3);
+  playToneAt(c, 1319, 'square', t+0.08, 0.12, 0.3);
+}
+function soundShuffle() {
+  var c = getAudio(); if (!c) return;
+  var t = c.currentTime;
+  for (var i = 0; i < 5; i++) {
+    playToneAt(c, 200 + i*80, 'square', t + i*0.05, 0.05, 0.15);
+  }
+}
 
 // ── Daily puzzle logic ─────────────────────────────────────────
 var EPOCH = new Date('2026-03-31T00:00:00').getTime();
