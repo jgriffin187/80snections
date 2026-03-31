@@ -84,6 +84,39 @@
   .dev-btn.danger { border-color: var(--magenta); color: var(--magenta); }
   .dev-btn.danger:hover { background: var(--magenta); color: #fff; }
   .dev-close { margin-top: 6px; font-size: 12px; color: var(--subtext); cursor: pointer; letter-spacing: 1px; text-transform: uppercase; }
+  .dev-divider { border: none; border-top: 1px solid rgba(45,226,230,0.2); margin: 10px 0; }
+  .dev-jump-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .dev-jump-input {
+    flex: 1; padding: 9px 8px; border-radius: 6px;
+    border: 1.5px solid var(--teal); background: rgba(45,226,230,0.08);
+    color: var(--teal); font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 800; text-align: center;
+    -webkit-appearance: none; outline: none;
+  }
+  .dev-jump-input::placeholder { color: rgba(45,226,230,0.35); font-weight: 600; }
+  .dev-jump-go {
+    padding: 9px 14px; border-radius: 6px;
+    border: 1.5px solid var(--teal); background: var(--teal);
+    color: #0a0a1a; font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 800; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .dev-played-grid {
+    display: grid; grid-template-columns: repeat(10, 1fr);
+    gap: 3px; margin-bottom: 10px;
+  }
+  .dev-pip {
+    width: 100%; aspect-ratio: 1; border-radius: 3px;
+    border: 1px solid rgba(45,226,230,0.3);
+    background: transparent; cursor: pointer;
+    font-size: 7px; display: flex; align-items: center;
+    justify-content: center; color: transparent;
+    transition: all 0.1s; position: relative;
+  }
+  .dev-pip.current { border-color: var(--yellow); background: var(--yellow); }
+  .dev-pip.played  { background: rgba(45,226,230,0.25); border-color: var(--teal); }
+  .dev-pip:hover   { border-color: var(--teal); background: rgba(45,226,230,0.15); }
+  .dev-pip-label { font-size: 10px; color: var(--subtext); text-align: center; margin-bottom: 4px; letter-spacing: 0.5px; }
   header {
     width: 100%; max-width: 600px; padding: 16px 16px 12px;
     text-align: center; border-bottom: 2px solid var(--teal);
@@ -184,12 +217,26 @@
 <div class="dev-menu" id="devMenu">
   <div class="dev-menu-title">&#x1F579; DEV MENU</div>
   <div class="dev-day-display">Now on: <span id="devDayDisplay">Day 1</span> of 100</div>
+
+  <!-- Prev / Next arrows -->
   <div class="dev-nav-row">
     <button class="dev-nav-btn" id="devPrev">&#x276E;</button>
     <div class="dev-nav-label">Cycle<br>Games</div>
     <button class="dev-nav-btn" id="devNext">&#x276F;</button>
   </div>
-  <button class="dev-btn danger" id="devReset">&#x1F504; Reset to Day 1</button>
+
+  <!-- Jump to specific game -->
+  <hr class="dev-divider">
+  <div class="dev-pip-label">All 100 Games &mdash; tap to jump &mdash; &#x2B50; = current &nbsp; &#x2713; = played</div>
+  <div class="dev-played-grid" id="devPipGrid"></div>
+
+  <div class="dev-jump-row">
+    <input class="dev-jump-input" id="devJumpInput" type="number" min="1" max="100" placeholder="Day #">
+    <button class="dev-jump-go" id="devJumpGo">Go</button>
+  </div>
+
+  <hr class="dev-divider">
+  <button class="dev-btn danger" id="devReset">&#x1F504; Reset All Progress</button>
   <div class="dev-close" id="devClose">&#x2715; Close</div>
 </div>
 
@@ -4844,12 +4891,70 @@ function startGame() {
 // ── Dev Menu — triple-tap the logo ─────────────────────────────
 var tapCount = 0, tapTimer = null;
 
+function getPlayedSet() {
+  // Return a Set of all day indices (0-based) that have been played
+  var played = new Set();
+  try {
+    Object.keys(localStorage).forEach(function(k) {
+      if (!k.startsWith('played_')) return;
+      // Key format: played_YYYY_M_D_oN — extract offset N
+      var parts = k.split('_o');
+      if (parts.length < 2) return;
+      var offset = parseInt(parts[1]);
+      var epoch = EPOCH;
+      try { var ov = localStorage.getItem('epoch_override'); if (ov) epoch = parseInt(ov); } catch(e) {}
+      // We need to find which day this offset maps to
+      // Use today's midnight as base
+      var now = new Date();
+      var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      var baseDay = Math.floor((midnight - epoch) / 86400000);
+      var idx = ((baseDay + offset) % GAMES.length + GAMES.length) % GAMES.length;
+      played.add(idx);
+    });
+  } catch(e) {}
+  return played;
+}
+
+function buildPipGrid() {
+  var grid = document.getElementById('devPipGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  var current = getDayIndex();
+  var played = getPlayedSet();
+  for (var i = 0; i < GAMES.length; i++) {
+    (function(idx) {
+      var pip = document.createElement('div');
+      pip.className = 'dev-pip';
+      if (idx === current) {
+        pip.classList.add('current');
+        pip.title = 'Day ' + (idx+1) + ' (current)';
+        pip.textContent = '★';
+        pip.style.color = '#0a0a1a';
+        pip.style.fontSize = '9px';
+      } else if (played.has(idx)) {
+        pip.classList.add('played');
+        pip.title = 'Day ' + (idx+1) + ' (played)';
+        pip.textContent = '✓';
+        pip.style.color = 'rgba(45,226,230,0.7)';
+        pip.style.fontSize = '9px';
+      } else {
+        pip.title = 'Day ' + (idx+1);
+      }
+      pip.addEventListener('click', function() {
+        jumpToDay(idx);
+      });
+      grid.appendChild(pip);
+    })(i);
+  }
+}
+
 function updateDevDisplay() {
   var el = document.getElementById('devDayDisplay');
   if (el) el.textContent = 'Day ' + (getDayIndex() + 1);
+  buildPipGrid();
 }
 
-function shiftDay(delta) {
+function jumpToDay(targetIdx) {
   try {
     markPlayedToday();
     var epoch = EPOCH;
@@ -4857,11 +4962,15 @@ function shiftDay(delta) {
     var now = new Date();
     var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     var baseDay = Math.floor((midnight - epoch) / 86400000);
-    var offset = parseInt(localStorage.getItem('day_offset') || '0');
-    var currentIdx = ((baseDay + offset) % GAMES.length + GAMES.length) % GAMES.length;
-    var newIdx = ((currentIdx + delta) % GAMES.length + GAMES.length) % GAMES.length;
-    localStorage.setItem('day_offset', newIdx - baseDay);
+    var newOffset = ((targetIdx % GAMES.length) + GAMES.length) % GAMES.length - baseDay;
+    localStorage.setItem('day_offset', newOffset);
   } catch(e) {}
+}
+
+function shiftDay(delta) {
+  var current = getDayIndex();
+  var newIdx = ((current + delta) % GAMES.length + GAMES.length) % GAMES.length;
+  jumpToDay(newIdx);
 }
 
 document.getElementById('logoBtn').addEventListener('click', function() {
@@ -4884,15 +4993,32 @@ document.getElementById('devClose').addEventListener('click', function() {
 document.getElementById('devNext').addEventListener('click', function() {
   soundCheat();
   shiftDay(1);
-  showToast('Next game →');
+  showToast('Day ' + (getDayIndex() + 1) + ' →');
   setTimeout(function() { location.reload(); }, 800);
 });
 
 document.getElementById('devPrev').addEventListener('click', function() {
   soundCheat();
   shiftDay(-1);
-  showToast('← Previous game');
+  showToast('← Day ' + (getDayIndex() + 1));
   setTimeout(function() { location.reload(); }, 800);
+});
+
+document.getElementById('devJumpGo').addEventListener('click', function() {
+  var val = parseInt(document.getElementById('devJumpInput').value);
+  if (isNaN(val) || val < 1 || val > 100) {
+    showToast('Enter a number 1–100');
+    return;
+  }
+  soundCheat();
+  jumpToDay(val - 1);
+  showToast('Jumping to Day ' + val + '...');
+  setTimeout(function() { location.reload(); }, 800);
+});
+
+// Also allow Enter key in the input
+document.getElementById('devJumpInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('devJumpGo').click();
 });
 
 document.getElementById('devReset').addEventListener('click', function() {
