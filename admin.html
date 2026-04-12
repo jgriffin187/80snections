@@ -13,15 +13,11 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-  /* ── Screens ── */
   .screen { display: none; }
   .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
-
-  /* ── Shared card ── */
   .card {
     background: var(--panel); border: 2px solid var(--teal); border-radius: 16px;
-    padding: 40px 32px; max-width: 440px; width: 100%; text-align: center;
+    padding: 40px 32px; max-width: 400px; width: 100%; text-align: center;
     box-shadow: 0 0 40px rgba(45,226,230,0.2);
   }
   .card-logo { font-family: 'Boogaloo', cursive; font-size: 38px; color: var(--teal);
@@ -38,8 +34,6 @@
     transition: border-color 0.15s;
   }
   .field-input:focus { border-color: var(--teal); }
-  .field-note { font-size: 11px; color: var(--subtext); text-align: left;
-    margin-bottom: 16px; line-height: 1.6; }
   .btn-full {
     width: 100%; padding: 13px; border-radius: 8px; border: none;
     background: var(--teal); color: #0a0a1a; font-family: 'Nunito', sans-serif;
@@ -48,33 +42,14 @@
   }
   .btn-full:hover { background: #50e8ec; box-shadow: 0 0 16px rgba(45,226,230,0.4); }
   .btn-full:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn-full.secondary {
-    background: transparent; border: 1.5px solid var(--border); color: var(--subtext);
-    font-size: 13px; padding: 10px;
-  }
-  .btn-full.secondary:hover { border-color: var(--teal); color: var(--teal); background: transparent; box-shadow: none; }
   .err-msg { color: var(--danger); font-size: 13px; min-height: 20px; margin-top: 4px; }
-  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-
-  /* ── Main app ── */
-  #appScreen { display: none; flex-direction: column; min-height: 100vh; align-items: stretch; justify-content: flex-start; padding: 0; }
+  #appScreen { display: none; flex-direction: column; min-height: 100vh; }
   #appScreen.active { display: flex; }
-
-  header {
-    background: var(--panel); border-bottom: 2px solid var(--teal);
-    padding: 14px 24px; display: flex; align-items: center;
-    justify-content: space-between; gap: 16px; flex-wrap: wrap;
-  }
+  header { background: var(--panel); border-bottom: 2px solid var(--teal); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .header-logo { font-family: 'Boogaloo', cursive; font-size: 26px; color: var(--teal); text-shadow: 0 0 8px var(--teal); }
   .header-logo span { color: var(--magenta); }
   .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-  .btn {
-    padding: 9px 18px; border-radius: 8px; border: 1.5px solid var(--teal);
-    background: transparent; color: var(--teal); font-family: 'Nunito', sans-serif;
-    font-size: 13px; font-weight: 800; cursor: pointer; letter-spacing: 0.5px;
-    text-transform: uppercase; transition: all 0.15s; white-space: nowrap;
-  }
+  .btn { padding: 9px 18px; border-radius: 8px; border: 1.5px solid var(--teal); background: transparent; color: var(--teal); font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.15s; white-space: nowrap; }
   .btn:hover { background: var(--teal); color: #0a0a1a; }
   .btn.magenta { border-color: var(--magenta); color: var(--magenta); }
   .btn.magenta:hover { background: var(--magenta); color: #fff; }
@@ -83,19 +58,15 @@
   .btn.danger { border-color: var(--danger); color: var(--danger); }
   .btn.danger:hover { background: var(--danger); color: #fff; }
   .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
   .main { padding: 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
-
   .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 24px; }
   .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-align: center; }
   .stat-num { font-family: 'Boogaloo', cursive; font-size: 32px; color: var(--teal); text-shadow: 0 0 8px var(--teal); line-height: 1; }
   .stat-label { font-size: 11px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-
   .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
   .filter-input { flex: 1; min-width: 200px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: rgba(45,226,230,0.05); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 14px; outline: none; }
   .filter-input:focus { border-color: var(--teal); }
   .filter-select { padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--panel); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 13px; outline: none; cursor: pointer; }
-
   .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   thead { background: rgba(45,226,230,0.08); }
@@ -106,7 +77,7 @@
   .td-num { font-family: 'Boogaloo', cursive; font-size: 20px; color: var(--teal); white-space: nowrap; width: 50px; }
   .td-date { white-space: nowrap; color: var(--subtext); font-size: 12px; }
   .td-date.today { color: var(--yellow); font-weight: 800; }
-  .td-date.past  { color: rgba(160,160,204,0.4); }
+  .td-date.past { color: rgba(160,160,204,0.4); }
   .cat-block { margin-bottom: 5px; }
   .cat-block:last-child { margin-bottom: 0; }
   .cat-badge { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; color: #0a0a1a; }
@@ -117,8 +88,6 @@
   .action-btn.del:hover { border-color: var(--danger); color: var(--danger); }
   .loading { text-align: center; padding: 48px; color: var(--teal); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
   .empty-state { text-align: center; padding: 48px; color: var(--subtext); font-size: 15px; }
-
-  /* ── Edit Modal ── */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: flex-start; justify-content: center; padding: 24px; overflow-y: auto; }
   .modal-overlay.open { display: flex; }
   .modal { background: var(--panel); border: 2px solid var(--teal); border-radius: 16px; padding: 28px; width: 100%; max-width: 700px; margin: auto; box-shadow: 0 0 40px rgba(45,226,230,0.25); animation: popIn 0.25s ease; }
@@ -133,88 +102,45 @@
   .cat-section-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
   .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap; }
   .modal-err { color: var(--danger); font-size: 13px; margin-top: 8px; }
-
-  /* ── Confirm ── */
   .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 300; align-items: center; justify-content: center; }
   .confirm-overlay.open { display: flex; }
   .confirm-box { background: var(--panel); border: 2px solid var(--danger); border-radius: 12px; padding: 28px 24px; max-width: 360px; width: 90%; text-align: center; box-shadow: 0 0 30px rgba(255,68,102,0.3); }
   .confirm-title { font-family: 'Boogaloo', cursive; font-size: 22px; color: var(--danger); margin-bottom: 10px; }
   .confirm-msg { color: var(--subtext); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
   .confirm-btns { display: flex; gap: 10px; justify-content: center; }
-
-  /* ── Toast ── */
   .toast { position: fixed; top: 20px; right: 20px; background: var(--panel); border: 1.5px solid var(--teal); color: var(--text); padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; z-index: 500; opacity: 0; transform: translateY(-10px); transition: all 0.2s; box-shadow: 0 0 20px rgba(45,226,230,0.3); pointer-events: none; }
   .toast.show { opacity: 1; transform: translateY(0); }
   .toast.error { border-color: var(--danger); }
-
   @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 
-<!-- ── Screen 1: Password login ── -->
+<!-- ── Login screen ── -->
 <div id="loginScreen" class="screen active">
   <div class="card">
     <div class="card-logo"><span>'80s</span>Nections</div>
     <div class="card-sub">Admin Dashboard</div>
     <div class="field-label">Admin Password</div>
-    <input class="field-input" id="loginPassword" type="password" placeholder="Enter your admin password" autocomplete="current-password">
+    <input class="field-input" id="loginPassword" type="password"
+      placeholder="Enter your admin password" autocomplete="current-password">
     <div class="err-msg" id="loginErr"></div>
-    <button class="btn-full" id="loginBtn">Unlock Admin</button>
-    <hr class="divider">
-    <div style="font-size:11px;color:var(--subtext);line-height:1.6">
-      First time? <a href="#" id="showSetupLink" style="color:var(--teal)">Set up your password & Supabase keys</a>
-    </div>
+    <button class="btn-full" id="loginBtn">Unlock</button>
   </div>
 </div>
 
-<!-- ── Screen 2: First-time setup ── -->
-<div id="setupScreen" class="screen">
-  <div class="card">
-    <div class="card-logo"><span>'80s</span>Nections</div>
-    <div class="card-sub">First-Time Setup</div>
-
-    <div class="field-label">Choose an Admin Password</div>
-    <input class="field-input" id="setupPassword" type="password" placeholder="Something memorable">
-
-    <div class="field-label">Confirm Password</div>
-    <input class="field-input" id="setupPassword2" type="password" placeholder="Type it again">
-
-    <hr class="divider">
-
-    <div class="field-label">Supabase Project URL</div>
-    <input class="field-input" id="setupUrl" type="text" placeholder="https://xxxxxxxxxxxx.supabase.co">
-
-    <div class="field-label">Anon (Public) Key</div>
-    <input class="field-input" id="setupAnon" type="text" placeholder="eyJhbGci...">
-
-    <div class="field-label">Service Role Key</div>
-    <input class="field-input" id="setupService" type="password" placeholder="eyJhbGci...">
-
-    <div class="field-note">
-      Find these in Supabase → <strong>Settings → API</strong><br>
-      All three values will be encrypted with your password and stored locally.
-    </div>
-
-    <div class="err-msg" id="setupErr"></div>
-    <button class="btn-full" id="setupSaveBtn">Save & Continue</button>
-    <button class="btn-full secondary" id="setupBackBtn">← Back to Login</button>
-  </div>
-</div>
-
-<!-- ── Screen 3: Main app ── -->
+<!-- ── Main app ── -->
 <div id="appScreen">
   <header>
     <div class="header-logo"><span>'80s</span>Nections</div>
-    <div style="color:var(--subtext);font-size:12px;letter-spacing:1px" id="headerInfo"></div>
+    <div style="color:var(--subtext);font-size:12px;letter-spacing:1px">Admin Dashboard</div>
     <div class="header-actions">
       <button class="btn green" id="btnAdd">＋ New Puzzle</button>
       <button class="btn" id="btnRefresh">↺ Refresh</button>
-      <button class="btn magenta" id="btnLogout">Lock</button>
+      <button class="btn magenta" id="btnLock">Lock</button>
     </div>
   </header>
-
   <div class="main">
     <div class="stats-bar">
       <div class="stat-card"><div class="stat-num" id="statTotal">–</div><div class="stat-label">Total Puzzles</div></div>
@@ -222,7 +148,6 @@
       <div class="stat-card"><div class="stat-num" id="statUnscheduled">–</div><div class="stat-label">Unscheduled</div></div>
       <div class="stat-card"><div class="stat-num" id="statPlayed">–</div><div class="stat-label">Already Played</div></div>
     </div>
-
     <div class="filters">
       <input class="filter-input" id="filterSearch" type="text" placeholder="Search categories or words...">
       <select class="filter-select" id="filterDate">
@@ -236,7 +161,6 @@
         <option value="play_date">Sort: Play Date</option>
       </select>
     </div>
-
     <div class="table-wrap">
       <table>
         <thead><tr><th>#</th><th>Play Date</th><th>Categories &amp; Words</th><th>Actions</th></tr></thead>
@@ -251,14 +175,8 @@
   <div class="modal">
     <div class="modal-title" id="modalTitle">New Puzzle</div>
     <div class="form-grid">
-      <div class="form-group">
-        <div class="form-label">Puzzle #</div>
-        <input class="form-input" id="fNum" type="number" min="1">
-      </div>
-      <div class="form-group">
-        <div class="form-label">Play Date (optional)</div>
-        <input class="form-input" id="fDate" type="date">
-      </div>
+      <div class="form-group"><div class="form-label">Puzzle #</div><input class="form-input" id="fNum" type="number" min="1"></div>
+      <div class="form-group"><div class="form-label">Play Date (optional)</div><input class="form-input" id="fDate" type="date"></div>
     </div>
     <div class="cat-section" style="border-color:rgba(249,223,109,0.4)">
       <div class="cat-section-title" style="color:#f7d716">🟨 Category 1 — Easiest</div>
@@ -288,7 +206,6 @@
   </div>
 </div>
 
-<!-- Confirm delete -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
     <div class="confirm-title">Delete Puzzle?</div>
@@ -303,29 +220,31 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Simple XOR encryption (password-based, good enough for local storage) ──
-function xorEncrypt(text, key) {
+// ── Baked-in credentials (XOR-encrypted with build-time salt) ──
+var _ENC  = 'NRFFHC1QWUFGWytMQABoWkMQHDA/AB4VFRsfVU9OTjRaXw0pGk0SEUM+WlEAN1sPClhzZ1AICAkHTAsYFUQ3eVgMBhEKLg15Fm1KOmM7BSwJFikgXAUlIFh4U0d5GHB6V28XGisUUGx1WTw7PxYBIh0vKwQgHDM9eEt+TwRfagcIRCoPMl49C1gKNkYiHxkxARkNVQofC1xUQXh8W18nKAUKAgkKLGJjOmQ8ASMPPXVGAColIx5oYGZIAVl1XQ8INlQqdwoKfic5BiUILGskMSBQKwMvBHVjdDd+ZDdwPTtRSmsdD28WGgU/NSwyGD8rNCktHFJLBRRjAHUXMjUUUSACJwBmFjsxIS0WFwJQRUZEGgtDTl5CKxEKTmMXGisMURhbWTw7PyUwABZ2PAAvFSAAYw1UYgcFeQUxKjUiLgpxXUk5IhZfKBMQLjgTAj4rBmhVcVsUYHkdCBwpDT5aFg55HQQYDlYSJiNBJxwFByhaXARNOFZdAjcrUQkLejZPWRA/TB8/KRZxOwcoCgoAa0huExhVUwN4ATkyLUAWVVwbNjYlUzcLJEEnMg1ZIGVhBm4dRFk0GRoUKA5cJnV0GCo7OCwCES0nXAA3Ry9HclpVBldgLy80ETUzAylJehskAyYLQwsrQQINBxlbfU17dj9RBjdxBgRDGQ==';
+var _SALT = 'N30nArcad3_80sRulez_Griffin187!';
+// Baked-in password hash — only this password unlocks the admin
+var _PW_HASH = '01a6e01a578faf2183e8c0428f218c488ae6b52908c790307b511d08d7610ff9';
+
+function xorCrypt(text, key) {
   var out = [];
   for (var i = 0; i < text.length; i++) {
     out.push(String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length)));
   }
-  return btoa(out.join(''));
+  return out.join('');
 }
-function xorDecrypt(encoded, key) {
+
+function getCredentials() {
   try {
-    var text = atob(encoded);
-    var out = [];
-    for (var i = 0; i < text.length; i++) {
-      out.push(String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length)));
-    }
-    return out.join('');
+    var decoded = atob(_ENC);
+    var decrypted = xorCrypt(decoded, _SALT);
+    return JSON.parse(decrypted);
   } catch(e) { return null; }
 }
 
-// Simple hash for password verification (not crypto-secure, but fine for local use)
-async function hashPassword(pw) {
+async function hashPw(pw) {
   var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 }
 
 // ── State ──────────────────────────────────────────────────────
@@ -335,52 +254,55 @@ var SERVICE_KEY = '';
 var allPuzzles = [];
 var editingId = null;
 var deleteId = null;
-var currentPassword = '';
 
-// ── Screen management ──────────────────────────────────────────
-function showScreen(id) {
-  ['loginScreen','setupScreen'].forEach(function(s) {
-    document.getElementById(s).classList.remove('active');
-  });
-  document.getElementById('appScreen').style.display = 'none';
-  if (id === 'appScreen') {
-    document.getElementById('appScreen').style.display = 'flex';
-    document.getElementById('appScreen').style.flexDirection = 'column';
-    document.getElementById('appScreen').style.minHeight = '100vh';
-  } else {
-    document.getElementById(id).classList.add('active');
+// ── Login ──────────────────────────────────────────────────────
+document.getElementById('loginBtn').addEventListener('click', async function() {
+  var pw = document.getElementById('loginPassword').value;
+  var err = document.getElementById('loginErr');
+  err.textContent = '';
+  if (!pw) { err.textContent = 'Please enter your password.'; return; }
+  this.disabled = true;
+  this.textContent = 'Checking...';
+
+  var hash = await hashPw(pw);
+  if (hash !== _PW_HASH) {
+    err.textContent = 'Incorrect password.';
+    document.getElementById('loginPassword').value = '';
+    this.disabled = false;
+    this.textContent = 'Unlock';
+    return;
   }
-}
 
-// ── Storage helpers ────────────────────────────────────────────
-function hasSetup() {
-  return !!localStorage.getItem('admin_hash');
-}
+  var creds = getCredentials();
+  if (!creds) {
+    err.textContent = 'Failed to load credentials.';
+    this.disabled = false;
+    this.textContent = 'Unlock';
+    return;
+  }
+  SUPABASE_URL = creds.url;
+  ANON_KEY = creds.anon;
+  SERVICE_KEY = creds.service;
 
-async function saveSetup(password, url, anon, service) {
-  var hash = await hashPassword(password);
-  var payload = JSON.stringify({ url: url, anon: anon, service: service });
-  var encrypted = xorEncrypt(payload, password);
-  localStorage.setItem('admin_hash', hash);
-  localStorage.setItem('admin_data', encrypted);
-}
+  document.getElementById('loginScreen').classList.remove('active');
+  document.getElementById('appScreen').style.display = 'flex';
+  document.getElementById('appScreen').style.flexDirection = 'column';
+  loadPuzzles();
+});
 
-async function tryLogin(password) {
-  var hash = await hashPassword(password);
-  var storedHash = localStorage.getItem('admin_hash');
-  if (hash !== storedHash) return false;
-  var encrypted = localStorage.getItem('admin_data');
-  var decrypted = xorDecrypt(encrypted, password);
-  if (!decrypted) return false;
-  try {
-    var data = JSON.parse(decrypted);
-    SUPABASE_URL = data.url;
-    ANON_KEY = data.anon;
-    SERVICE_KEY = data.service;
-    currentPassword = password;
-    return true;
-  } catch(e) { return false; }
-}
+document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
+
+document.getElementById('btnLock').addEventListener('click', function() {
+  SUPABASE_URL = ANON_KEY = SERVICE_KEY = '';
+  document.getElementById('appScreen').style.display = 'none';
+  document.getElementById('loginScreen').classList.add('active');
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginErr').textContent = '';
+  document.getElementById('loginBtn').disabled = false;
+  document.getElementById('loginBtn').textContent = 'Unlock';
+});
 
 // ── Toast ──────────────────────────────────────────────────────
 function toast(msg, isError) {
@@ -389,89 +311,6 @@ function toast(msg, isError) {
   t.className = 'toast' + (isError ? ' error' : '') + ' show';
   setTimeout(function() { t.classList.remove('show'); }, 2500);
 }
-
-// ── Login screen ───────────────────────────────────────────────
-document.getElementById('loginBtn').addEventListener('click', async function() {
-  var pw = document.getElementById('loginPassword').value;
-  var err = document.getElementById('loginErr');
-  err.textContent = '';
-  if (!pw) { err.textContent = 'Please enter your password.'; return; }
-  this.textContent = 'Unlocking...';
-  this.disabled = true;
-  var ok = await tryLogin(pw);
-  if (ok) {
-    document.getElementById('headerInfo').textContent =
-      SUPABASE_URL.replace('https://','').split('.')[0];
-    showScreen('appScreen');
-    loadPuzzles();
-  } else {
-    err.textContent = 'Incorrect password.';
-    document.getElementById('loginPassword').value = '';
-    this.textContent = 'Unlock Admin';
-    this.disabled = false;
-  }
-});
-
-document.getElementById('loginPassword').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') document.getElementById('loginBtn').click();
-});
-
-document.getElementById('showSetupLink').addEventListener('click', function(e) {
-  e.preventDefault();
-  showScreen('setupScreen');
-});
-
-// ── Setup screen ───────────────────────────────────────────────
-document.getElementById('setupSaveBtn').addEventListener('click', async function() {
-  var pw1  = document.getElementById('setupPassword').value;
-  var pw2  = document.getElementById('setupPassword2').value;
-  var url  = document.getElementById('setupUrl').value.trim().replace(/\/$/, '');
-  var anon = document.getElementById('setupAnon').value.trim();
-  var svc  = document.getElementById('setupService').value.trim();
-  var err  = document.getElementById('setupErr');
-  err.textContent = '';
-
-  if (!pw1) { err.textContent = 'Please choose a password.'; return; }
-  if (pw1 !== pw2) { err.textContent = 'Passwords do not match.'; return; }
-  if (pw1.length < 4) { err.textContent = 'Password must be at least 4 characters.'; return; }
-  if (!url || !anon || !svc) { err.textContent = 'Please fill in all Supabase fields.'; return; }
-
-  this.textContent = 'Testing connection...';
-  this.disabled = true;
-
-  try {
-    var res = await fetch(url + '/rest/v1/puzzles?select=count&limit=1', {
-      headers: { 'apikey': anon, 'Authorization': 'Bearer ' + anon }
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status + ': ' + await res.text());
-    await saveSetup(pw1, url, anon, svc);
-    // Auto-login
-    await tryLogin(pw1);
-    document.getElementById('headerInfo').textContent =
-      SUPABASE_URL.replace('https://','').split('.')[0];
-    toast('Setup complete! Welcome.');
-    showScreen('appScreen');
-    loadPuzzles();
-  } catch(e) {
-    err.textContent = 'Connection failed: ' + e.message;
-    this.textContent = 'Save & Continue';
-    this.disabled = false;
-  }
-});
-
-document.getElementById('setupBackBtn').addEventListener('click', function() {
-  showScreen('loginScreen');
-});
-
-// ── App header ─────────────────────────────────────────────────
-document.getElementById('btnLogout').addEventListener('click', function() {
-  SUPABASE_URL = ANON_KEY = SERVICE_KEY = currentPassword = '';
-  document.getElementById('loginPassword').value = '';
-  document.getElementById('loginErr').textContent = '';
-  showScreen('loginScreen');
-});
-
-document.getElementById('btnRefresh').addEventListener('click', loadPuzzles);
 
 // ── API ────────────────────────────────────────────────────────
 function apiHeaders(write) {
@@ -509,18 +348,20 @@ async function loadPuzzles() {
   document.getElementById('puzzleBody').innerHTML = '<tr><td colspan="4" class="loading">Loading puzzles...</td></tr>';
   try {
     allPuzzles = await fetchPuzzles();
-    renderStats();
-    renderTable();
+    renderStats(); renderTable();
   } catch(e) {
     document.getElementById('puzzleBody').innerHTML = '<tr><td colspan="4" class="empty-state" style="color:var(--danger)">Error: ' + e.message + '</td></tr>';
     toast('Load failed: ' + e.message, true);
   }
 }
 
+document.getElementById('btnRefresh').addEventListener('click', loadPuzzles);
+
 function renderStats() {
-  var today = new Date().toISOString().split('T')[0];
+  var now = new Date();
+  var todayStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
   var scheduled = allPuzzles.filter(function(p){ return p.play_date; }).length;
-  var played = allPuzzles.filter(function(p){ return p.play_date && p.play_date < today; }).length;
+  var played = allPuzzles.filter(function(p){ return p.play_date && p.play_date < todayStr; }).length;
   document.getElementById('statTotal').textContent = allPuzzles.length;
   document.getElementById('statScheduled').textContent = scheduled;
   document.getElementById('statUnscheduled').textContent = allPuzzles.length - scheduled;
@@ -528,28 +369,28 @@ function renderStats() {
 }
 
 var COLOR_BG = { 1: '#f7d716', 2: '#2de2e6', 3: '#c724b1', 4: '#3ddc97' };
-
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function renderTable() {
   var search = document.getElementById('filterSearch').value.toLowerCase();
   var dateFilter = document.getElementById('filterDate').value;
-  var sort = document.getElementById('filterSort').value;
-  var today = new Date().toISOString().split('T')[0];
+  var sortBy = document.getElementById('filterSort').value;
+  var now = new Date();
+  var todayStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
 
   var rows = allPuzzles.filter(function(p) {
     if (search) {
       var hay = [p.cat1_name,p.cat1_words,p.cat2_name,p.cat2_words,p.cat3_name,p.cat3_words,p.cat4_name,p.cat4_words].join(' ').toLowerCase();
       if (!hay.includes(search)) return false;
     }
-    if (dateFilter === 'upcoming')    return p.play_date && p.play_date >= today;
-    if (dateFilter === 'played')      return p.play_date && p.play_date < today;
+    if (dateFilter === 'upcoming')    return p.play_date && p.play_date >= todayStr;
+    if (dateFilter === 'played')      return p.play_date && p.play_date < todayStr;
     if (dateFilter === 'unscheduled') return !p.play_date;
     return true;
   });
 
-  rows.sort(function(a,b){
-    if (sort === 'play_date') {
+  rows.sort(function(a,b) {
+    if (sortBy === 'play_date') {
       if (!a.play_date && !b.play_date) return a.puzzle_num - b.puzzle_num;
       if (!a.play_date) return 1; if (!b.play_date) return -1;
       return a.play_date.localeCompare(b.play_date);
@@ -564,10 +405,11 @@ function renderTable() {
 
   var html = '';
   rows.forEach(function(p) {
-    var dateClass = 'td-date', dateDisplay = p.play_date || '<span style="opacity:.4;font-style:italic">unscheduled</span>';
+    var dateClass = 'td-date';
+    var dateDisplay = p.play_date || '<span style="opacity:.4;font-style:italic">unscheduled</span>';
     if (p.play_date) {
-      if (p.play_date === today) { dateClass += ' today'; dateDisplay = '⭐ ' + p.play_date; }
-      else if (p.play_date < today) dateClass += ' past';
+      if (p.play_date === todayStr) { dateClass += ' today'; dateDisplay = '⭐ ' + p.play_date; }
+      else if (p.play_date < todayStr) dateClass += ' past';
     }
     var cats = [
       {name:p.cat1_name,words:p.cat1_words,color:p.cat1_color||1},
@@ -575,11 +417,11 @@ function renderTable() {
       {name:p.cat3_name,words:p.cat3_words,color:p.cat3_color||3},
       {name:p.cat4_name,words:p.cat4_words,color:p.cat4_color||4},
     ];
-    var catHtml = cats.map(function(c){
+    var catHtml = cats.map(function(c) {
       return '<div class="cat-block"><span class="cat-badge" style="background:'+COLOR_BG[c.color]+'">'+esc(c.name)+'</span><div class="cat-words">'+esc(c.words)+'</div></div>';
     }).join('');
-    html += '<tr><td class="td-num">'+p.puzzle_num+'</td><td class="'+dateClass+'">'+dateDisplay+'</td><td>'+catHtml+'</td>' +
-      '<td class="td-actions"><button class="action-btn" onclick="openEdit('+p.id+')">✏️</button>' +
+    html += '<tr><td class="td-num">'+p.puzzle_num+'</td><td class="'+dateClass+'">'+dateDisplay+'</td><td>'+catHtml+'</td>'+
+      '<td class="td-actions"><button class="action-btn" onclick="openEdit('+p.id+')">✏️</button>'+
       '<button class="action-btn del" onclick="confirmDelete('+p.id+','+p.puzzle_num+')">🗑</button></td></tr>';
   });
   document.getElementById('puzzleBody').innerHTML = html;
@@ -663,13 +505,6 @@ document.getElementById('confirmYes').addEventListener('click', async function()
   } catch(e) { toast('Delete failed: ' + e.message, true); }
   finally { this.textContent = 'Delete'; this.disabled = false; deleteId = null; }
 });
-
-// ── Init ───────────────────────────────────────────────────────
-if (hasSetup()) {
-  showScreen('loginScreen');
-} else {
-  showScreen('setupScreen');
-}
 </script>
 </body>
 </html>
