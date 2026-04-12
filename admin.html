@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>'80sNections Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a1a; --panel: #12123a; --teal: #2de2e6; --magenta: #c724b1;
+    --yellow: #f7d716; --green: #3ddc97; --text: #f0f0ff; --subtext: #a0a0cc;
+    --border: rgba(45,226,230,0.25); --danger: #ff4466;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── Screens ── */
+  .screen { display: none; }
+  .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; }
+
+  /* ── Shared card ── */
+  .card {
+    background: var(--panel); border: 2px solid var(--teal); border-radius: 16px;
+    padding: 40px 32px; max-width: 440px; width: 100%; text-align: center;
+    box-shadow: 0 0 40px rgba(45,226,230,0.2);
+  }
+  .card-logo { font-family: 'Boogaloo', cursive; font-size: 38px; color: var(--teal);
+    text-shadow: 0 0 10px var(--teal); margin-bottom: 4px; }
+  .card-logo span { color: var(--magenta); text-shadow: 0 0 10px var(--magenta); }
+  .card-sub { font-size: 12px; color: var(--subtext); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 28px; }
+  .field-label { font-size: 11px; color: var(--subtext); text-align: left;
+    margin-bottom: 5px; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
+  .field-input {
+    width: 100%; padding: 12px 14px; margin-bottom: 14px; border-radius: 8px;
+    border: 1.5px solid var(--border); background: rgba(45,226,230,0.06);
+    color: var(--text); font-family: 'Nunito', sans-serif; font-size: 14px; outline: none;
+    transition: border-color 0.15s;
+  }
+  .field-input:focus { border-color: var(--teal); }
+  .field-note { font-size: 11px; color: var(--subtext); text-align: left;
+    margin-bottom: 16px; line-height: 1.6; }
+  .btn-full {
+    width: 100%; padding: 13px; border-radius: 8px; border: none;
+    background: var(--teal); color: #0a0a1a; font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase;
+    letter-spacing: 0.5px; transition: all 0.15s; margin-bottom: 8px;
+  }
+  .btn-full:hover { background: #50e8ec; box-shadow: 0 0 16px rgba(45,226,230,0.4); }
+  .btn-full:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-full.secondary {
+    background: transparent; border: 1.5px solid var(--border); color: var(--subtext);
+    font-size: 13px; padding: 10px;
+  }
+  .btn-full.secondary:hover { border-color: var(--teal); color: var(--teal); background: transparent; box-shadow: none; }
+  .err-msg { color: var(--danger); font-size: 13px; min-height: 20px; margin-top: 4px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* ── Main app ── */
+  #appScreen { display: none; flex-direction: column; min-height: 100vh; align-items: stretch; justify-content: flex-start; padding: 0; }
+  #appScreen.active { display: flex; }
+
+  header {
+    background: var(--panel); border-bottom: 2px solid var(--teal);
+    padding: 14px 24px; display: flex; align-items: center;
+    justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .header-logo { font-family: 'Boogaloo', cursive; font-size: 26px; color: var(--teal); text-shadow: 0 0 8px var(--teal); }
+  .header-logo span { color: var(--magenta); }
+  .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .btn {
+    padding: 9px 18px; border-radius: 8px; border: 1.5px solid var(--teal);
+    background: transparent; color: var(--teal); font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 800; cursor: pointer; letter-spacing: 0.5px;
+    text-transform: uppercase; transition: all 0.15s; white-space: nowrap;
+  }
+  .btn:hover { background: var(--teal); color: #0a0a1a; }
+  .btn.magenta { border-color: var(--magenta); color: var(--magenta); }
+  .btn.magenta:hover { background: var(--magenta); color: #fff; }
+  .btn.green { border-color: var(--green); color: var(--green); }
+  .btn.green:hover { background: var(--green); color: #0a0a1a; }
+  .btn.danger { border-color: var(--danger); color: var(--danger); }
+  .btn.danger:hover { background: var(--danger); color: #fff; }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .main { padding: 24px; max-width: 1200px; margin: 0 auto; width: 100%; }
+
+  .stats-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-align: center; }
+  .stat-num { font-family: 'Boogaloo', cursive; font-size: 32px; color: var(--teal); text-shadow: 0 0 8px var(--teal); line-height: 1; }
+  .stat-label { font-size: 11px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+  .filters { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+  .filter-input { flex: 1; min-width: 200px; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: rgba(45,226,230,0.05); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 14px; outline: none; }
+  .filter-input:focus { border-color: var(--teal); }
+  .filter-select { padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--panel); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 13px; outline: none; cursor: pointer; }
+
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead { background: rgba(45,226,230,0.08); }
+  th { padding: 12px 14px; text-align: left; color: var(--teal); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  td { padding: 12px 14px; border-bottom: 1px solid rgba(45,226,230,0.08); vertical-align: top; line-height: 1.4; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(45,226,230,0.04); }
+  .td-num { font-family: 'Boogaloo', cursive; font-size: 20px; color: var(--teal); white-space: nowrap; width: 50px; }
+  .td-date { white-space: nowrap; color: var(--subtext); font-size: 12px; }
+  .td-date.today { color: var(--yellow); font-weight: 800; }
+  .td-date.past  { color: rgba(160,160,204,0.4); }
+  .cat-block { margin-bottom: 5px; }
+  .cat-block:last-child { margin-bottom: 0; }
+  .cat-badge { display: inline-block; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; color: #0a0a1a; }
+  .cat-words { font-size: 12px; color: var(--subtext); }
+  .td-actions { white-space: nowrap; width: 90px; }
+  .action-btn { padding: 5px 10px; border-radius: 5px; border: 1px solid var(--border); background: transparent; color: var(--subtext); cursor: pointer; font-size: 12px; font-family: 'Nunito', sans-serif; font-weight: 700; transition: all 0.1s; margin-right: 4px; }
+  .action-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .action-btn.del:hover { border-color: var(--danger); color: var(--danger); }
+  .loading { text-align: center; padding: 48px; color: var(--teal); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
+  .empty-state { text-align: center; padding: 48px; color: var(--subtext); font-size: 15px; }
+
+  /* ── Edit Modal ── */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: flex-start; justify-content: center; padding: 24px; overflow-y: auto; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--panel); border: 2px solid var(--teal); border-radius: 16px; padding: 28px; width: 100%; max-width: 700px; margin: auto; box-shadow: 0 0 40px rgba(45,226,230,0.25); animation: popIn 0.25s ease; }
+  .modal-title { font-family: 'Boogaloo', cursive; font-size: 26px; color: var(--teal); margin-bottom: 20px; text-shadow: 0 0 8px var(--teal); }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-label { font-size: 11px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+  .form-input, .form-textarea { padding: 10px 12px; border-radius: 7px; border: 1.5px solid var(--border); background: rgba(45,226,230,0.05); color: var(--text); font-family: 'Nunito', sans-serif; font-size: 13px; outline: none; transition: border-color 0.15s; }
+  .form-input:focus, .form-textarea:focus { border-color: var(--teal); }
+  .form-textarea { resize: vertical; min-height: 60px; line-height: 1.5; }
+  .cat-section { background: rgba(45,226,230,0.04); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+  .cat-section-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .modal-footer { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; flex-wrap: wrap; }
+  .modal-err { color: var(--danger); font-size: 13px; margin-top: 8px; }
+
+  /* ── Confirm ── */
+  .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 300; align-items: center; justify-content: center; }
+  .confirm-overlay.open { display: flex; }
+  .confirm-box { background: var(--panel); border: 2px solid var(--danger); border-radius: 12px; padding: 28px 24px; max-width: 360px; width: 90%; text-align: center; box-shadow: 0 0 30px rgba(255,68,102,0.3); }
+  .confirm-title { font-family: 'Boogaloo', cursive; font-size: 22px; color: var(--danger); margin-bottom: 10px; }
+  .confirm-msg { color: var(--subtext); font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
+  .confirm-btns { display: flex; gap: 10px; justify-content: center; }
+
+  /* ── Toast ── */
+  .toast { position: fixed; top: 20px; right: 20px; background: var(--panel); border: 1.5px solid var(--teal); color: var(--text); padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; z-index: 500; opacity: 0; transform: translateY(-10px); transition: all 0.2s; box-shadow: 0 0 20px rgba(45,226,230,0.3); pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.error { border-color: var(--danger); }
+
+  @keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- ── Screen 1: Password login ── -->
+<div id="loginScreen" class="screen active">
+  <div class="card">
+    <div class="card-logo"><span>'80s</span>Nections</div>
+    <div class="card-sub">Admin Dashboard</div>
+    <div class="field-label">Admin Password</div>
+    <input class="field-input" id="loginPassword" type="password" placeholder="Enter your admin password" autocomplete="current-password">
+    <div class="err-msg" id="loginErr"></div>
+    <button class="btn-full" id="loginBtn">Unlock Admin</button>
+    <hr class="divider">
+    <div style="font-size:11px;color:var(--subtext);line-height:1.6">
+      First time? <a href="#" id="showSetupLink" style="color:var(--teal)">Set up your password & Supabase keys</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Screen 2: First-time setup ── -->
+<div id="setupScreen" class="screen">
+  <div class="card">
+    <div class="card-logo"><span>'80s</span>Nections</div>
+    <div class="card-sub">First-Time Setup</div>
+
+    <div class="field-label">Choose an Admin Password</div>
+    <input class="field-input" id="setupPassword" type="password" placeholder="Something memorable">
+
+    <div class="field-label">Confirm Password</div>
+    <input class="field-input" id="setupPassword2" type="password" placeholder="Type it again">
+
+    <hr class="divider">
+
+    <div class="field-label">Supabase Project URL</div>
+    <input class="field-input" id="setupUrl" type="text" placeholder="https://xxxxxxxxxxxx.supabase.co">
+
+    <div class="field-label">Anon (Public) Key</div>
+    <input class="field-input" id="setupAnon" type="text" placeholder="eyJhbGci...">
+
+    <div class="field-label">Service Role Key</div>
+    <input class="field-input" id="setupService" type="password" placeholder="eyJhbGci...">
+
+    <div class="field-note">
+      Find these in Supabase → <strong>Settings → API</strong><br>
+      All three values will be encrypted with your password and stored locally.
+    </div>
+
+    <div class="err-msg" id="setupErr"></div>
+    <button class="btn-full" id="setupSaveBtn">Save & Continue</button>
+    <button class="btn-full secondary" id="setupBackBtn">← Back to Login</button>
+  </div>
+</div>
+
+<!-- ── Screen 3: Main app ── -->
+<div id="appScreen">
+  <header>
+    <div class="header-logo"><span>'80s</span>Nections</div>
+    <div style="color:var(--subtext);font-size:12px;letter-spacing:1px" id="headerInfo"></div>
+    <div class="header-actions">
+      <button class="btn green" id="btnAdd">＋ New Puzzle</button>
+      <button class="btn" id="btnRefresh">↺ Refresh</button>
+      <button class="btn magenta" id="btnLogout">Lock</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="stats-bar">
+      <div class="stat-card"><div class="stat-num" id="statTotal">–</div><div class="stat-label">Total Puzzles</div></div>
+      <div class="stat-card"><div class="stat-num" id="statScheduled">–</div><div class="stat-label">Scheduled</div></div>
+      <div class="stat-card"><div class="stat-num" id="statUnscheduled">–</div><div class="stat-label">Unscheduled</div></div>
+      <div class="stat-card"><div class="stat-num" id="statPlayed">–</div><div class="stat-label">Already Played</div></div>
+    </div>
+
+    <div class="filters">
+      <input class="filter-input" id="filterSearch" type="text" placeholder="Search categories or words...">
+      <select class="filter-select" id="filterDate">
+        <option value="all">All Dates</option>
+        <option value="upcoming">Upcoming</option>
+        <option value="played">Already Played</option>
+        <option value="unscheduled">Unscheduled</option>
+      </select>
+      <select class="filter-select" id="filterSort">
+        <option value="puzzle_num">Sort: Puzzle #</option>
+        <option value="play_date">Sort: Play Date</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Play Date</th><th>Categories &amp; Words</th><th>Actions</th></tr></thead>
+        <tbody id="puzzleBody"><tr><td colspan="4" class="loading">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Edit / Add Modal -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">New Puzzle</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <div class="form-label">Puzzle #</div>
+        <input class="form-input" id="fNum" type="number" min="1">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Play Date (optional)</div>
+        <input class="form-input" id="fDate" type="date">
+      </div>
+    </div>
+    <div class="cat-section" style="border-color:rgba(249,223,109,0.4)">
+      <div class="cat-section-title" style="color:#f7d716">🟨 Category 1 — Easiest</div>
+      <div class="form-group" style="margin-bottom:10px"><div class="form-label">Name</div><input class="form-input" id="fC1N" type="text"></div>
+      <div class="form-group"><div class="form-label">Words (comma separated, exactly 4)</div><textarea class="form-textarea" id="fC1W"></textarea></div>
+    </div>
+    <div class="cat-section" style="border-color:rgba(45,226,230,0.4)">
+      <div class="cat-section-title" style="color:#2de2e6">🟦 Category 2</div>
+      <div class="form-group" style="margin-bottom:10px"><div class="form-label">Name</div><input class="form-input" id="fC2N" type="text"></div>
+      <div class="form-group"><div class="form-label">Words (comma separated, exactly 4)</div><textarea class="form-textarea" id="fC2W"></textarea></div>
+    </div>
+    <div class="cat-section" style="border-color:rgba(199,36,177,0.4)">
+      <div class="cat-section-title" style="color:#c724b1">🟪 Category 3</div>
+      <div class="form-group" style="margin-bottom:10px"><div class="form-label">Name</div><input class="form-input" id="fC3N" type="text"></div>
+      <div class="form-group"><div class="form-label">Words (comma separated, exactly 4)</div><textarea class="form-textarea" id="fC3W"></textarea></div>
+    </div>
+    <div class="cat-section" style="border-color:rgba(61,220,151,0.4)">
+      <div class="cat-section-title" style="color:#3ddc97">🟩 Category 4 — Hardest</div>
+      <div class="form-group" style="margin-bottom:10px"><div class="form-label">Name</div><input class="form-input" id="fC4N" type="text"></div>
+      <div class="form-group"><div class="form-label">Words (comma separated, exactly 4)</div><textarea class="form-textarea" id="fC4W"></textarea></div>
+    </div>
+    <div class="modal-err" id="modalErr"></div>
+    <div class="modal-footer">
+      <button class="btn" id="modalCancel">Cancel</button>
+      <button class="btn green" id="modalSave">Save Puzzle</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm delete -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-title">Delete Puzzle?</div>
+    <div class="confirm-msg" id="confirmMsg">This cannot be undone.</div>
+    <div class="confirm-btns">
+      <button class="btn" id="confirmNo">Cancel</button>
+      <button class="btn danger" id="confirmYes">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── Simple XOR encryption (password-based, good enough for local storage) ──
+function xorEncrypt(text, key) {
+  var out = [];
+  for (var i = 0; i < text.length; i++) {
+    out.push(String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length)));
+  }
+  return btoa(out.join(''));
+}
+function xorDecrypt(encoded, key) {
+  try {
+    var text = atob(encoded);
+    var out = [];
+    for (var i = 0; i < text.length; i++) {
+      out.push(String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length)));
+    }
+    return out.join('');
+  } catch(e) { return null; }
+}
+
+// Simple hash for password verification (not crypto-secure, but fine for local use)
+async function hashPassword(pw) {
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ── State ──────────────────────────────────────────────────────
+var SUPABASE_URL = '';
+var ANON_KEY = '';
+var SERVICE_KEY = '';
+var allPuzzles = [];
+var editingId = null;
+var deleteId = null;
+var currentPassword = '';
+
+// ── Screen management ──────────────────────────────────────────
+function showScreen(id) {
+  ['loginScreen','setupScreen'].forEach(function(s) {
+    document.getElementById(s).classList.remove('active');
+  });
+  document.getElementById('appScreen').style.display = 'none';
+  if (id === 'appScreen') {
+    document.getElementById('appScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.flexDirection = 'column';
+    document.getElementById('appScreen').style.minHeight = '100vh';
+  } else {
+    document.getElementById(id).classList.add('active');
+  }
+}
+
+// ── Storage helpers ────────────────────────────────────────────
+function hasSetup() {
+  return !!localStorage.getItem('admin_hash');
+}
+
+async function saveSetup(password, url, anon, service) {
+  var hash = await hashPassword(password);
+  var payload = JSON.stringify({ url: url, anon: anon, service: service });
+  var encrypted = xorEncrypt(payload, password);
+  localStorage.setItem('admin_hash', hash);
+  localStorage.setItem('admin_data', encrypted);
+}
+
+async function tryLogin(password) {
+  var hash = await hashPassword(password);
+  var storedHash = localStorage.getItem('admin_hash');
+  if (hash !== storedHash) return false;
+  var encrypted = localStorage.getItem('admin_data');
+  var decrypted = xorDecrypt(encrypted, password);
+  if (!decrypted) return false;
+  try {
+    var data = JSON.parse(decrypted);
+    SUPABASE_URL = data.url;
+    ANON_KEY = data.anon;
+    SERVICE_KEY = data.service;
+    currentPassword = password;
+    return true;
+  } catch(e) { return false; }
+}
+
+// ── Toast ──────────────────────────────────────────────────────
+function toast(msg, isError) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isError ? ' error' : '') + ' show';
+  setTimeout(function() { t.classList.remove('show'); }, 2500);
+}
+
+// ── Login screen ───────────────────────────────────────────────
+document.getElementById('loginBtn').addEventListener('click', async function() {
+  var pw = document.getElementById('loginPassword').value;
+  var err = document.getElementById('loginErr');
+  err.textContent = '';
+  if (!pw) { err.textContent = 'Please enter your password.'; return; }
+  this.textContent = 'Unlocking...';
+  this.disabled = true;
+  var ok = await tryLogin(pw);
+  if (ok) {
+    document.getElementById('headerInfo').textContent =
+      SUPABASE_URL.replace('https://','').split('.')[0];
+    showScreen('appScreen');
+    loadPuzzles();
+  } else {
+    err.textContent = 'Incorrect password.';
+    document.getElementById('loginPassword').value = '';
+    this.textContent = 'Unlock Admin';
+    this.disabled = false;
+  }
+});
+
+document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
+
+document.getElementById('showSetupLink').addEventListener('click', function(e) {
+  e.preventDefault();
+  showScreen('setupScreen');
+});
+
+// ── Setup screen ───────────────────────────────────────────────
+document.getElementById('setupSaveBtn').addEventListener('click', async function() {
+  var pw1  = document.getElementById('setupPassword').value;
+  var pw2  = document.getElementById('setupPassword2').value;
+  var url  = document.getElementById('setupUrl').value.trim().replace(/\/$/, '');
+  var anon = document.getElementById('setupAnon').value.trim();
+  var svc  = document.getElementById('setupService').value.trim();
+  var err  = document.getElementById('setupErr');
+  err.textContent = '';
+
+  if (!pw1) { err.textContent = 'Please choose a password.'; return; }
+  if (pw1 !== pw2) { err.textContent = 'Passwords do not match.'; return; }
+  if (pw1.length < 4) { err.textContent = 'Password must be at least 4 characters.'; return; }
+  if (!url || !anon || !svc) { err.textContent = 'Please fill in all Supabase fields.'; return; }
+
+  this.textContent = 'Testing connection...';
+  this.disabled = true;
+
+  try {
+    var res = await fetch(url + '/rest/v1/puzzles?select=count&limit=1', {
+      headers: { 'apikey': anon, 'Authorization': 'Bearer ' + anon }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status + ': ' + await res.text());
+    await saveSetup(pw1, url, anon, svc);
+    // Auto-login
+    await tryLogin(pw1);
+    document.getElementById('headerInfo').textContent =
+      SUPABASE_URL.replace('https://','').split('.')[0];
+    toast('Setup complete! Welcome.');
+    showScreen('appScreen');
+    loadPuzzles();
+  } catch(e) {
+    err.textContent = 'Connection failed: ' + e.message;
+    this.textContent = 'Save & Continue';
+    this.disabled = false;
+  }
+});
+
+document.getElementById('setupBackBtn').addEventListener('click', function() {
+  showScreen('loginScreen');
+});
+
+// ── App header ─────────────────────────────────────────────────
+document.getElementById('btnLogout').addEventListener('click', function() {
+  SUPABASE_URL = ANON_KEY = SERVICE_KEY = currentPassword = '';
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginErr').textContent = '';
+  showScreen('loginScreen');
+});
+
+document.getElementById('btnRefresh').addEventListener('click', loadPuzzles);
+
+// ── API ────────────────────────────────────────────────────────
+function apiHeaders(write) {
+  return {
+    'Content-Type': 'application/json',
+    'apikey': write ? SERVICE_KEY : ANON_KEY,
+    'Authorization': 'Bearer ' + (write ? SERVICE_KEY : ANON_KEY),
+    'Prefer': 'return=representation'
+  };
+}
+
+async function fetchPuzzles() {
+  var res = await fetch(SUPABASE_URL + '/rest/v1/puzzles?select=*&order=puzzle_num.asc', { headers: apiHeaders(false) });
+  if (!res.ok) throw new Error('HTTP ' + res.status + ' ' + await res.text());
+  return res.json();
+}
+
+async function savePuzzle(data, id) {
+  if (id) {
+    var res = await fetch(SUPABASE_URL + '/rest/v1/puzzles?id=eq.' + id, { method: 'PATCH', headers: apiHeaders(true), body: JSON.stringify(data) });
+    if (!res.ok) throw new Error(await res.text());
+  } else {
+    var res = await fetch(SUPABASE_URL + '/rest/v1/puzzles', { method: 'POST', headers: apiHeaders(true), body: JSON.stringify(data) });
+    if (!res.ok) throw new Error(await res.text());
+  }
+}
+
+async function deletePuzzle(id) {
+  var res = await fetch(SUPABASE_URL + '/rest/v1/puzzles?id=eq.' + id, { method: 'DELETE', headers: apiHeaders(true) });
+  if (!res.ok) throw new Error(await res.text());
+}
+
+// ── Load & render ──────────────────────────────────────────────
+async function loadPuzzles() {
+  document.getElementById('puzzleBody').innerHTML = '<tr><td colspan="4" class="loading">Loading puzzles...</td></tr>';
+  try {
+    allPuzzles = await fetchPuzzles();
+    renderStats();
+    renderTable();
+  } catch(e) {
+    document.getElementById('puzzleBody').innerHTML = '<tr><td colspan="4" class="empty-state" style="color:var(--danger)">Error: ' + e.message + '</td></tr>';
+    toast('Load failed: ' + e.message, true);
+  }
+}
+
+function renderStats() {
+  var today = new Date().toISOString().split('T')[0];
+  var scheduled = allPuzzles.filter(function(p){ return p.play_date; }).length;
+  var played = allPuzzles.filter(function(p){ return p.play_date && p.play_date < today; }).length;
+  document.getElementById('statTotal').textContent = allPuzzles.length;
+  document.getElementById('statScheduled').textContent = scheduled;
+  document.getElementById('statUnscheduled').textContent = allPuzzles.length - scheduled;
+  document.getElementById('statPlayed').textContent = played;
+}
+
+var COLOR_BG = { 1: '#f7d716', 2: '#2de2e6', 3: '#c724b1', 4: '#3ddc97' };
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderTable() {
+  var search = document.getElementById('filterSearch').value.toLowerCase();
+  var dateFilter = document.getElementById('filterDate').value;
+  var sort = document.getElementById('filterSort').value;
+  var today = new Date().toISOString().split('T')[0];
+
+  var rows = allPuzzles.filter(function(p) {
+    if (search) {
+      var hay = [p.cat1_name,p.cat1_words,p.cat2_name,p.cat2_words,p.cat3_name,p.cat3_words,p.cat4_name,p.cat4_words].join(' ').toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    if (dateFilter === 'upcoming')    return p.play_date && p.play_date >= today;
+    if (dateFilter === 'played')      return p.play_date && p.play_date < today;
+    if (dateFilter === 'unscheduled') return !p.play_date;
+    return true;
+  });
+
+  rows.sort(function(a,b){
+    if (sort === 'play_date') {
+      if (!a.play_date && !b.play_date) return a.puzzle_num - b.puzzle_num;
+      if (!a.play_date) return 1; if (!b.play_date) return -1;
+      return a.play_date.localeCompare(b.play_date);
+    }
+    return a.puzzle_num - b.puzzle_num;
+  });
+
+  if (!rows.length) {
+    document.getElementById('puzzleBody').innerHTML = '<tr><td colspan="4" class="empty-state">No puzzles match your filters.</td></tr>';
+    return;
+  }
+
+  var html = '';
+  rows.forEach(function(p) {
+    var dateClass = 'td-date', dateDisplay = p.play_date || '<span style="opacity:.4;font-style:italic">unscheduled</span>';
+    if (p.play_date) {
+      if (p.play_date === today) { dateClass += ' today'; dateDisplay = '⭐ ' + p.play_date; }
+      else if (p.play_date < today) dateClass += ' past';
+    }
+    var cats = [
+      {name:p.cat1_name,words:p.cat1_words,color:p.cat1_color||1},
+      {name:p.cat2_name,words:p.cat2_words,color:p.cat2_color||2},
+      {name:p.cat3_name,words:p.cat3_words,color:p.cat3_color||3},
+      {name:p.cat4_name,words:p.cat4_words,color:p.cat4_color||4},
+    ];
+    var catHtml = cats.map(function(c){
+      return '<div class="cat-block"><span class="cat-badge" style="background:'+COLOR_BG[c.color]+'">'+esc(c.name)+'</span><div class="cat-words">'+esc(c.words)+'</div></div>';
+    }).join('');
+    html += '<tr><td class="td-num">'+p.puzzle_num+'</td><td class="'+dateClass+'">'+dateDisplay+'</td><td>'+catHtml+'</td>' +
+      '<td class="td-actions"><button class="action-btn" onclick="openEdit('+p.id+')">✏️</button>' +
+      '<button class="action-btn del" onclick="confirmDelete('+p.id+','+p.puzzle_num+')">🗑</button></td></tr>';
+  });
+  document.getElementById('puzzleBody').innerHTML = html;
+}
+
+document.getElementById('filterSearch').addEventListener('input', renderTable);
+document.getElementById('filterDate').addEventListener('change', renderTable);
+document.getElementById('filterSort').addEventListener('change', renderTable);
+
+// ── Edit modal ─────────────────────────────────────────────────
+function openEdit(id) {
+  var p = allPuzzles.find(function(x){ return x.id===id; });
+  if (!p) return;
+  editingId = id;
+  document.getElementById('modalTitle').textContent = 'Edit Puzzle #' + p.puzzle_num;
+  document.getElementById('fNum').value  = p.puzzle_num;
+  document.getElementById('fDate').value = p.play_date || '';
+  document.getElementById('fC1N').value  = p.cat1_name;  document.getElementById('fC1W').value = p.cat1_words;
+  document.getElementById('fC2N').value  = p.cat2_name;  document.getElementById('fC2W').value = p.cat2_words;
+  document.getElementById('fC3N').value  = p.cat3_name;  document.getElementById('fC3W').value = p.cat3_words;
+  document.getElementById('fC4N').value  = p.cat4_name;  document.getElementById('fC4W').value = p.cat4_words;
+  document.getElementById('modalErr').textContent = '';
+  document.getElementById('editModal').classList.add('open');
+}
+
+document.getElementById('btnAdd').addEventListener('click', function() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'New Puzzle';
+  ['fNum','fDate','fC1N','fC1W','fC2N','fC2W','fC3N','fC3W','fC4N','fC4W'].forEach(function(id){ document.getElementById(id).value=''; });
+  if (allPuzzles.length) {
+    document.getElementById('fNum').value = Math.max.apply(null, allPuzzles.map(function(p){ return p.puzzle_num; })) + 1;
+  }
+  document.getElementById('modalErr').textContent = '';
+  document.getElementById('editModal').classList.add('open');
+});
+
+document.getElementById('modalCancel').addEventListener('click', function(){ document.getElementById('editModal').classList.remove('open'); });
+
+document.getElementById('modalSave').addEventListener('click', async function() {
+  var err = document.getElementById('modalErr');
+  err.textContent = '';
+  var data = {
+    puzzle_num: parseInt(document.getElementById('fNum').value),
+    play_date:  document.getElementById('fDate').value || null,
+    cat1_name: document.getElementById('fC1N').value.trim(), cat1_words: document.getElementById('fC1W').value.trim(),
+    cat2_name: document.getElementById('fC2N').value.trim(), cat2_words: document.getElementById('fC2W').value.trim(),
+    cat3_name: document.getElementById('fC3N').value.trim(), cat3_words: document.getElementById('fC3W').value.trim(),
+    cat4_name: document.getElementById('fC4N').value.trim(), cat4_words: document.getElementById('fC4W').value.trim(),
+  };
+  if (!data.puzzle_num) { err.textContent = 'Puzzle # is required.'; return; }
+  var wf = ['cat1_words','cat2_words','cat3_words','cat4_words'];
+  for (var i=0;i<wf.length;i++) {
+    var words = data[wf[i]].split(',').map(function(w){ return w.trim(); }).filter(Boolean);
+    if (words.length !== 4) { err.textContent = 'Category '+(i+1)+' needs exactly 4 words (found '+words.length+').'; return; }
+  }
+  this.textContent = 'Saving...'; this.disabled = true;
+  try {
+    await savePuzzle(data, editingId);
+    document.getElementById('editModal').classList.remove('open');
+    toast(editingId ? 'Puzzle updated!' : 'Puzzle added!');
+    await loadPuzzles();
+  } catch(e) { err.textContent = 'Save failed: ' + e.message; }
+  finally { this.textContent = 'Save Puzzle'; this.disabled = false; }
+});
+
+// ── Delete ─────────────────────────────────────────────────────
+function confirmDelete(id, num) {
+  deleteId = id;
+  document.getElementById('confirmMsg').textContent = 'Delete Puzzle #' + num + '? This cannot be undone.';
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+document.getElementById('confirmNo').addEventListener('click', function(){ document.getElementById('confirmOverlay').classList.remove('open'); deleteId=null; });
+document.getElementById('confirmYes').addEventListener('click', async function() {
+  if (!deleteId) return;
+  this.textContent = 'Deleting...'; this.disabled = true;
+  try {
+    await deletePuzzle(deleteId);
+    document.getElementById('confirmOverlay').classList.remove('open');
+    toast('Puzzle deleted.');
+    await loadPuzzles();
+  } catch(e) { toast('Delete failed: ' + e.message, true); }
+  finally { this.textContent = 'Delete'; this.disabled = false; deleteId = null; }
+});
+
+// ── Init ───────────────────────────────────────────────────────
+if (hasSetup()) {
+  showScreen('loginScreen');
+} else {
+  showScreen('setupScreen');
+}
+</script>
+</body>
+</html>
