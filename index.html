@@ -180,11 +180,150 @@
   footer { text-align: center; padding: 12px; font-size: 11px; color: #444466; border-top: 1px solid rgba(45,226,230,0.15); width: 100%; max-width: 600px; background: var(--bg); letter-spacing: 1px; text-transform: uppercase; }
   @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
   @keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
+
+  /* Dev menu */
+  .dev-menu {
+    display: none;
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #12123a;
+    border: 2px solid var(--magenta);
+    border-radius: 12px;
+    padding: 16px 20px;
+    z-index: 500;
+    box-shadow: 0 0 30px rgba(199,36,177,0.5);
+    text-align: center;
+    min-width: 280px;
+  }
+  .dev-menu.open { display: block; }
+  .dev-menu-title { font-family: 'Boogaloo', cursive; color: var(--magenta); font-size: 18px; letter-spacing: 2px; margin-bottom: 4px; text-shadow: 0 0 8px var(--magenta); }
+  .dev-day-display { font-size: 13px; color: var(--teal); margin-bottom: 12px; letter-spacing: 1px; }
+  .dev-nav-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .dev-nav-btn {
+    flex: 1; padding: 10px 6px;
+    border-radius: 6px; border: 1.5px solid var(--teal);
+    background: transparent; color: var(--teal);
+    font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 800;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .dev-nav-btn:hover { background: var(--teal); color: #0a0a1a; }
+  .dev-nav-label { flex: 2; font-size: 11px; color: var(--subtext); letter-spacing: 0.5px; text-transform: uppercase; line-height: 1.4; }
+  .dev-btn {
+    display: block; width: 100%; margin-bottom: 8px; padding: 10px;
+    border-radius: 6px; border: 1.5px solid var(--teal);
+    background: transparent; color: var(--teal);
+    font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
+    cursor: pointer; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.15s;
+  }
+  .dev-btn:hover { background: var(--teal); color: #0a0a1a; }
+  .dev-btn.danger { border-color: var(--magenta); color: var(--magenta); }
+  .dev-btn.danger:hover { background: var(--magenta); color: #fff; }
+  .dev-close { margin-top: 6px; font-size: 12px; color: var(--subtext); cursor: pointer; letter-spacing: 1px; text-transform: uppercase; }
+  .dev-divider { border: none; border-top: 1px solid rgba(45,226,230,0.2); margin: 10px 0; }
+  .dev-jump-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .dev-jump-input {
+    flex: 1; padding: 9px 8px; border-radius: 6px;
+    border: 1.5px solid var(--teal); background: rgba(45,226,230,0.08);
+    color: var(--teal); font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 800; text-align: center;
+    -webkit-appearance: none; outline: none;
+  }
+  .dev-jump-input::placeholder { color: rgba(45,226,230,0.35); font-weight: 600; }
+  .dev-jump-go {
+    padding: 9px 14px; border-radius: 6px;
+    border: 1.5px solid var(--teal); background: var(--teal);
+    color: #0a0a1a; font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 800; cursor: pointer;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .dev-played-grid {
+    display: grid; grid-template-columns: repeat(10, 1fr);
+    gap: 3px; margin-bottom: 10px;
+  }
+  .dev-pip {
+    width: 100%; aspect-ratio: 1; border-radius: 3px;
+    border: 1px solid rgba(45,226,230,0.3);
+    background: transparent; cursor: pointer;
+    font-size: 7px; display: flex; align-items: center;
+    justify-content: center; color: transparent;
+    transition: all 0.1s; position: relative;
+  }
+  .dev-pip.current { border-color: var(--yellow); background: var(--yellow); }
+  .dev-pip.played  { background: rgba(45,226,230,0.25); border-color: var(--teal); }
+  .dev-pip:hover   { border-color: var(--teal); background: rgba(45,226,230,0.15); }
+  .dev-pip-label { font-size: 10px; color: var(--subtext); text-align: center; margin-bottom: 4px; letter-spacing: 0.5px; }
+  header {
+    width: 100%; max-width: 600px; padding: 16px 16px 12px;
+    text-align: center; border-bottom: 2px solid var(--teal);
+    position: relative; background: var(--bg);
+  }
+  .logo {
+    font-family: 'Boogaloo', cursive; font-size: 48px; letter-spacing: 2px;
+    line-height: 1; color: var(--teal); cursor: pointer;
+    text-shadow: 0 0 10px var(--teal), 0 0 30px var(--teal), 0 0 60px rgba(45,226,230,0.4);
+  }
+  .logo .apos, .logo .eight { color: var(--magenta); text-shadow: 0 0 10px var(--magenta), 0 0 30px var(--magenta); }
+  .tagline { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--subtext); margin-top: 4px; }
+  .day-label { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--teal); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .instructions { text-align: center; padding: 10px 16px 6px; font-size: 14px; color: var(--subtext); max-width: 600px; width: 100%; background: var(--bg); letter-spacing: 0.5px; }
+  .main { width: 100%; max-width: 600px; padding: 0 16px 24px; flex: 1; background: var(--bg); }
+  .solved-categories { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+  .solved-cat { border-radius: 6px; padding: 12px 16px; text-align: center; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); border: 1px solid rgba(255,255,255,0.15); }
+  .solved-cat .cat-name { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: #0a0a1a; }
+  .solved-cat .cat-words { font-size: 13px; font-weight: 700; color: #0a0a1a; }
+  .grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 20px; }
+  .tile {
+    background: var(--tile-bg); border: 1px solid var(--border); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    font-weight: 800; font-size: 11px; letter-spacing: 0.3px; text-transform: uppercase;
+    cursor: pointer; padding: 6px 4px; min-height: 76px; transition: all 0.15s;
+    user-select: none; -webkit-user-select: none; line-height: 1.25; color: var(--text); word-break: break-word;
+  }
+  .tile:hover { background: var(--tile-hover); border-color: var(--teal); color: var(--teal); box-shadow: 0 0 8px rgba(45,226,230,0.3); }
+  .tile.selected { background: var(--teal); border-color: var(--teal); color: #0a0a1a; box-shadow: 0 0 16px rgba(45,226,230,0.6); }
+  .tile.shake { animation: shake 0.5s; }
+  .mistakes-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; justify-content: center; font-size: 13px; font-weight: 700; color: var(--subtext); letter-spacing: 0.5px; text-transform: uppercase; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--magenta); display: inline-block; box-shadow: 0 0 6px var(--magenta); transition: opacity 0.3s; }
+  .dot.used { opacity: 0.15; box-shadow: none; }
+  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .btn { border: 1.5px solid var(--teal); background: transparent; color: var(--teal); border-radius: 999px; padding: 10px 22px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.15s; }
+  .btn:hover { background: var(--teal); color: #0a0a1a; box-shadow: 0 0 12px rgba(45,226,230,0.5); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn.submit { background: var(--magenta); border-color: var(--magenta); color: #fff; box-shadow: 0 0 10px rgba(199,36,177,0.4); }
+  .btn.submit:hover { background: #e030c8; box-shadow: 0 0 20px rgba(199,36,177,0.7); }
+  .btn.submit:disabled { background: var(--magenta); opacity: 0.3; }
+  .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px); background: var(--magenta); color: #fff; padding: 10px 24px; border-radius: 6px; font-weight: 800; font-size: 14px; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 100; white-space: nowrap; box-shadow: 0 0 20px rgba(199,36,177,0.6); }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .locked-screen { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; gap: 16px; flex: 1; background: var(--bg); width: 100%; max-width: 600px; }
+  .locked-screen.show { display: flex; }
+  .locked-icon { font-size: 56px; }
+  .locked-title { font-family: 'Boogaloo', cursive; font-size: 32px; color: var(--teal); text-shadow: 0 0 10px var(--teal); }
+  .locked-msg { color: var(--subtext); font-size: 15px; line-height: 1.5; max-width: 320px; }
+  .countdown { font-family: 'Boogaloo', cursive; font-size: 48px; color: var(--magenta); text-shadow: 0 0 10px var(--magenta), 0 0 30px var(--magenta); letter-spacing: 4px; }
+  .countdown-label { font-size: 12px; color: var(--subtext); letter-spacing: 2px; text-transform: uppercase; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #12123a; border: 2px solid var(--teal); border-radius: 12px; padding: 32px 24px; max-width: 400px; width: 90%; text-align: center; animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 0 40px rgba(45,226,230,0.3); }
+  .modal .emoji { font-size: 48px; margin-bottom: 12px; }
+  .modal h2 { font-family: 'Boogaloo', cursive; font-size: 32px; color: var(--teal); margin-bottom: 8px; text-shadow: 0 0 10px var(--teal); }
+  .modal p { color: var(--subtext); font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
+  .modal .result-cats { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; text-align: left; }
+  .result-cat { border-radius: 6px; padding: 10px 14px; }
+  .result-cat .rcat-name { font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; color: #0a0a1a; }
+  .result-cat .rcat-words { margin-top: 2px; font-weight: 700; font-size: 12px; color: #0a0a1a; }
+  .modal-btns { display: flex; gap: 10px; justify-content: center; }
+  footer { text-align: center; padding: 12px; font-size: 11px; color: #444466; border-top: 1px solid rgba(45,226,230,0.15); width: 100%; max-width: 600px; background: var(--bg); letter-spacing: 1px; text-transform: uppercase; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
+  @keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
+
 </style>
 </head>
 <body>
 
-<header>
+
+<header id="appHeader" style="display:none">
   <div class="logo" id="logoBtn"><span class="apos">'</span><span class="eight">80s</span>Nections</div>
   <div class="tagline">The Ultimate 80s Music Connections Game</div>
   <div class="day-label" id="dayLabel">Day 1</div>
@@ -216,27 +355,29 @@
 
 <div class="dev-menu" id="devMenu">
   <div class="dev-menu-title">&#x1F579; DEV MENU</div>
-  <div class="dev-day-display">Now on: <span id="devDayDisplay">Day 1</span> of 100</div>
+  <div class="dev-day-display">Puzzle: <span id="devDayDisplay">–</span></div>
 
   <!-- Prev / Next arrows -->
   <div class="dev-nav-row">
     <button class="dev-nav-btn" id="devPrev">&#x276E;</button>
-    <div class="dev-nav-label">Cycle<br>Games</div>
+    <div class="dev-nav-label">Cycle<br>Puzzles</div>
     <button class="dev-nav-btn" id="devNext">&#x276F;</button>
   </div>
 
-  <!-- Jump to specific game -->
+  <!-- Pip grid -->
   <hr class="dev-divider">
-  <div class="dev-pip-label">All 100 Games &mdash; tap to jump &mdash; &#x2B50; = current &nbsp; &#x2713; = played</div>
+  <div class="dev-pip-label">All puzzles &mdash; tap to jump &mdash; &#x2B50; = current &nbsp; &#x2713; = played</div>
   <div class="dev-played-grid" id="devPipGrid"></div>
 
+  <!-- Jump to number -->
   <div class="dev-jump-row">
-    <input class="dev-jump-input" id="devJumpInput" type="number" min="1" max="100" placeholder="Day #">
+    <input class="dev-jump-input" id="devJumpInput" type="number" min="1" max="100" placeholder="Puzzle #">
     <button class="dev-jump-go" id="devJumpGo">Go</button>
   </div>
 
   <hr class="dev-divider">
-  <button class="dev-btn danger" id="devReset">&#x1F504; Reset All Progress</button>
+  <button class="dev-btn danger" id="devReset">&#x1F504; Reset Played Status</button>
+  <a href="admin.html" target="_blank" class="dev-btn" id="devAdmin" style="display:block;margin-top:4px;text-decoration:none;text-align:center">&#x2699;&#xFE0F; Open Admin</a>
   <div class="dev-close" id="devClose">&#x2715; Close</div>
 </div>
 
@@ -257,4408 +398,57 @@
 <footer>'80sNections &mdash; 100 Days of 80s Music Trivia</footer>
 
 <script>
-var GAMES=[
- {
-  "cats": [
-   {
-    "name": "Michael Jackson Songs",
-    "color": 1,
-    "words": [
-     "WANNA BE STARTIN SOMETHIN",
-     "ROCK WITH YOU",
-     "BEAT IT",
-     "THRILLER"
-    ]
-   },
-   {
-    "name": "Songs Featured in 80s Movies",
-    "color": 2,
-    "words": [
-     "I'VE HAD THE TIME OF MY LIFE",
-     "FOOTLOOSE",
-     "OH YEAH",
-     "DONT YOU FORGET ABOUT ME"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1983",
-    "color": 3,
-    "words": [
-     "TOTAL ECLIPSE OF THE HEART",
-     "SAY SAY SAY",
-     "ALL NIGHT LONG",
-     "EVERY BREATH YOU TAKE"
-    ]
-   },
-   {
-    "name": "Songs with a Person's Name in the Title",
-    "color": 4,
-    "words": [
-     "MARIA",
-     "JACK AND DIANE",
-     "SANDY",
-     "ROXANNE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Madonna Songs",
-    "color": 1,
-    "words": [
-     "LIKE A VIRGIN",
-     "PAPA DONT PREACH",
-     "MATERIAL GIRL",
-     "OPEN YOUR HEART"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1985",
-    "color": 2,
-    "words": [
-     "I WANT TO KNOW WHAT LOVE IS",
-     "CARELESS WHISPER",
-     "EVERYBODY WANTS TO RULE THE WORLD",
-     "PART-TIME LOVER"
-    ]
-   },
-   {
-    "name": "Songs About Dancing",
-    "color": 3,
-    "words": [
-     "DANCING WITH MYSELF",
-     "COME ON EILEEN",
-     "I WANNA DANCE WITH SOMEBODY",
-     "DANCING IN THE DARK"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "GIRLS ON FILM",
-     "EVERY BREATH YOU TAKE",
-     "SLEDGEHAMMER",
-     "THRILLER"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Prince Songs",
-    "color": 1,
-    "words": [
-     "AROUND THE WORLD IN A DAY",
-     "RASPBERRY BERET",
-     "PURPLE RAIN",
-     "KISS"
-    ]
-   },
-   {
-    "name": "Songs with Colors in the Title",
-    "color": 2,
-    "words": [
-     "GOLDEN YEARS",
-     "LADY IN RED",
-     "RED RED WINE",
-     "99 RED BALLOONS"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 3,
-    "words": [
-     "HYSTERIA",
-     "SLIPPERY WHEN WET",
-     "LIKE A VIRGIN",
-     "THE JOSHUA TREE"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1984",
-    "color": 4,
-    "words": [
-     "WHEN DOVES CRY",
-     "WHAT'S LOVE GOT TO DO WITH IT",
-     "GHOSTBUSTERS",
-     "LETS HEAR IT FOR THE BOY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Whitney Houston Songs",
-    "color": 1,
-    "words": [
-     "HOW WILL I KNOW",
-     "DIDNT WE ALMOST HAVE IT ALL",
-     "ONE MOMENT IN TIME",
-     "GREATEST LOVE OF ALL"
-    ]
-   },
-   {
-    "name": "Famous 80s Power Ballads",
-    "color": 2,
-    "words": [
-     "MORE THAN A FEELING",
-     "WITH OR WITHOUT YOU",
-     "DONT STOP BELIEVIN",
-     "EVERY ROSE HAS ITS THORN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1987",
-    "color": 3,
-    "words": [
-     "WALK LIKE AN EGYPTIAN",
-     "SHAKE YOU DOWN",
-     "SHAKEDOWN",
-     "NOTHING'S GONNA STOP US NOW"
-    ]
-   },
-   {
-    "name": "Songs About the Night",
-    "color": 4,
-    "words": [
-     "BLINDED BY THE LIGHT",
-     "MIDNIGHT HOUR",
-     "DANCING IN THE DARK",
-     "IN THE AIR TONIGHT"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Cyndi Lauper Songs",
-    "color": 1,
-    "words": [
-     "HAT FULL OF STARS",
-     "I DROVE ALL NIGHT",
-     "SHE BOP",
-     "ALL THROUGH THE NIGHT"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 2,
-    "words": [
-     "SHOULD I STAY OR SHOULD I GO",
-     "BURNING DOWN THE HOUSE",
-     "COME ON EILEEN",
-     "ROAD TO NOWHERE"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1986",
-    "color": 3,
-    "words": [
-     "ADDICTED TO LOVE",
-     "ROCK ME AMADEUS",
-     "HUMAN",
-     "KISS"
-    ]
-   },
-   {
-    "name": "Songs About Girls",
-    "color": 4,
-    "words": [
-     "VENUS",
-     "GIRLS ON FILM",
-     "PRIVATE DANCER",
-     "JESSIES GIRL"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "George Michael Songs",
-    "color": 1,
-    "words": [
-     "I WANT YOUR SEX",
-     "FAITH",
-     "FATHER FIGURE",
-     "MONKEY"
-    ]
-   },
-   {
-    "name": "Songs That Were Banned from Radio",
-    "color": 2,
-    "words": [
-     "PHYSICAL",
-     "MONEY FOR NOTHING",
-     "EBONY AND IVORY",
-     "JE T'AIME"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "GOT MY MIND SET ON YOU",
-     "GET OUTTA MY DREAMS",
-     "TOGETHER FOREVER",
-     "ONE MORE TRY"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 4,
-    "words": [
-     "DON'T YOU WANT ME",
-     "BLUE MONDAY",
-     "TAINTED LOVE",
-     "SMALLTOWN BOY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Bruce Springsteen Songs",
-    "color": 1,
-    "words": [
-     "TUNNEL OF LOVE",
-     "COVER ME",
-     "BRILLIANT DISGUISE",
-     "ONE STEP UP"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1984",
-    "color": 2,
-    "words": [
-     "HELLO",
-     "JUMP",
-     "GHOSTBUSTERS",
-     "FOOTLOOSE"
-    ]
-   },
-   {
-    "name": "Songs About Cars",
-    "color": 3,
-    "words": [
-     "CARS",
-     "LIFE IS A HIGHWAY",
-     "LITTLE DEUCE COUPE",
-     "LITTLE RED CORVETTE"
-    ]
-   },
-   {
-    "name": "Artists Who Left Famous Bands",
-    "color": 4,
-    "words": [
-     "PETER GABRIEL",
-     "STING",
-     "DON HENLEY",
-     "OZZY OSBOURNE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Tina Turner Songs",
-    "color": 1,
-    "words": [
-     "PRIVATE DANCER",
-     "STEAMY WINDOWS",
-     "TWO PEOPLE",
-     "TYPICAL MALE"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1986",
-    "color": 2,
-    "words": [
-     "KISS",
-     "STUCK WITH YOU",
-     "GREATEST LOVE OF ALL",
-     "ADDICTED TO LOVE"
-    ]
-   },
-   {
-    "name": "Famous 80s Duets",
-    "color": 3,
-    "words": [
-     "EBONY AND IVORY",
-     "ISLANDS IN THE STREAM",
-     "SOMETHING",
-     "ALMOST PARADISE"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 4,
-    "words": [
-     "GREAT BALLS OF FIRE",
-     "PRIVATE FIRES",
-     "BURNING DOWN THE HOUSE",
-     "LIGHT MY FIRE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Phil Collins Songs",
-    "color": 1,
-    "words": [
-     "ONE MORE NIGHT",
-     "INVISIBLE TOUCH",
-     "AGAINST ALL ODDS",
-     "A GROOVY KIND OF LOVE"
-    ]
-   },
-   {
-    "name": "Live Aid Wembley Performers (1985)",
-    "color": 2,
-    "words": [
-     "U2",
-     "PAUL MCCARTNEY",
-     "THE WHO",
-     "STYLE COUNCIL"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1982",
-    "color": 3,
-    "words": [
-     "OPEN ARMS",
-     "EYE OF THE TIGER",
-     "JACK AND DIANE",
-     "I LOVE ROCK N ROLL"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 4,
-    "words": [
-     "JUMP FOR MY LOVE",
-     "LETS HEAR IT FOR THE BOY",
-     "LETS DANCE",
-     "WALKING ON SUNSHINE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Lionel Richie Songs",
-    "color": 1,
-    "words": [
-     "HELLO",
-     "DANCING ON THE CEILING",
-     "BALLERINA GIRL",
-     "STUCK ON YOU"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1984",
-    "color": 2,
-    "words": [
-     "FOOTLOOSE",
-     "WHAT'S LOVE GOT TO DO WITH IT",
-     "JUMP",
-     "AGAINST ALL ODDS"
-    ]
-   },
-   {
-    "name": "Songs That Hit #1 in Both UK & US",
-    "color": 3,
-    "words": [
-     "TOTAL ECLIPSE OF THE HEART",
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "EVERY BREATH YOU TAKE",
-     "EBONY AND IVORY"
-    ]
-   },
-   {
-    "name": "Songs About Love (in the title)",
-    "color": 4,
-    "words": [
-     "I WANT TO KNOW WHAT LOVE IS",
-     "LOVE IS A BATTLEFIELD",
-     "ADDICTED TO LOVE",
-     "CRAZY LITTLE THING CALLED LOVE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Duran Duran Songs",
-    "color": 1,
-    "words": [
-     "IS THERE SOMETHING I SHOULD KNOW",
-     "GIRLS ON FILM",
-     "VIEW TO A KILL",
-     "HUNGRY LIKE THE WOLF"
-    ]
-   },
-   {
-    "name": "Original MTV VJs",
-    "color": 2,
-    "words": [
-     "ALAN HUNTER",
-     "J.J. JACKSON",
-     "ADAM CURRY",
-     "NINA BLACKWOOD"
-    ]
-   },
-   {
-    "name": "Hair Metal Classics",
-    "color": 3,
-    "words": [
-     "POUR SOME SUGAR ON ME",
-     "HOME SWEET HOME",
-     "LIVIN ON A PRAYER",
-     "EVERY ROSE HAS ITS THORN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1989",
-    "color": 4,
-    "words": [
-     "WHEN I'M WITH YOU",
-     "LOST IN YOUR EYES",
-     "LIKE A PRAYER",
-     "MY PREROGATIVE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "The Police Songs",
-    "color": 1,
-    "words": [
-     "DONT STAND SO CLOSE TO ME",
-     "EVERY LITTLE THING SHE DOES IS MAGIC",
-     "MESSAGE IN A BOTTLE",
-     "DE DO DO DO"
-    ]
-   },
-   {
-    "name": "Songs About Heartbreak",
-    "color": 2,
-    "words": [
-     "WHAT BECOMES OF THE BROKENHEARTED",
-     "EVERY ROSE HAS ITS THORN",
-     "THE HEART OF ROCK AND ROLL",
-     "BROKEN WINGS"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1983",
-    "color": 3,
-    "words": [
-     "ALL NIGHT LONG",
-     "BEAT IT",
-     "BILLIE JEAN",
-     "SAY SAY SAY"
-    ]
-   },
-   {
-    "name": "Bands Starting with 'The'",
-    "color": 4,
-    "words": [
-     "THE B-52S",
-     "THE PRETENDERS",
-     "THE CLASH",
-     "THE SMITHS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "U2 Songs",
-    "color": 1,
-    "words": [
-     "SUNDAY BLOODY SUNDAY",
-     "WITH OR WITHOUT YOU",
-     "DESIRE",
-     "I STILL HAVENT FOUND WHAT IM LOOKING FOR"
-    ]
-   },
-   {
-    "name": "Live Aid JFK Performers (1985)",
-    "color": 2,
-    "words": [
-     "MICK JAGGER",
-     "NEIL YOUNG",
-     "LED ZEPPELIN",
-     "MADONNA"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1987",
-    "color": 3,
-    "words": [
-     "LA BAMBA",
-     "I KNEW YOU WERE WAITING",
-     "WALK LIKE AN EGYPTIAN",
-     "SHAKE YOU DOWN"
-    ]
-   },
-   {
-    "name": "Songs About Rain",
-    "color": 4,
-    "words": [
-     "PURPLE RAIN",
-     "HERE COMES THE RAIN AGAIN",
-     "ONLY HAPPY WHEN IT RAINS",
-     "WHO'LL STOP THE RAIN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Tears for Fears Songs",
-    "color": 1,
-    "words": [
-     "EVERYBODY WANTS TO RULE THE WORLD",
-     "SHOUT",
-     "MAD WORLD",
-     "MOTHERS TALK"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 2,
-    "words": [
-     "SWEET DREAMS",
-     "BLUE MONDAY",
-     "WEST END GIRLS",
-     "TAINTED LOVE"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1985",
-    "color": 3,
-    "words": [
-     "SEPARATE LIVES",
-     "PART-TIME LOVER",
-     "SAY YOU SAY ME",
-     "CARELESS WHISPER"
-    ]
-   },
-   {
-    "name": "80s One-Hit Wonder Artists",
-    "color": 4,
-    "words": [
-     "TONI BASIL",
-     "RICK ASTLEY",
-     "VANGELIS",
-     "SOFT CELL"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Bon Jovi Songs",
-    "color": 1,
-    "words": [
-     "YOU GIVE LOVE A BAD NAME",
-     "SHOT THROUGH THE HEART",
-     "LIVIN ON A PRAYER",
-     "WANTED DEAD OR ALIVE"
-    ]
-   },
-   {
-    "name": "Hair Metal Classics",
-    "color": 2,
-    "words": [
-     "EVERY ROSE HAS ITS THORN",
-     "POUR SOME SUGAR ON ME",
-     "HOME SWEET HOME",
-     "GIRLS GIRLS GIRLS"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1986",
-    "color": 3,
-    "words": [
-     "STUCK WITH YOU",
-     "ADDICTED TO LOVE",
-     "GREATEST LOVE OF ALL",
-     "HUMAN"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 4,
-    "words": [
-     "RUNNING WITH THE NIGHT",
-     "RUN-DMC",
-     "RUNNING UP THAT HILL",
-     "I RAN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Def Leppard Songs",
-    "color": 1,
-    "words": [
-     "ANIMAL",
-     "ROCK OF AGES",
-     "ARMAGEDDON IT",
-     "PHOTOGRAPH"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 2,
-    "words": [
-     "LIKE A VIRGIN",
-     "BORN IN THE USA",
-     "THRILLER",
-     "THE JOSHUA TREE"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "FAITH",
-     "NEED YOU TONIGHT",
-     "ONE MORE TRY",
-     "GOT MY MIND SET ON YOU"
-    ]
-   },
-   {
-    "name": "Power Ballad Classics",
-    "color": 4,
-    "words": [
-     "HERE I GO AGAIN",
-     "WITH OR WITHOUT YOU",
-     "DONT STOP BELIEVIN",
-     "EVERY ROSE HAS ITS THORN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "INXS Songs",
-    "color": 1,
-    "words": [
-     "DEVIL INSIDE",
-     "I SEND A MESSAGE",
-     "NEVER TEAR US APART",
-     "NEW SENSATION"
-    ]
-   },
-   {
-    "name": "Songs That Became #1 in Both UK & US",
-    "color": 2,
-    "words": [
-     "EBONY AND IVORY",
-     "TOTAL ECLIPSE OF THE HEART",
-     "BILLIE JEAN",
-     "UPTOWN GIRL"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1987",
-    "color": 3,
-    "words": [
-     "SHAKEDOWN",
-     "I KNEW YOU WERE WAITING",
-     "WALK LIKE AN EGYPTIAN",
-     "SHAKE YOU DOWN"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 4,
-    "words": [
-     "INTO THE GROOVE",
-     "LETS HEAR IT FOR THE BOY",
-     "HOLIDAY",
-     "WALKING ON SUNSHINE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "R.E.M. Songs",
-    "color": 1,
-    "words": [
-     "LOSING MY RELIGION",
-     "DRIVER 8",
-     "RADIO FREE EUROPE",
-     "STAND"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 2,
-    "words": [
-     "ROAD TO NOWHERE",
-     "SHOULD I STAY OR SHOULD I GO",
-     "ONCE IN A LIFETIME",
-     "COME ON EILEEN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1989",
-    "color": 3,
-    "words": [
-     "MY PREROGATIVE",
-     "TWO HEARTS",
-     "LOOK AWAY",
-     "LIKE A PRAYER"
-    ]
-   },
-   {
-    "name": "Songs with a City Name in the Title",
-    "color": 4,
-    "words": [
-     "VIVA LAS VEGAS",
-     "NEW YORK NEW YORK",
-     "LIVING IN AMERICA",
-     "VIENNA"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Talking Heads Songs",
-    "color": 1,
-    "words": [
-     "THIS MUST BE THE PLACE",
-     "AND SHE WAS",
-     "PSYCHO KILLER",
-     "LIFE DURING WARTIME"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 2,
-    "words": [
-     "GREAT BALLS OF FIRE",
-     "LIGHT MY FIRE",
-     "WE DIDN'T START THE FIRE",
-     "BURNING DOWN THE HOUSE"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1980",
-    "color": 3,
-    "words": [
-     "ANOTHER ONE BITES THE DUST",
-     "MAGIC",
-     "STARTING OVER",
-     "THE TIDE IS HIGH"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "COME ON EILEEN",
-     "PUTTIN ON THE RITZ",
-     "MICKEY",
-     "99 LUFTBALLONS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Depeche Mode Songs",
-    "color": 1,
-    "words": [
-     "EVERYTHING COUNTS",
-     "PERSONAL JESUS",
-     "ENJOY THE SILENCE",
-     "MASTER AND SERVANT"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 2,
-    "words": [
-     "DON'T YOU WANT ME",
-     "SMALLTOWN BOY",
-     "JUST CANT GET ENOUGH",
-     "SWEET DREAMS"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1981",
-    "color": 3,
-    "words": [
-     "BETTE DAVIS EYES",
-     "JESSIES GIRL",
-     "KEEP ON LOVING YOU",
-     "9 TO 5"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "SLEDGEHAMMER",
-     "GIRLS ON FILM",
-     "EVERY BREATH YOU TAKE",
-     "TOTAL ECLIPSE OF THE HEART"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Billboard #1 Hits of 1980",
-    "color": 1,
-    "words": [
-     "ANOTHER ONE BITES THE DUST",
-     "MAGIC",
-     "FUNKYTOWN",
-     "THE TIDE IS HIGH"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1985",
-    "color": 2,
-    "words": [
-     "SAY YOU SAY ME",
-     "BROKEN WINGS",
-     "EVERYBODY WANTS TO RULE THE WORLD",
-     "SEPARATE LIVES"
-    ]
-   },
-   {
-    "name": "Songs About Dancing",
-    "color": 3,
-    "words": [
-     "DANCE HALL DAYS",
-     "COME ON EILEEN",
-     "LETS DANCE",
-     "DANCING WITH MYSELF"
-    ]
-   },
-   {
-    "name": "Songs About Girls",
-    "color": 4,
-    "words": [
-     "PRIVATE DANCER",
-     "JESSIES GIRL",
-     "UPTOWN GIRL",
-     "GIRLS JUST WANT TO HAVE FUN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs in Breakfast Club Soundtrack",
-    "color": 1,
-    "words": [
-     "WAITING FOR SOMEONE",
-     "DONT YOU FORGET ABOUT ME",
-     "PLEASE PLEASE TELL ME NOW",
-     "DON'T YOU FORGET ABOUT ME"
-    ]
-   },
-   {
-    "name": "Songs in Top Gun Soundtrack",
-    "color": 2,
-    "words": [
-     "DANGER ZONE",
-     "PLAYING WITH THE BOYS",
-     "HOT SUMMER NIGHTS",
-     "TAKE MY BREATH AWAY"
-    ]
-   },
-   {
-    "name": "Songs in Footloose Soundtrack",
-    "color": 3,
-    "words": [
-     "LETS HEAR IT FOR THE BOY",
-     "FOOTLOOSE",
-     "HOLDING OUT FOR A HERO",
-     "ALMOST PARADISE"
-    ]
-   },
-   {
-    "name": "Songs in Dirty Dancing Soundtrack",
-    "color": 4,
-    "words": [
-     "SHE'S LIKE THE WIND",
-     "HUNGRY EYES",
-     "DO YOU LOVE ME",
-     "I'VE HAD THE TIME OF MY LIFE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Original 5 MTV VJs",
-    "color": 1,
-    "words": [
-     "NINA BLACKWOOD",
-     "MARK GOODMAN",
-     "J.J. JACKSON",
-     "MARTHA QUINN"
-    ]
-   },
-   {
-    "name": "Live Aid Wembley Performers",
-    "color": 2,
-    "words": [
-     "QUEEN",
-     "STYLE COUNCIL",
-     "ELTON JOHN",
-     "DAVID BOWIE"
-    ]
-   },
-   {
-    "name": "Songs About the Night",
-    "color": 3,
-    "words": [
-     "SATURDAY NIGHT",
-     "NIGHTSHIFT",
-     "BLINDED BY THE LIGHT",
-     "ALL NIGHT LONG"
-    ]
-   },
-   {
-    "name": "Songs About Heartbreak",
-    "color": 4,
-    "words": [
-     "BROKEN WINGS",
-     "SOMEBODY",
-     "MISSING YOU",
-     "WITH OR WITHOUT YOU"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Billboard #1 Hits of 1982",
-    "color": 1,
-    "words": [
-     "EYE OF THE TIGER",
-     "I LOVE ROCK N ROLL",
-     "JACK AND DIANE",
-     "HARD TO SAY IM SORRY"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1986",
-    "color": 2,
-    "words": [
-     "ROCK ME AMADEUS",
-     "HUMAN",
-     "GREATEST LOVE OF ALL",
-     "STUCK WITH YOU"
-    ]
-   },
-   {
-    "name": "Songs About Cars",
-    "color": 3,
-    "words": [
-     "PINK CADILLAC",
-     "DANGER ZONE",
-     "DRIVING IN MY CAR",
-     "RADAR LOVE"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "BILLIE JEAN",
-     "THRILLER",
-     "EVERY BREATH YOU TAKE",
-     "SLEDGEHAMMER"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Hair Metal Classics",
-    "color": 1,
-    "words": [
-     "POUR SOME SUGAR ON ME",
-     "LIVIN ON A PRAYER",
-     "WANTED DEAD OR ALIVE",
-     "HERE I GO AGAIN"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 2,
-    "words": [
-     "ROAD TO NOWHERE",
-     "PSYCHO KILLER",
-     "SHOULD I STAY OR SHOULD I GO",
-     "MESSAGE IN A BOTTLE"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 3,
-    "words": [
-     "JUST CANT GET ENOUGH",
-     "DON'T YOU WANT ME",
-     "BLUE MONDAY",
-     "TAINTED LOVE"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 4,
-    "words": [
-     "WALKING ON SUNSHINE",
-     "JUMP FOR MY LOVE",
-     "HOLIDAY",
-     "WAKE ME UP BEFORE YOU GO GO"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs About Rain",
-    "color": 1,
-    "words": [
-     "HERE COMES THE RAIN AGAIN",
-     "SET FIRE TO THE RAIN",
-     "PURPLE RAIN",
-     "CRYING IN THE RAIN"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 2,
-    "words": [
-     "FIRE",
-     "LIGHT MY FIRE",
-     "GREAT BALLS OF FIRE",
-     "BEDS ARE BURNING"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 3,
-    "words": [
-     "RUNAWAY",
-     "RUN TO YOU",
-     "KEEP ON RUNNING",
-     "I RAN"
-    ]
-   },
-   {
-    "name": "Songs About the Night",
-    "color": 4,
-    "words": [
-     "MIDNIGHT HOUR",
-     "IN THE AIR TONIGHT",
-     "DANCING IN THE DARK",
-     "ROCK THE NIGHT"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Billboard #1 Hits of 1981",
-    "color": 1,
-    "words": [
-     "KEEP ON LOVING YOU",
-     "9 TO 5",
-     "MORNING TRAIN",
-     "PHYSICAL"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1988",
-    "color": 2,
-    "words": [
-     "ANYTHING FOR YOU",
-     "GOT MY MIND SET ON YOU",
-     "NEED YOU TONIGHT",
-     "FAITH"
-    ]
-   },
-   {
-    "name": "Songs That Were Banned from Radio",
-    "color": 3,
-    "words": [
-     "OLIVER'S ARMY",
-     "GOD SAVE THE QUEEN",
-     "RELAX",
-     "MONEY FOR NOTHING"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "PUTTIN ON THE RITZ",
-     "I RAN",
-     "CHARIOTS OF FIRE",
-     "99 LUFTBALLONS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Bands That Started with 'The'",
-    "color": 1,
-    "words": [
-     "THE SMITHS",
-     "THE HUMAN LEAGUE",
-     "THE GO-GOS",
-     "THE CURE"
-    ]
-   },
-   {
-    "name": "Artists Famous by One Name Only",
-    "color": 2,
-    "words": [
-     "MADONNA",
-     "BONNIE",
-     "BJORK",
-     "FALCO"
-    ]
-   },
-   {
-    "name": "Songs with a Country in the Title",
-    "color": 3,
-    "words": [
-     "ISLANDS IN THE STREAM",
-     "AMERICAN GIRL",
-     "RIO",
-     "LA BAMBA"
-    ]
-   },
-   {
-    "name": "Songs with a City in the Title",
-    "color": 4,
-    "words": [
-     "WEST END GIRLS",
-     "LIVING IN AMERICA",
-     "VIENNA",
-     "NEW YORK NEW YORK"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Famous 80s Duets",
-    "color": 1,
-    "words": [
-     "EBONY AND IVORY",
-     "ISLANDS IN THE STREAM",
-     "DON'T GO BREAKING MY HEART",
-     "SOMETHING"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 2,
-    "words": [
-     "BORN IN THE USA",
-     "HYSTERIA",
-     "1984",
-     "SLIPPERY WHEN WET"
-    ]
-   },
-   {
-    "name": "Songs That Hit #1 in Both UK & US",
-    "color": 3,
-    "words": [
-     "CALL ME",
-     "UPTOWN GIRL",
-     "EVERY BREATH YOU TAKE",
-     "KARMA CHAMELEON"
-    ]
-   },
-   {
-    "name": "Power Ballad Classics",
-    "color": 4,
-    "words": [
-     "PATIENCE",
-     "EVERY ROSE HAS ITS THORN",
-     "I WANT TO KNOW WHAT LOVE IS",
-     "DONT STOP BELIEVIN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs About Love (in the title)",
-    "color": 1,
-    "words": [
-     "WHAT'S LOVE GOT TO DO WITH IT",
-     "I WANT TO KNOW WHAT LOVE IS",
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "ELECTRIC LOVE"
-    ]
-   },
-   {
-    "name": "Songs with a Person's Name",
-    "color": 2,
-    "words": [
-     "JESSIES GIRL",
-     "SANDY",
-     "BRANDY",
-     "JACK AND DIANE"
-    ]
-   },
-   {
-    "name": "Songs About Cars",
-    "color": 3,
-    "words": [
-     "DRIVING IN MY CAR",
-     "DANGER ZONE",
-     "PINK CADILLAC",
-     "LIFE IS A HIGHWAY"
-    ]
-   },
-   {
-    "name": "Songs About Dancing",
-    "color": 4,
-    "words": [
-     "I WANNA DANCE WITH SOMEBODY",
-     "COME ON EILEEN",
-     "DANCE HALL DAYS",
-     "DANCING WITH MYSELF"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Billy Idol Songs",
-    "color": 1,
-    "words": [
-     "FLESH FOR FANTASY",
-     "TO BE A LOVER",
-     "MONY MONY",
-     "EYES WITHOUT A FACE"
-    ]
-   },
-   {
-    "name": "Songs About Heartbreak",
-    "color": 2,
-    "words": [
-     "MISSING YOU",
-     "WHAT BECOMES OF THE BROKENHEARTED",
-     "TOTAL ECLIPSE OF THE HEART",
-     "EVERY ROSE HAS ITS THORN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1983",
-    "color": 3,
-    "words": [
-     "MANIAC",
-     "BILLIE JEAN",
-     "SAY SAY SAY",
-     "EVERY BREATH YOU TAKE"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 4,
-    "words": [
-     "ONCE IN A LIFETIME",
-     "MESSAGE IN A BOTTLE",
-     "ROAD TO NOWHERE",
-     "BRASS IN POCKET"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Sting Solo Songs",
-    "color": 1,
-    "words": [
-     "BE STILL MY BEATING HEART",
-     "WE'LL BE TOGETHER",
-     "FORTRESS AROUND YOUR HEART",
-     "ENGLISHMAN IN NEW YORK"
-    ]
-   },
-   {
-    "name": "Songs About Rain",
-    "color": 2,
-    "words": [
-     "WHO'LL STOP THE RAIN",
-     "SET FIRE TO THE RAIN",
-     "NOVEMBER RAIN",
-     "HERE COMES THE RAIN AGAIN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1985",
-    "color": 3,
-    "words": [
-     "PART-TIME LOVER",
-     "LIKE A VIRGIN",
-     "SEPARATE LIVES",
-     "I WANT TO KNOW WHAT LOVE IS"
-    ]
-   },
-   {
-    "name": "Live Aid JFK Performers",
-    "color": 4,
-    "words": [
-     "BOB DYLAN",
-     "MADONNA",
-     "MICK JAGGER",
-     "CROSBY STILLS NASH YOUNG"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Michael Jackson Songs",
-    "color": 1,
-    "words": [
-     "SMOOTH CRIMINAL",
-     "DONT STOP TIL YOU GET ENOUGH",
-     "PYT",
-     "DIRTY DIANA"
-    ]
-   },
-   {
-    "name": "Songs That Were Banned from Radio",
-    "color": 2,
-    "words": [
-     "RELAX",
-     "MONEY FOR NOTHING",
-     "OLIVER'S ARMY",
-     "GOD SAVE THE QUEEN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1984",
-    "color": 3,
-    "words": [
-     "LETS HEAR IT FOR THE BOY",
-     "FOOTLOOSE",
-     "HELLO",
-     "WHEN DOVES CRY"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "EVERY BREATH YOU TAKE",
-     "TOTAL ECLIPSE OF THE HEART",
-     "BILLIE JEAN",
-     "TAKE ON ME"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Madonna Songs",
-    "color": 1,
-    "words": [
-     "DRESS YOU UP",
-     "LIKE A PRAYER",
-     "LUCKY STAR",
-     "OPEN YOUR HEART"
-    ]
-   },
-   {
-    "name": "Songs About Girls",
-    "color": 2,
-    "words": [
-     "GIRLS JUST WANT TO HAVE FUN",
-     "VENUS",
-     "UPTOWN GIRL",
-     "GLORIA"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1986",
-    "color": 3,
-    "words": [
-     "KISS",
-     "HUMAN",
-     "THAT'S WHAT FRIENDS ARE FOR",
-     "STUCK WITH YOU"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 4,
-    "words": [
-     "LETS DANCE",
-     "INTO THE GROOVE",
-     "WAKE ME UP BEFORE YOU GO GO",
-     "WALKING ON SUNSHINE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Prince Songs",
-    "color": 1,
-    "words": [
-     "1999",
-     "LITTLE RED CORVETTE",
-     "RASPBERRY BERET",
-     "WHEN DOVES CRY"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 2,
-    "words": [
-     "SLIPPERY WHEN WET",
-     "1984",
-     "HYSTERIA",
-     "BORN IN THE USA"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1989",
-    "color": 3,
-    "words": [
-     "WIND BENEATH MY WINGS",
-     "LOOK AWAY",
-     "COLD HEARTED",
-     "LIKE A PRAYER"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 4,
-    "words": [
-     "PRIVATE FIRES",
-     "WE DIDN'T START THE FIRE",
-     "FIRE",
-     "BEDS ARE BURNING"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Duran Duran Songs",
-    "color": 1,
-    "words": [
-     "HUNGRY LIKE THE WOLF",
-     "GIRLS ON FILM",
-     "VIEW TO A KILL",
-     "IS THERE SOMETHING I SHOULD KNOW"
-    ]
-   },
-   {
-    "name": "Songs That Hit #1 in Both UK & US",
-    "color": 2,
-    "words": [
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "UPTOWN GIRL",
-     "CALL ME",
-     "KARMA CHAMELEON"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1982",
-    "color": 3,
-    "words": [
-     "CENTERFOLD",
-     "I LOVE ROCK N ROLL",
-     "DON'T YOU WANT ME",
-     "EYE OF THE TIGER"
-    ]
-   },
-   {
-    "name": "Hair Metal Classics",
-    "color": 4,
-    "words": [
-     "HERE I GO AGAIN",
-     "YOU GIVE LOVE A BAD NAME",
-     "POUR SOME SUGAR ON ME",
-     "GIRLS GIRLS GIRLS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "The Police Songs",
-    "color": 1,
-    "words": [
-     "DE DO DO DO",
-     "ROXANNE",
-     "KING OF PAIN",
-     "EVERY LITTLE THING SHE DOES IS MAGIC"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 2,
-    "words": [
-     "RUNAWAY",
-     "I RAN",
-     "KEEP ON RUNNING",
-     "RUN-DMC"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1980",
-    "color": 3,
-    "words": [
-     "CELEBRATION",
-     "MAGIC",
-     "LADY",
-     "ANOTHER ONE BITES THE DUST"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "COME ON EILEEN",
-     "SAFETY DANCE",
-     "CHARIOTS OF FIRE",
-     "PUTTIN ON THE RITZ"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "U2 Songs",
-    "color": 1,
-    "words": [
-     "ANGEL OF HARLEM",
-     "NEW YEARS DAY",
-     "I STILL HAVENT FOUND WHAT IM LOOKING FOR",
-     "WITH OR WITHOUT YOU"
-    ]
-   },
-   {
-    "name": "Live Aid Wembley Performers",
-    "color": 2,
-    "words": [
-     "THE WHO",
-     "U2",
-     "DIRE STRAITS",
-     "ELTON JOHN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1983",
-    "color": 3,
-    "words": [
-     "TOTAL ECLIPSE OF THE HEART",
-     "MANIAC",
-     "SAY SAY SAY",
-     "ALL NIGHT LONG"
-    ]
-   },
-   {
-    "name": "Songs About Heartbreak",
-    "color": 4,
-    "words": [
-     "BROKEN WINGS",
-     "MISSING YOU",
-     "THE HEART OF ROCK AND ROLL",
-     "SOMEBODY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Tears for Fears Songs",
-    "color": 1,
-    "words": [
-     "HEAD OVER HEELS",
-     "EVERYBODY WANTS TO RULE THE WORLD",
-     "PALE SHELTER",
-     "SHOUT"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 2,
-    "words": [
-     "DON'T YOU WANT ME",
-     "TAINTED LOVE",
-     "BLUE MONDAY",
-     "WORDS"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1987",
-    "color": 3,
-    "words": [
-     "SHAKE YOU DOWN",
-     "WITH OR WITHOUT YOU",
-     "SHAKEDOWN",
-     "LA BAMBA"
-    ]
-   },
-   {
-    "name": "Songs About the Night",
-    "color": 4,
-    "words": [
-     "BLINDED BY THE LIGHT",
-     "DANCING IN THE DARK",
-     "SATURDAY NIGHT",
-     "ROCK THE NIGHT"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Bon Jovi Songs",
-    "color": 1,
-    "words": [
-     "LIVIN ON A PRAYER",
-     "WANTED DEAD OR ALIVE",
-     "ILL BE THERE FOR YOU",
-     "SHOT THROUGH THE HEART"
-    ]
-   },
-   {
-    "name": "Power Ballad Classics",
-    "color": 2,
-    "words": [
-     "I WANT TO KNOW WHAT LOVE IS",
-     "MORE THAN A FEELING",
-     "EVERY ROSE HAS ITS THORN",
-     "PATIENCE"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "GOT MY MIND SET ON YOU",
-     "ANYTHING FOR YOU",
-     "GET OUTTA MY DREAMS",
-     "COULD'VE BEEN"
-    ]
-   },
-   {
-    "name": "Bands Starting with 'The'",
-    "color": 4,
-    "words": [
-     "THE SMITHS",
-     "THE CARS",
-     "THE BANGLES",
-     "THE POLICE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Def Leppard Songs",
-    "color": 1,
-    "words": [
-     "POUR SOME SUGAR ON ME",
-     "ARMAGEDDON IT",
-     "ANIMAL",
-     "BRINGIN ON THE HEARTBREAK"
-    ]
-   },
-   {
-    "name": "Hair Metal Classics",
-    "color": 2,
-    "words": [
-     "YOU GIVE LOVE A BAD NAME",
-     "GIRLS GIRLS GIRLS",
-     "WANTED DEAD OR ALIVE",
-     "EVERY ROSE HAS ITS THORN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1981",
-    "color": 3,
-    "words": [
-     "KEEP ON LOVING YOU",
-     "RAPTURE",
-     "PHYSICAL",
-     "ENDLESS LOVE"
-    ]
-   },
-   {
-    "name": "Songs About Cars",
-    "color": 4,
-    "words": [
-     "DRIVING IN MY CAR",
-     "LITTLE RED CORVETTE",
-     "RADAR LOVE",
-     "DANGER ZONE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "INXS Songs",
-    "color": 1,
-    "words": [
-     "I SEND A MESSAGE",
-     "NEED YOU TONIGHT",
-     "NEVER TEAR US APART",
-     "DON'T CHANGE"
-    ]
-   },
-   {
-    "name": "Songs About Dancing",
-    "color": 2,
-    "words": [
-     "COME ON EILEEN",
-     "SHAKE YOUR LOVE",
-     "LETS DANCE",
-     "I WANNA DANCE WITH SOMEBODY"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1986",
-    "color": 3,
-    "words": [
-     "GREATEST LOVE OF ALL",
-     "KISS",
-     "THAT'S WHAT FRIENDS ARE FOR",
-     "HUMAN"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 4,
-    "words": [
-     "SHOULD I STAY OR SHOULD I GO",
-     "PSYCHO KILLER",
-     "MESSAGE IN A BOTTLE",
-     "BURNING DOWN THE HOUSE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "R.E.M. Songs",
-    "color": 1,
-    "words": [
-     "STAND",
-     "POP SONG 89",
-     "THE ONE I LOVE",
-     "RADIO FREE EUROPE"
-    ]
-   },
-   {
-    "name": "Songs About Cities",
-    "color": 2,
-    "words": [
-     "WALKING IN MEMPHIS",
-     "VIENNA",
-     "WEST END GIRLS",
-     "LIVING IN AMERICA"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1989",
-    "color": 3,
-    "words": [
-     "TWO HEARTS",
-     "WHEN I'M WITH YOU",
-     "COLD HEARTED",
-     "LOOK AWAY"
-    ]
-   },
-   {
-    "name": "Artists Famous by One Name",
-    "color": 4,
-    "words": [
-     "PRINCE",
-     "DEBBIE",
-     "BONO",
-     "CYNDI"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Talking Heads Songs",
-    "color": 1,
-    "words": [
-     "BURNING DOWN THE HOUSE",
-     "LIFE DURING WARTIME",
-     "ONCE IN A LIFETIME",
-     "ROAD TO NOWHERE"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 2,
-    "words": [
-     "BEDS ARE BURNING",
-     "FIRE",
-     "LIGHT MY FIRE",
-     "PRIVATE FIRES"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1984",
-    "color": 3,
-    "words": [
-     "FOOTLOOSE",
-     "WHEN DOVES CRY",
-     "LETS HEAR IT FOR THE BOY",
-     "AGAINST ALL ODDS"
-    ]
-   },
-   {
-    "name": "Famous 80s Duets",
-    "color": 4,
-    "words": [
-     "ALMOST PARADISE",
-     "EBONY AND IVORY",
-     "SOMETHING",
-     "SAY SAY SAY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Depeche Mode Songs",
-    "color": 1,
-    "words": [
-     "JUST CANT GET ENOUGH",
-     "STRIPPED",
-     "PERSONAL JESUS",
-     "EVERYTHING COUNTS"
-    ]
-   },
-   {
-    "name": "Songs About Rain",
-    "color": 2,
-    "words": [
-     "NOVEMBER RAIN",
-     "PURPLE RAIN",
-     "CRYING IN THE RAIN",
-     "HAVE YOU EVER SEEN THE RAIN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1985",
-    "color": 3,
-    "words": [
-     "SEPARATE LIVES",
-     "BROKEN WINGS",
-     "CARELESS WHISPER",
-     "I WANT TO KNOW WHAT LOVE IS"
-    ]
-   },
-   {
-    "name": "Songs That Were Banned",
-    "color": 4,
-    "words": [
-     "GOD SAVE THE QUEEN",
-     "OLIVER'S ARMY",
-     "RELAX",
-     "EBONY AND IVORY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Whitney Houston Songs",
-    "color": 1,
-    "words": [
-     "I WANNA DANCE WITH SOMEBODY",
-     "DIDNT WE ALMOST HAVE IT ALL",
-     "GREATEST LOVE OF ALL",
-     "SO EMOTIONAL"
-    ]
-   },
-   {
-    "name": "Songs About Love (in the title)",
-    "color": 2,
-    "words": [
-     "ENDLESS LOVE",
-     "LOVE IS A BATTLEFIELD",
-     "I WANT TO KNOW WHAT LOVE IS",
-     "I JUST CALLED TO SAY I LOVE YOU"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1987",
-    "color": 3,
-    "words": [
-     "LA BAMBA",
-     "SHAKE YOU DOWN",
-     "I KNEW YOU WERE WAITING",
-     "NOTHING'S GONNA STOP US NOW"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "GIRLS ON FILM",
-     "BILLIE JEAN",
-     "SLEDGEHAMMER",
-     "EVERY BREATH YOU TAKE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Cyndi Lauper Songs",
-    "color": 1,
-    "words": [
-     "GIRLS JUST WANT TO HAVE FUN",
-     "SHE BOP",
-     "TIME AFTER TIME",
-     "CHANGE OF HEART"
-    ]
-   },
-   {
-    "name": "Songs About Girls",
-    "color": 2,
-    "words": [
-     "VENUS",
-     "PRIVATE DANCER",
-     "UPTOWN GIRL",
-     "GLORIA"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1983",
-    "color": 3,
-    "words": [
-     "MANIAC",
-     "BEAT IT",
-     "TOTAL ECLIPSE OF THE HEART",
-     "DOWN UNDER"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 4,
-    "words": [
-     "LIKE A VIRGIN",
-     "WALKING ON SUNSHINE",
-     "INTO THE GROOVE",
-     "HOLIDAY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "George Michael Songs",
-    "color": 1,
-    "words": [
-     "KISSING A FOOL",
-     "FATHER FIGURE",
-     "I WANT YOUR SEX",
-     "MONKEY"
-    ]
-   },
-   {
-    "name": "Songs That Hit #1 in Both UK & US",
-    "color": 2,
-    "words": [
-     "TOTAL ECLIPSE OF THE HEART",
-     "EBONY AND IVORY",
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "BILLIE JEAN"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "ONE MORE TRY",
-     "ANYTHING FOR YOU",
-     "GET OUTTA MY DREAMS",
-     "GOT MY MIND SET ON YOU"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 4,
-    "words": [
-     "HYSTERIA",
-     "THRILLER",
-     "THE JOSHUA TREE",
-     "BAD"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Phil Collins Songs",
-    "color": 1,
-    "words": [
-     "AGAINST ALL ODDS",
-     "A GROOVY KIND OF LOVE",
-     "INVISIBLE TOUCH",
-     "EASY LOVER"
-    ]
-   },
-   {
-    "name": "Live Aid Performers (1985)",
-    "color": 2,
-    "words": [
-     "QUEEN",
-     "STYLE COUNCIL",
-     "U2",
-     "DIRE STRAITS"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1982",
-    "color": 3,
-    "words": [
-     "OPEN ARMS",
-     "CENTERFOLD",
-     "EYE OF THE TIGER",
-     "DON'T YOU WANT ME"
-    ]
-   },
-   {
-    "name": "Power Ballad Classics",
-    "color": 4,
-    "words": [
-     "EVERY ROSE HAS ITS THORN",
-     "WITH OR WITHOUT YOU",
-     "DONT STOP BELIEVIN",
-     "HERE I GO AGAIN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Lionel Richie Songs",
-    "color": 1,
-    "words": [
-     "HELLO",
-     "RUNNING WITH THE NIGHT",
-     "SAY YOU SAY ME",
-     "ENDLESS LOVE"
-    ]
-   },
-   {
-    "name": "Songs About Dancing",
-    "color": 2,
-    "words": [
-     "SHAKE YOUR LOVE",
-     "FOOTLOOSE",
-     "LETS DANCE",
-     "DANCE HALL DAYS"
-    ]
-   },
-   {
-    "name": "Billboard #1 Hits of 1980",
-    "color": 3,
-    "words": [
-     "ANOTHER ONE BITES THE DUST",
-     "CALL ME",
-     "FUNKYTOWN",
-     "THE TIDE IS HIGH"
-    ]
-   },
-   {
-    "name": "Famous 80s Duets",
-    "color": 4,
-    "words": [
-     "SAY SAY SAY",
-     "SOMETHING",
-     "I KNEW YOU WERE WAITING",
-     "ISLANDS IN THE STREAM"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "#1 Hits of 1980",
-    "color": 1,
-    "words": [
-     "THE TIDE IS HIGH",
-     "CELEBRATION",
-     "STARTING OVER",
-     "FUNKYTOWN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1981",
-    "color": 2,
-    "words": [
-     "BETTE DAVIS EYES",
-     "PHYSICAL",
-     "MORNING TRAIN",
-     "JESSIES GIRL"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 3,
-    "words": [
-     "KEEP ON RUNNING",
-     "RUN-DMC",
-     "I RAN",
-     "RUN AWAY"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 4,
-    "words": [
-     "WORDS",
-     "WEST END GIRLS",
-     "DON'T YOU WANT ME",
-     "JUST CANT GET ENOUGH"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "#1 Hits of 1982",
-    "color": 1,
-    "words": [
-     "HARD TO SAY IM SORRY",
-     "CENTERFOLD",
-     "JACK AND DIANE",
-     "EBONY AND IVORY"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1983",
-    "color": 2,
-    "words": [
-     "BEAT IT",
-     "SAY SAY SAY",
-     "MANIAC",
-     "DOWN UNDER"
-    ]
-   },
-   {
-    "name": "Hair Metal Classics",
-    "color": 3,
-    "words": [
-     "YOU GIVE LOVE A BAD NAME",
-     "POUR SOME SUGAR ON ME",
-     "EVERY ROSE HAS ITS THORN",
-     "WANTED DEAD OR ALIVE"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 4,
-    "words": [
-     "BURNING DOWN THE HOUSE",
-     "BRASS IN POCKET",
-     "SHOULD I STAY OR SHOULD I GO",
-     "COME ON EILEEN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "#1 Hits of 1984",
-    "color": 1,
-    "words": [
-     "FOOTLOOSE",
-     "HELLO",
-     "AGAINST ALL ODDS",
-     "WHAT'S LOVE GOT TO DO WITH IT"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1985",
-    "color": 2,
-    "words": [
-     "EVERYBODY WANTS TO RULE THE WORLD",
-     "LIKE A VIRGIN",
-     "SEPARATE LIVES",
-     "SAY YOU SAY ME"
-    ]
-   },
-   {
-    "name": "Songs About Cars",
-    "color": 3,
-    "words": [
-     "LIFE IS A HIGHWAY",
-     "DRIVING IN MY CAR",
-     "PINK CADILLAC",
-     "RADAR LOVE"
-    ]
-   },
-   {
-    "name": "Songs About Love (in the title)",
-    "color": 4,
-    "words": [
-     "I WANT TO KNOW WHAT LOVE IS",
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "CRAZY LITTLE THING CALLED LOVE",
-     "ELECTRIC LOVE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "#1 Hits of 1986",
-    "color": 1,
-    "words": [
-     "THAT'S WHAT FRIENDS ARE FOR",
-     "STUCK WITH YOU",
-     "KISS",
-     "ROCK ME AMADEUS"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1987",
-    "color": 2,
-    "words": [
-     "WALK LIKE AN EGYPTIAN",
-     "NOTHING'S GONNA STOP US NOW",
-     "WITH OR WITHOUT YOU",
-     "SHAKE YOU DOWN"
-    ]
-   },
-   {
-    "name": "Songs with a City Name",
-    "color": 3,
-    "words": [
-     "VIENNA",
-     "NEW YORK NEW YORK",
-     "VIVA LAS VEGAS",
-     "LIVING IN AMERICA"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "CHARIOTS OF FIRE",
-     "SAFETY DANCE",
-     "PUTTIN ON THE RITZ",
-     "TAINTED LOVE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "#1 Hits of 1988",
-    "color": 1,
-    "words": [
-     "ANYTHING FOR YOU",
-     "ONE MORE TRY",
-     "COULD'VE BEEN",
-     "NEED YOU TONIGHT"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1989",
-    "color": 2,
-    "words": [
-     "TWO HEARTS",
-     "LOST IN YOUR EYES",
-     "LIKE A PRAYER",
-     "WHEN I'M WITH YOU"
-    ]
-   },
-   {
-    "name": "Songs About Heartbreak",
-    "color": 3,
-    "words": [
-     "WITH OR WITHOUT YOU",
-     "BROKEN WINGS",
-     "EVERY ROSE HAS ITS THORN",
-     "TOTAL ECLIPSE OF THE HEART"
-    ]
-   },
-   {
-    "name": "Power Ballad Classics",
-    "color": 4,
-    "words": [
-     "MORE THAN A FEELING",
-     "DONT STOP BELIEVIN",
-     "PATIENCE",
-     "HERE I GO AGAIN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Michael Jackson Songs",
-    "color": 1,
-    "words": [
-     "PYT",
-     "BILLIE JEAN",
-     "WANNA BE STARTIN SOMETHIN",
-     "DIRTY DIANA"
-    ]
-   },
-   {
-    "name": "Songs About Dancing",
-    "color": 2,
-    "words": [
-     "I WANNA DANCE WITH SOMEBODY",
-     "SHAKE YOUR LOVE",
-     "DANCING WITH MYSELF",
-     "DANCING IN THE DARK"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1982",
-    "color": 3,
-    "words": [
-     "I LOVE ROCK N ROLL",
-     "DON'T YOU WANT ME",
-     "HARD TO SAY IM SORRY",
-     "CENTERFOLD"
-    ]
-   },
-   {
-    "name": "Songs That Were Banned from Radio",
-    "color": 4,
-    "words": [
-     "GOD SAVE THE QUEEN",
-     "I WANT YOUR SEX",
-     "EBONY AND IVORY",
-     "PHYSICAL"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Madonna Songs",
-    "color": 1,
-    "words": [
-     "DRESS YOU UP",
-     "HOLIDAY",
-     "OPEN YOUR HEART",
-     "LIKE A PRAYER"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 2,
-    "words": [
-     "LETS DANCE",
-     "INTO THE GROOVE",
-     "JUMP FOR MY LOVE",
-     "LIKE A VIRGIN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1984",
-    "color": 3,
-    "words": [
-     "WHAT'S LOVE GOT TO DO WITH IT",
-     "HELLO",
-     "AGAINST ALL ODDS",
-     "LETS HEAR IT FOR THE BOY"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "TOTAL ECLIPSE OF THE HEART",
-     "GIRLS ON FILM",
-     "TAKE ON ME",
-     "SLEDGEHAMMER"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Sting Solo Songs",
-    "color": 1,
-    "words": [
-     "SPREAD A LITTLE HAPPINESS",
-     "CONSIDER ME GONE",
-     "WE'LL BE TOGETHER",
-     "FORTRESS AROUND YOUR HEART"
-    ]
-   },
-   {
-    "name": "Songs About Rain",
-    "color": 2,
-    "words": [
-     "SET FIRE TO THE RAIN",
-     "PURPLE RAIN",
-     "ONLY HAPPY WHEN IT RAINS",
-     "HERE COMES THE RAIN AGAIN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1986",
-    "color": 3,
-    "words": [
-     "STUCK WITH YOU",
-     "ROCK ME AMADEUS",
-     "THAT'S WHAT FRIENDS ARE FOR",
-     "ADDICTED TO LOVE"
-    ]
-   },
-   {
-    "name": "Bands Starting with 'The'",
-    "color": 4,
-    "words": [
-     "THE CARS",
-     "THE SMITHS",
-     "THE CURE",
-     "THE B-52S"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Bruce Springsteen Songs",
-    "color": 1,
-    "words": [
-     "TUNNEL OF LOVE",
-     "COVER ME",
-     "DANCING IN THE DARK",
-     "GLORY DAYS"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 2,
-    "words": [
-     "RUN TO YOU",
-     "RUNNING UP THAT HILL",
-     "KEEP ON RUNNING",
-     "RUN AWAY"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1987",
-    "color": 3,
-    "words": [
-     "WALK LIKE AN EGYPTIAN",
-     "WITH OR WITHOUT YOU",
-     "NOTHING'S GONNA STOP US NOW",
-     "SHAKE YOU DOWN"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 4,
-    "words": [
-     "BORN IN THE USA",
-     "LIKE A VIRGIN",
-     "THE JOSHUA TREE",
-     "SLIPPERY WHEN WET"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Billy Idol Songs",
-    "color": 1,
-    "words": [
-     "EYES WITHOUT A FACE",
-     "REBEL YELL",
-     "DANCING WITH MYSELF",
-     "CRADLE OF LOVE"
-    ]
-   },
-   {
-    "name": "Hair Metal Classics",
-    "color": 2,
-    "words": [
-     "GIRLS GIRLS GIRLS",
-     "WANTED DEAD OR ALIVE",
-     "HOME SWEET HOME",
-     "LIVIN ON A PRAYER"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1983",
-    "color": 3,
-    "words": [
-     "MANIAC",
-     "DOWN UNDER",
-     "ALL NIGHT LONG",
-     "BILLIE JEAN"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "MICKEY",
-     "I RAN",
-     "ROCK ME AMADEUS",
-     "CHARIOTS OF FIRE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Tina Turner Songs",
-    "color": 1,
-    "words": [
-     "TWO PEOPLE",
-     "THE BEST",
-     "WHATS LOVE GOT TO DO WITH IT",
-     "STEAMY WINDOWS"
-    ]
-   },
-   {
-    "name": "Songs About Girls",
-    "color": 2,
-    "words": [
-     "UPTOWN GIRL",
-     "GLORIA",
-     "JESSIES GIRL",
-     "VENUS"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "GOT MY MIND SET ON YOU",
-     "NEED YOU TONIGHT",
-     "ANYTHING FOR YOU",
-     "TOGETHER FOREVER"
-    ]
-   },
-   {
-    "name": "Live Aid JFK Performers",
-    "color": 4,
-    "words": [
-     "TINA TURNER",
-     "BOB DYLAN",
-     "LED ZEPPELIN",
-     "RUN-DMC"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Duran Duran Songs",
-    "color": 1,
-    "words": [
-     "HUNGRY LIKE THE WOLF",
-     "VIEW TO A KILL",
-     "RIO",
-     "NOTORIOUS"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 2,
-    "words": [
-     "ONCE IN A LIFETIME",
-     "BURNING DOWN THE HOUSE",
-     "PSYCHO KILLER",
-     "COME ON EILEEN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1980",
-    "color": 3,
-    "words": [
-     "THE TIDE IS HIGH",
-     "LADY",
-     "CELEBRATION",
-     "ANOTHER ONE BITES THE DUST"
-    ]
-   },
-   {
-    "name": "Songs with a Country in the Title",
-    "color": 4,
-    "words": [
-     "AFRICA",
-     "LA BAMBA",
-     "LIVING IN AMERICA",
-     "EUROPA"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "The Police Songs",
-    "color": 1,
-    "words": [
-     "DONT STAND SO CLOSE TO ME",
-     "KING OF PAIN",
-     "ROXANNE",
-     "EVERY LITTLE THING SHE DOES IS MAGIC"
-    ]
-   },
-   {
-    "name": "Songs About the Night",
-    "color": 2,
-    "words": [
-     "NIGHTSHIFT",
-     "IN THE AIR TONIGHT",
-     "ROCK THE NIGHT",
-     "DANCING IN THE DARK"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1981",
-    "color": 3,
-    "words": [
-     "PHYSICAL",
-     "KEEP ON LOVING YOU",
-     "JESSIES GIRL",
-     "MORNING TRAIN"
-    ]
-   },
-   {
-    "name": "Famous 80s Duets",
-    "color": 4,
-    "words": [
-     "SAY SAY SAY",
-     "ISLANDS IN THE STREAM",
-     "DON'T GO BREAKING MY HEART",
-     "ALMOST PARADISE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "U2 Songs",
-    "color": 1,
-    "words": [
-     "DESIRE",
-     "NEW YEARS DAY",
-     "I STILL HAVENT FOUND WHAT IM LOOKING FOR",
-     "PRIDE"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 2,
-    "words": [
-     "BEDS ARE BURNING",
-     "DISCO INFERNO",
-     "PRIVATE FIRES",
-     "WE DIDN'T START THE FIRE"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1989",
-    "color": 3,
-    "words": [
-     "LOST IN YOUR EYES",
-     "LOOK AWAY",
-     "WHEN I'M WITH YOU",
-     "MY PREROGATIVE"
-    ]
-   },
-   {
-    "name": "Artists Famous by One Name",
-    "color": 4,
-    "words": [
-     "SADE",
-     "BONO",
-     "PRINCE",
-     "BJORK"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Tears for Fears Songs",
-    "color": 1,
-    "words": [
-     "PALE SHELTER",
-     "CHANGE",
-     "EVERYBODY WANTS TO RULE THE WORLD",
-     "MOTHERS TALK"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 2,
-    "words": [
-     "SWEET DREAMS",
-     "BLUE MONDAY",
-     "DON'T YOU WANT ME",
-     "JUST CANT GET ENOUGH"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1985",
-    "color": 3,
-    "words": [
-     "BROKEN WINGS",
-     "SEPARATE LIVES",
-     "I WANT TO KNOW WHAT LOVE IS",
-     "SAY YOU SAY ME"
-    ]
-   },
-   {
-    "name": "Songs That Hit #1 in Both UK & US",
-    "color": 4,
-    "words": [
-     "EVERY BREATH YOU TAKE",
-     "BILLIE JEAN",
-     "TOTAL ECLIPSE OF THE HEART",
-     "EBONY AND IVORY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs in Top Gun Soundtrack",
-    "color": 1,
-    "words": [
-     "MIGHTY WINGS",
-     "PLAYING WITH THE BOYS",
-     "HOT SUMMER NIGHTS",
-     "TOP GUN ANTHEM"
-    ]
-   },
-   {
-    "name": "Songs in Footloose Soundtrack",
-    "color": 2,
-    "words": [
-     "FOOTLOOSE",
-     "I'M FREE",
-     "ALMOST PARADISE",
-     "DANCING IN THE SHEETS"
-    ]
-   },
-   {
-    "name": "Songs in Ghostbusters Soundtrack",
-    "color": 3,
-    "words": [
-     "ZUUL",
-     "MAIN TITLE THEME",
-     "FEEL IT",
-     "ON OUR OWN"
-    ]
-   },
-   {
-    "name": "Songs in Risky Business Soundtrack",
-    "color": 4,
-    "words": [
-     "LOVE ON A REAL TRAIN",
-     "GUIDO THE KILLER PIMP",
-     "HUNGRY FOR YOUR LOVE",
-     "IN THE AIR TONIGHT"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "#1 Hits of 1980",
-    "color": 1,
-    "words": [
-     "CELEBRATION",
-     "THE TIDE IS HIGH",
-     "MAGIC",
-     "CALL ME"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1984",
-    "color": 2,
-    "words": [
-     "FOOTLOOSE",
-     "GHOSTBUSTERS",
-     "WHEN DOVES CRY",
-     "JUMP"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "ANYTHING FOR YOU",
-     "GOT MY MIND SET ON YOU",
-     "COULD'VE BEEN",
-     "NEED YOU TONIGHT"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "MICKEY",
-     "99 LUFTBALLONS",
-     "I RAN",
-     "SAFETY DANCE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "#1 Hits of 1981",
-    "color": 1,
-    "words": [
-     "MORNING TRAIN",
-     "JESSIES GIRL",
-     "PHYSICAL",
-     "BETTE DAVIS EYES"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1985",
-    "color": 2,
-    "words": [
-     "SEPARATE LIVES",
-     "LIKE A VIRGIN",
-     "EVERYBODY WANTS TO RULE THE WORLD",
-     "SAY YOU SAY ME"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1989",
-    "color": 3,
-    "words": [
-     "COLD HEARTED",
-     "WHEN I'M WITH YOU",
-     "MY PREROGATIVE",
-     "WIND BENEATH MY WINGS"
-    ]
-   },
-   {
-    "name": "Songs About Heartbreak",
-    "color": 4,
-    "words": [
-     "SOMEBODY",
-     "TOTAL ECLIPSE OF THE HEART",
-     "BROKEN WINGS",
-     "THE HEART OF ROCK AND ROLL"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs About Dancing",
-    "color": 1,
-    "words": [
-     "DANCE HALL DAYS",
-     "I WANNA DANCE WITH SOMEBODY",
-     "DANCING WITH MYSELF",
-     "LETS DANCE"
-    ]
-   },
-   {
-    "name": "Songs About Cars",
-    "color": 2,
-    "words": [
-     "CARS",
-     "LIFE IS A HIGHWAY",
-     "DANGER ZONE",
-     "LITTLE RED CORVETTE"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 3,
-    "words": [
-     "DISCO INFERNO",
-     "WE DIDN'T START THE FIRE",
-     "FIRE",
-     "PRIVATE FIRES"
-    ]
-   },
-   {
-    "name": "Songs About Rain",
-    "color": 4,
-    "words": [
-     "SET FIRE TO THE RAIN",
-     "WHO'LL STOP THE RAIN",
-     "HERE COMES THE RAIN AGAIN",
-     "NOVEMBER RAIN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs with a Person's Name",
-    "color": 1,
-    "words": [
-     "ROSANNA",
-     "BETH",
-     "ROXANNE",
-     "BRANDY"
-    ]
-   },
-   {
-    "name": "Songs with a City Name",
-    "color": 2,
-    "words": [
-     "LIVING IN AMERICA",
-     "WALKING IN MEMPHIS",
-     "STREETS OF PHILADELPHIA",
-     "VIVA LAS VEGAS"
-    ]
-   },
-   {
-    "name": "Songs with a Country in the Title",
-    "color": 3,
-    "words": [
-     "RIO",
-     "AFRICA",
-     "EUROPA",
-     "LA BAMBA"
-    ]
-   },
-   {
-    "name": "Songs About Love (in the title)",
-    "color": 4,
-    "words": [
-     "LOVE IS A BATTLEFIELD",
-     "WHAT'S LOVE GOT TO DO WITH IT",
-     "ADDICTED TO LOVE",
-     "CRAZY LITTLE THING CALLED LOVE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Hair Metal Classics",
-    "color": 1,
-    "words": [
-     "EVERY ROSE HAS ITS THORN",
-     "WANTED DEAD OR ALIVE",
-     "POUR SOME SUGAR ON ME",
-     "YOU GIVE LOVE A BAD NAME"
-    ]
-   },
-   {
-    "name": "Power Ballad Classics",
-    "color": 2,
-    "words": [
-     "I WANT TO KNOW WHAT LOVE IS",
-     "WITH OR WITHOUT YOU",
-     "PATIENCE",
-     "OPEN ARMS"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 3,
-    "words": [
-     "BRASS IN POCKET",
-     "COME ON EILEEN",
-     "MESSAGE IN A BOTTLE",
-     "ROAD TO NOWHERE"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "ROCK ME AMADEUS",
-     "SAFETY DANCE",
-     "MICKEY",
-     "NEVER GONNA GIVE YOU UP"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Live Aid Wembley Performers",
-    "color": 1,
-    "words": [
-     "ELTON JOHN",
-     "THE WHO",
-     "DIRE STRAITS",
-     "QUEEN"
-    ]
-   },
-   {
-    "name": "Live Aid JFK Performers",
-    "color": 2,
-    "words": [
-     "NEIL YOUNG",
-     "MICK JAGGER",
-     "RUN-DMC",
-     "TINA TURNER"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 3,
-    "words": [
-     "RUN TO YOU",
-     "RUN AWAY",
-     "RUNNING UP THAT HILL",
-     "I RAN"
-    ]
-   },
-   {
-    "name": "Bands Starting with 'The'",
-    "color": 4,
-    "words": [
-     "THE HUMAN LEAGUE",
-     "THE CURE",
-     "THE BANGLES",
-     "THE SMITHS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 1,
-    "words": [
-     "LIKE A VIRGIN",
-     "BAD",
-     "THE JOSHUA TREE",
-     "THRILLER"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 2,
-    "words": [
-     "EVERY BREATH YOU TAKE",
-     "BILLIE JEAN",
-     "TAKE ON ME",
-     "SLEDGEHAMMER"
-    ]
-   },
-   {
-    "name": "Famous 80s Duets",
-    "color": 3,
-    "words": [
-     "I KNEW YOU WERE WAITING",
-     "EBONY AND IVORY",
-     "DON'T GO BREAKING MY HEART",
-     "ISLANDS IN THE STREAM"
-    ]
-   },
-   {
-    "name": "Songs That Hit #1 in Both UK & US",
-    "color": 4,
-    "words": [
-     "UPTOWN GIRL",
-     "KARMA CHAMELEON",
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "CALL ME"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs About Girls",
-    "color": 1,
-    "words": [
-     "MATERIAL GIRL",
-     "GLORIA",
-     "VENUS",
-     "JESSIES GIRL"
-    ]
-   },
-   {
-    "name": "Songs About the Night",
-    "color": 2,
-    "words": [
-     "MIDNIGHT HOUR",
-     "ROCK THE NIGHT",
-     "SATURDAY NIGHT",
-     "BLINDED BY THE LIGHT"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 3,
-    "words": [
-     "HOLIDAY",
-     "LIKE A VIRGIN",
-     "LETS HEAR IT FOR THE BOY",
-     "WAKE ME UP BEFORE YOU GO GO"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 4,
-    "words": [
-     "TAINTED LOVE",
-     "WEST END GIRLS",
-     "SMALLTOWN BOY",
-     "JUST CANT GET ENOUGH"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs That Were Banned from Radio",
-    "color": 1,
-    "words": [
-     "MONEY FOR NOTHING",
-     "I WANT YOUR SEX",
-     "JE T'AIME",
-     "EBONY AND IVORY"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 2,
-    "words": [
-     "RUN-DMC",
-     "RUN AWAY",
-     "RUN TO YOU",
-     "RUNAWAY"
-    ]
-   },
-   {
-    "name": "Artists Famous by One Name",
-    "color": 3,
-    "words": [
-     "BONO",
-     "VANGELIS",
-     "BONNIE",
-     "CYNDI"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1983",
-    "color": 4,
-    "words": [
-     "MANIAC",
-     "TOTAL ECLIPSE OF THE HEART",
-     "BILLIE JEAN",
-     "DOWN UNDER"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs with Colors in the Title",
-    "color": 1,
-    "words": [
-     "LITTLE RED CORVETTE",
-     "PURPLE RAIN",
-     "GOLDEN YEARS",
-     "WHITE WEDDING"
-    ]
-   },
-   {
-    "name": "Songs About Cars",
-    "color": 2,
-    "words": [
-     "CARS",
-     "PINK CADILLAC",
-     "LIFE IS A HIGHWAY",
-     "RADAR LOVE"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1981",
-    "color": 3,
-    "words": [
-     "ENDLESS LOVE",
-     "RAPTURE",
-     "PHYSICAL",
-     "KEEP ON LOVING YOU"
-    ]
-   },
-   {
-    "name": "Famous 80s Duets",
-    "color": 4,
-    "words": [
-     "I KNEW YOU WERE WAITING",
-     "ISLANDS IN THE STREAM",
-     "ALMOST PARADISE",
-     "EBONY AND IVORY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Songs in Breakfast Club Soundtrack",
-    "color": 1,
-    "words": [
-     "DONT YOU FORGET ABOUT ME",
-     "PLEASE PLEASE TELL ME NOW",
-     "SIXX",
-     "WAITING FOR SOMEONE"
-    ]
-   },
-   {
-    "name": "Songs in Dirty Dancing Soundtrack",
-    "color": 2,
-    "words": [
-     "SHE'S LIKE THE WIND",
-     "STAY",
-     "I'VE HAD THE TIME OF MY LIFE",
-     "IN THE STILL OF THE NIGHT"
-    ]
-   },
-   {
-    "name": "Songs in Pretty in Pink Soundtrack",
-    "color": 3,
-    "words": [
-     "GET IT RIGHT",
-     "ROUND ROUND",
-     "IF YOU LEAVE",
-     "SHELLSHOCK"
-    ]
-   },
-   {
-    "name": "Songs in Ferris Bueller Soundtrack",
-    "color": 4,
-    "words": [
-     "DANKE SCHOEN",
-     "OH YEAH",
-     "I'M AFRAID",
-     "BEAT CAN'T BE BEAT"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Michael Jackson Songs",
-    "color": 1,
-    "words": [
-     "DONT STOP TIL YOU GET ENOUGH",
-     "THRILLER",
-     "PYT",
-     "SMOOTH CRIMINAL"
-    ]
-   },
-   {
-    "name": "Songs About Love (in the title)",
-    "color": 2,
-    "words": [
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "ELECTRIC LOVE",
-     "ADDICTED TO LOVE",
-     "WHAT'S LOVE GOT TO DO WITH IT"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1986",
-    "color": 3,
-    "words": [
-     "THAT'S WHAT FRIENDS ARE FOR",
-     "GREATEST LOVE OF ALL",
-     "KISS",
-     "STUCK WITH YOU"
-    ]
-   },
-   {
-    "name": "Artists Famous by One Name",
-    "color": 4,
-    "words": [
-     "PRINCE",
-     "MORRISSEY",
-     "VANGELIS",
-     "BJORK"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Madonna Songs",
-    "color": 1,
-    "words": [
-     "DRESS YOU UP",
-     "LUCKY STAR",
-     "HOLIDAY",
-     "CAUSING A COMMOTION"
-    ]
-   },
-   {
-    "name": "Songs That Were Banned",
-    "color": 2,
-    "words": [
-     "EBONY AND IVORY",
-     "MONEY FOR NOTHING",
-     "I WANT YOUR SEX",
-     "PHYSICAL"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "GOT MY MIND SET ON YOU",
-     "COULD'VE BEEN",
-     "GET OUTTA MY DREAMS",
-     "TOGETHER FOREVER"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "TAKE ON ME",
-     "BILLIE JEAN",
-     "SLEDGEHAMMER",
-     "TOTAL ECLIPSE OF THE HEART"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Depeche Mode Songs",
-    "color": 1,
-    "words": [
-     "JUST CANT GET ENOUGH",
-     "ENJOY THE SILENCE",
-     "EVERYTHING COUNTS",
-     "PERSONAL JESUS"
-    ]
-   },
-   {
-    "name": "Songs About Heartbreak",
-    "color": 2,
-    "words": [
-     "BROKEN WINGS",
-     "TOTAL ECLIPSE OF THE HEART",
-     "WITH OR WITHOUT YOU",
-     "EVERY ROSE HAS ITS THORN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1982",
-    "color": 3,
-    "words": [
-     "HARD TO SAY IM SORRY",
-     "DON'T YOU WANT ME",
-     "EBONY AND IVORY",
-     "OPEN ARMS"
-    ]
-   },
-   {
-    "name": "Synth-Pop Classics",
-    "color": 4,
-    "words": [
-     "WEST END GIRLS",
-     "TAINTED LOVE",
-     "WORDS",
-     "SWEET DREAMS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Bon Jovi Songs",
-    "color": 1,
-    "words": [
-     "WANTED DEAD OR ALIVE",
-     "LIVIN ON A PRAYER",
-     "BORN TO BE MY BABY",
-     "YOU GIVE LOVE A BAD NAME"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 2,
-    "words": [
-     "RUN AWAY",
-     "RUNNING UP THAT HILL",
-     "KEEP ON RUNNING",
-     "RUNAWAY"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1984",
-    "color": 3,
-    "words": [
-     "FOOTLOOSE",
-     "LETS HEAR IT FOR THE BOY",
-     "GHOSTBUSTERS",
-     "AGAINST ALL ODDS"
-    ]
-   },
-   {
-    "name": "Power Ballad Classics",
-    "color": 4,
-    "words": [
-     "WITH OR WITHOUT YOU",
-     "MORE THAN A FEELING",
-     "EVERY ROSE HAS ITS THORN",
-     "OPEN ARMS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Def Leppard Songs",
-    "color": 1,
-    "words": [
-     "TOO LATE FOR LOVE",
-     "BRINGIN ON THE HEARTBREAK",
-     "ANIMAL",
-     "PHOTOGRAPH"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 2,
-    "words": [
-     "BURNING DOWN THE HOUSE",
-     "WE DIDN'T START THE FIRE",
-     "PRIVATE FIRES",
-     "BEDS ARE BURNING"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1985",
-    "color": 3,
-    "words": [
-     "I WANT TO KNOW WHAT LOVE IS",
-     "SAY YOU SAY ME",
-     "EVERYBODY WANTS TO RULE THE WORLD",
-     "BROKEN WINGS"
-    ]
-   },
-   {
-    "name": "Hair Metal Classics",
-    "color": 4,
-    "words": [
-     "POUR SOME SUGAR ON ME",
-     "EVERY ROSE HAS ITS THORN",
-     "LIVIN ON A PRAYER",
-     "HERE I GO AGAIN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "INXS Songs",
-    "color": 1,
-    "words": [
-     "NEVER TEAR US APART",
-     "DEVIL INSIDE",
-     "I SEND A MESSAGE",
-     "LISTEN LIKE THIEVES"
-    ]
-   },
-   {
-    "name": "Songs About Night",
-    "color": 2,
-    "words": [
-     "MIDNIGHT HOUR",
-     "BLINDED BY THE LIGHT",
-     "NIGHTSHIFT",
-     "IN THE AIR TONIGHT"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1983",
-    "color": 3,
-    "words": [
-     "DOWN UNDER",
-     "MANIAC",
-     "BEAT IT",
-     "TOTAL ECLIPSE OF THE HEART"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 4,
-    "words": [
-     "MESSAGE IN A BOTTLE",
-     "COME ON EILEEN",
-     "PSYCHO KILLER",
-     "BURNING DOWN THE HOUSE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "R.E.M. Songs",
-    "color": 1,
-    "words": [
-     "LOSING MY RELIGION",
-     "POP SONG 89",
-     "RADIO FREE EUROPE",
-     "THE ONE I LOVE"
-    ]
-   },
-   {
-    "name": "Songs About Rain",
-    "color": 2,
-    "words": [
-     "HAVE YOU EVER SEEN THE RAIN",
-     "SET FIRE TO THE RAIN",
-     "WHO'LL STOP THE RAIN",
-     "CRYING IN THE RAIN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1986",
-    "color": 3,
-    "words": [
-     "STUCK WITH YOU",
-     "HUMAN",
-     "ADDICTED TO LOVE",
-     "ROCK ME AMADEUS"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "99 LUFTBALLONS",
-     "TAINTED LOVE",
-     "PUTTIN ON THE RITZ",
-     "SAFETY DANCE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Talking Heads Songs",
-    "color": 1,
-    "words": [
-     "BURNING DOWN THE HOUSE",
-     "LIFE DURING WARTIME",
-     "ROAD TO NOWHERE",
-     "THIS MUST BE THE PLACE"
-    ]
-   },
-   {
-    "name": "Songs with a City",
-    "color": 2,
-    "words": [
-     "VIVA LAS VEGAS",
-     "NEW YORK NEW YORK",
-     "MIDNIGHT IN MOSCOW",
-     "WALKING IN MEMPHIS"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1980",
-    "color": 3,
-    "words": [
-     "LADY",
-     "ANOTHER ONE BITES THE DUST",
-     "CELEBRATION",
-     "FUNKYTOWN"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 4,
-    "words": [
-     "LETS DANCE",
-     "JUMP FOR MY LOVE",
-     "INTO THE GROOVE",
-     "LETS HEAR IT FOR THE BOY"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Billy Idol Songs",
-    "color": 1,
-    "words": [
-     "MONY MONY",
-     "REBEL YELL",
-     "EYES WITHOUT A FACE",
-     "FLESH FOR FANTASY"
-    ]
-   },
-   {
-    "name": "Songs About Cars",
-    "color": 2,
-    "words": [
-     "CARS",
-     "DANGER ZONE",
-     "LITTLE DEUCE COUPE",
-     "LIFE IS A HIGHWAY"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1987",
-    "color": 3,
-    "words": [
-     "I KNEW YOU WERE WAITING",
-     "WITH OR WITHOUT YOU",
-     "WALK LIKE AN EGYPTIAN",
-     "LA BAMBA"
-    ]
-   },
-   {
-    "name": "Hair Metal Classics",
-    "color": 4,
-    "words": [
-     "GIRLS GIRLS GIRLS",
-     "EVERY ROSE HAS ITS THORN",
-     "YOU GIVE LOVE A BAD NAME",
-     "LIVIN ON A PRAYER"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Sting Solo Songs",
-    "color": 1,
-    "words": [
-     "RUSSIANS",
-     "BE STILL MY BEATING HEART",
-     "SPREAD A LITTLE HAPPINESS",
-     "WE'LL BE TOGETHER"
-    ]
-   },
-   {
-    "name": "Songs That Hit #1 UK & US",
-    "color": 2,
-    "words": [
-     "BILLIE JEAN",
-     "UPTOWN GIRL",
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "EBONY AND IVORY"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1989",
-    "color": 3,
-    "words": [
-     "MY PREROGATIVE",
-     "TWO HEARTS",
-     "LOOK AWAY",
-     "LOST IN YOUR EYES"
-    ]
-   },
-   {
-    "name": "Famous 80s Duets",
-    "color": 4,
-    "words": [
-     "SOMETHING",
-     "SAY SAY SAY",
-     "DON'T GO BREAKING MY HEART",
-     "ISLANDS IN THE STREAM"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Phil Collins Songs",
-    "color": 1,
-    "words": [
-     "EASY LOVER",
-     "ONE MORE NIGHT",
-     "YOU CANT HURRY LOVE",
-     "IN THE AIR TONIGHT"
-    ]
-   },
-   {
-    "name": "Songs About Dancing",
-    "color": 2,
-    "words": [
-     "SHAKE YOUR LOVE",
-     "LETS DANCE",
-     "COME ON EILEEN",
-     "DANCING IN THE DARK"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1981",
-    "color": 3,
-    "words": [
-     "PHYSICAL",
-     "BETTE DAVIS EYES",
-     "KEEP ON LOVING YOU",
-     "RAPTURE"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 4,
-    "words": [
-     "BAD",
-     "1984",
-     "SLIPPERY WHEN WET",
-     "LIKE A VIRGIN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Bruce Springsteen Songs",
-    "color": 1,
-    "words": [
-     "DANCING IN THE DARK",
-     "COVER ME",
-     "TUNNEL OF LOVE",
-     "BORN IN THE USA"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 2,
-    "words": [
-     "WE DIDN'T START THE FIRE",
-     "BURNING DOWN THE HOUSE",
-     "PRIVATE FIRES",
-     "GREAT BALLS OF FIRE"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "NEED YOU TONIGHT",
-     "GOT MY MIND SET ON YOU",
-     "FAITH",
-     "ANYTHING FOR YOU"
-    ]
-   },
-   {
-    "name": "Live Aid Performers",
-    "color": 4,
-    "words": [
-     "QUEEN",
-     "ELTON JOHN",
-     "STYLE COUNCIL",
-     "DIRE STRAITS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Whitney Houston Songs",
-    "color": 1,
-    "words": [
-     "WHERE DO BROKEN HEARTS GO",
-     "I WANNA DANCE WITH SOMEBODY",
-     "ONE MOMENT IN TIME",
-     "SO EMOTIONAL"
-    ]
-   },
-   {
-    "name": "Songs About Heartbreak",
-    "color": 2,
-    "words": [
-     "WITH OR WITHOUT YOU",
-     "SOMEBODY",
-     "THE HEART OF ROCK AND ROLL",
-     "BROKEN WINGS"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1982",
-    "color": 3,
-    "words": [
-     "EYE OF THE TIGER",
-     "HARD TO SAY IM SORRY",
-     "I LOVE ROCK N ROLL",
-     "DON'T YOU WANT ME"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "GIRLS ON FILM",
-     "BILLIE JEAN",
-     "TOTAL ECLIPSE OF THE HEART",
-     "TAKE ON ME"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Cyndi Lauper Songs",
-    "color": 1,
-    "words": [
-     "GIRLS JUST WANT TO HAVE FUN",
-     "TRUE COLORS",
-     "TIME AFTER TIME",
-     "ALL THROUGH THE NIGHT"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 2,
-    "words": [
-     "HOLIDAY",
-     "LIKE A VIRGIN",
-     "WALKING ON SUNSHINE",
-     "INTO THE GROOVE"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1984",
-    "color": 3,
-    "words": [
-     "LETS HEAR IT FOR THE BOY",
-     "FOOTLOOSE",
-     "HELLO",
-     "GHOSTBUSTERS"
-    ]
-   },
-   {
-    "name": "Bands Starting with 'The'",
-    "color": 4,
-    "words": [
-     "THE POLICE",
-     "THE SMITHS",
-     "THE BANGLES",
-     "THE HUMAN LEAGUE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Prince Songs",
-    "color": 1,
-    "words": [
-     "AROUND THE WORLD IN A DAY",
-     "1999",
-     "KISS",
-     "RASPBERRY BERET"
-    ]
-   },
-   {
-    "name": "Songs About Girls",
-    "color": 2,
-    "words": [
-     "GIRLS ON FILM",
-     "UPTOWN GIRL",
-     "JESSIES GIRL",
-     "GIRLS JUST WANT TO HAVE FUN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1983",
-    "color": 3,
-    "words": [
-     "TOTAL ECLIPSE OF THE HEART",
-     "MANIAC",
-     "EVERY BREATH YOU TAKE",
-     "ALL NIGHT LONG"
-    ]
-   },
-   {
-    "name": "Famous 80s Music Videos",
-    "color": 4,
-    "words": [
-     "SLEDGEHAMMER",
-     "LIKE A VIRGIN",
-     "TAKE ON ME",
-     "THRILLER"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Lionel Richie Songs",
-    "color": 1,
-    "words": [
-     "BALLERINA GIRL",
-     "HELLO",
-     "ALL NIGHT LONG",
-     "RUNNING WITH THE NIGHT"
-    ]
-   },
-   {
-    "name": "Songs About Love (in the title)",
-    "color": 2,
-    "words": [
-     "I WANT TO KNOW WHAT LOVE IS",
-     "I JUST CALLED TO SAY I LOVE YOU",
-     "WHAT'S LOVE GOT TO DO WITH IT",
-     "ENDLESS LOVE"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1985",
-    "color": 3,
-    "words": [
-     "SEPARATE LIVES",
-     "CARELESS WHISPER",
-     "SAY YOU SAY ME",
-     "LIKE A VIRGIN"
-    ]
-   },
-   {
-    "name": "Artists Famous by One Name",
-    "color": 4,
-    "words": [
-     "MADONNA",
-     "TIFFANY",
-     "VANGELIS",
-     "PRINCE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "George Michael Songs",
-    "color": 1,
-    "words": [
-     "FAITH",
-     "ONE MORE TRY",
-     "KISSING A FOOL",
-     "I WANT YOUR SEX"
-    ]
-   },
-   {
-    "name": "Songs That Were Banned",
-    "color": 2,
-    "words": [
-     "RELAX",
-     "JE T'AIME",
-     "PHYSICAL",
-     "GOD SAVE THE QUEEN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1986",
-    "color": 3,
-    "words": [
-     "THAT'S WHAT FRIENDS ARE FOR",
-     "KISS",
-     "GREATEST LOVE OF ALL",
-     "STUCK WITH YOU"
-    ]
-   },
-   {
-    "name": "Dance-Pop Classics",
-    "color": 4,
-    "words": [
-     "LIKE A VIRGIN",
-     "LETS DANCE",
-     "JUMP FOR MY LOVE",
-     "WALKING ON SUNSHINE"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Tina Turner Songs",
-    "color": 1,
-    "words": [
-     "TYPICAL MALE",
-     "ADDICTED TO LOVE",
-     "STEAMY WINDOWS",
-     "BETTER BE GOOD TO ME"
-    ]
-   },
-   {
-    "name": "Songs About Running",
-    "color": 2,
-    "words": [
-     "RUN AWAY",
-     "RUN TO YOU",
-     "RUNNING UP THAT HILL",
-     "RUNNING WITH THE NIGHT"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1987",
-    "color": 3,
-    "words": [
-     "SHAKEDOWN",
-     "SHAKE YOU DOWN",
-     "I WANNA DANCE WITH SOMEBODY",
-     "NOTHING'S GONNA STOP US NOW"
-    ]
-   },
-   {
-    "name": "Power Ballad Classics",
-    "color": 4,
-    "words": [
-     "I WANT TO KNOW WHAT LOVE IS",
-     "HERE I GO AGAIN",
-     "EVERY ROSE HAS ITS THORN",
-     "DONT STOP BELIEVIN"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Duran Duran Songs",
-    "color": 1,
-    "words": [
-     "HUNGRY LIKE THE WOLF",
-     "ORDINARY WORLD",
-     "VIEW TO A KILL",
-     "UNION OF THE SNAKE"
-    ]
-   },
-   {
-    "name": "Songs About Rain",
-    "color": 2,
-    "words": [
-     "CRYING IN THE RAIN",
-     "ONLY HAPPY WHEN IT RAINS",
-     "PURPLE RAIN",
-     "HAVE YOU EVER SEEN THE RAIN"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1980",
-    "color": 3,
-    "words": [
-     "MAGIC",
-     "CALL ME",
-     "ANOTHER ONE BITES THE DUST",
-     "FUNKYTOWN"
-    ]
-   },
-   {
-    "name": "New Wave Classics",
-    "color": 4,
-    "words": [
-     "ONCE IN A LIFETIME",
-     "MESSAGE IN A BOTTLE",
-     "BURNING DOWN THE HOUSE",
-     "BRASS IN POCKET"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "The Police Songs",
-    "color": 1,
-    "words": [
-     "ROXANNE",
-     "DE DO DO DO",
-     "EVERY BREATH YOU TAKE",
-     "WRAPPED AROUND YOUR FINGER"
-    ]
-   },
-   {
-    "name": "Songs About the Night",
-    "color": 2,
-    "words": [
-     "SATURDAY NIGHT",
-     "ROCK THE NIGHT",
-     "ALL NIGHT LONG",
-     "BLINDED BY THE LIGHT"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1988",
-    "color": 3,
-    "words": [
-     "TOGETHER FOREVER",
-     "GOT MY MIND SET ON YOU",
-     "COULD'VE BEEN",
-     "FAITH"
-    ]
-   },
-   {
-    "name": "One-Hit Wonder Songs",
-    "color": 4,
-    "words": [
-     "99 LUFTBALLONS",
-     "PUTTIN ON THE RITZ",
-     "CHARIOTS OF FIRE",
-     "ROCK ME AMADEUS"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "U2 Songs",
-    "color": 1,
-    "words": [
-     "DESIRE",
-     "NEW YEARS DAY",
-     "ANGEL OF HARLEM",
-     "I STILL HAVENT FOUND WHAT IM LOOKING FOR"
-    ]
-   },
-   {
-    "name": "Songs About Fire",
-    "color": 2,
-    "words": [
-     "LIGHT MY FIRE",
-     "PRIVATE FIRES",
-     "GREAT BALLS OF FIRE",
-     "FIRE"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1989",
-    "color": 3,
-    "words": [
-     "LIKE A PRAYER",
-     "MY PREROGATIVE",
-     "TWO HEARTS",
-     "WHEN I'M WITH YOU"
-    ]
-   },
-   {
-    "name": "Live Aid JFK Performers",
-    "color": 4,
-    "words": [
-     "LED ZEPPELIN",
-     "CROSBY STILLS NASH YOUNG",
-     "BOB DYLAN",
-     "TINA TURNER"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Michael Jackson Songs",
-    "color": 1,
-    "words": [
-     "DONT STOP TIL YOU GET ENOUGH",
-     "BILLIE JEAN",
-     "PYT",
-     "WANNA BE STARTIN SOMETHIN"
-    ]
-   },
-   {
-    "name": "Songs About Dancing",
-    "color": 2,
-    "words": [
-     "DANCING WITH MYSELF",
-     "DANCING IN THE DARK",
-     "COME ON EILEEN",
-     "DANCE HALL DAYS"
-    ]
-   },
-   {
-    "name": "#1 Hits of 1981",
-    "color": 3,
-    "words": [
-     "ENDLESS LOVE",
-     "JESSIES GIRL",
-     "RAPTURE",
-     "9 TO 5"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 4,
-    "words": [
-     "HYSTERIA",
-     "1984",
-     "THE JOSHUA TREE",
-     "THRILLER"
-    ]
-   }
-  ]
- },
- {
-  "cats": [
-   {
-    "name": "Original 5 MTV VJs",
-    "color": 1,
-    "words": [
-     "MARTHA QUINN",
-     "ALAN HUNTER",
-     "MARK GOODMAN",
-     "NINA BLACKWOOD"
-    ]
-   },
-   {
-    "name": "Live Aid Wembley Headliners (1985)",
-    "color": 2,
-    "words": [
-     "QUEEN",
-     "U2",
-     "DAVID BOWIE",
-     "ELTON JOHN"
-    ]
-   },
-   {
-    "name": "Diamond-Certified 80s Albums",
-    "color": 3,
-    "words": [
-     "THRILLER",
-     "BORN IN THE USA",
-     "SLIPPERY WHEN WET",
-     "THE JOSHUA TREE"
-    ]
-   },
-   {
-    "name": "#1 Hits in Both 1983 AND 1987",
-    "color": 4,
-    "words": [
-     "BILLIE JEAN",
-     "EVERY BREATH YOU TAKE",
-     "WALK LIKE AN EGYPTIAN",
-     "I WANNA DANCE WITH SOMEBODY"
-    ]
-   }
-  ]
- }
-];
+var SUPABASE_URL = 'https://ufoxrwssrqdwyoziochh.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmb3hyd3NzcnFkd3lvemlvY2hoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5NDU2NTksImV4cCI6MjA5MTUyMTY1OX0.XB7_eHpSPVm_MBRODrcs25-3EysGw0D1x8VeiDMHlHE';
+
+// ── Supabase helpers ──────────────────────────────────────────
+async function fetchTodayPuzzle() {
+  // Dev override: load a specific puzzle by number
+  var override = null;
+  try { override = localStorage.getItem('dev_puzzle_override'); } catch(e) {}
+
+  var url;
+  if (override) {
+    localStorage.removeItem('dev_puzzle_override'); // use once then clear
+    url = SUPABASE_URL + '/rest/v1/puzzles?puzzle_num=eq.' + override + '&select=*&limit=1';
+  } else {
+    var now = new Date();
+    var today = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0');
+    url = SUPABASE_URL + '/rest/v1/puzzles?play_date=eq.' + today + '&select=*&limit=1';
+  }
+
+  console.log('Fetching:', url);
+  var res = await fetch(url, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+  if (!res.ok) {
+    var errText = await res.text();
+    console.error('Fetch failed:', res.status, errText);
+    throw new Error('HTTP ' + res.status + ' — ' + errText);
+  }
+  var data = await res.json();
+  console.log('Result:', data);
+  return data[0] || null;
+}
+
+// Convert Supabase row → game object the UI expects
+function rowToGame(p) {
+  return {
+    cats: [
+      { name: p.cat1_name, color: p.cat1_color || 1,
+        words: p.cat1_words.split(',').map(function(w){ return w.trim(); }) },
+      { name: p.cat2_name, color: p.cat2_color || 2,
+        words: p.cat2_words.split(',').map(function(w){ return w.trim(); }) },
+      { name: p.cat3_name, color: p.cat3_color || 3,
+        words: p.cat3_words.split(',').map(function(w){ return w.trim(); }) },
+      { name: p.cat4_name, color: p.cat4_color || 4,
+        words: p.cat4_words.split(',').map(function(w){ return w.trim(); }) },
+    ],
+    puzzle_num: p.puzzle_num,
+    play_date:  p.play_date
+  };
+}
+
 
 var COLOR_CONFIG = {
   1: { bg: "#2de2e6" },
@@ -4710,25 +500,15 @@ function soundLose()    { playSound('lose'); }
 function soundCheat()   { playSound('cheat'); }
 function soundShuffle() { playSound('shuffle'); }
 
-// ── Daily puzzle logic ─────────────────────────────────────────
-var EPOCH = new Date('2026-03-31T00:00:00').getTime();
-
-function getDayIndex() {
-  var now = new Date();
-  var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  var epoch = EPOCH;
-  try { var ov = localStorage.getItem('epoch_override'); if (ov) epoch = parseInt(ov); } catch(e) {}
-  var offset = 0;
-  try { offset = parseInt(localStorage.getItem('day_offset') || '0'); } catch(e) {}
-  var dayNum = Math.floor((midnight - epoch) / 86400000) + offset;
-  return ((dayNum % GAMES.length) + GAMES.length) % GAMES.length;
-}
+// ── Daily puzzle logic (Supabase) ────────────────────────────
+var currentGame = null;
 
 function getTodayKey() {
   var now = new Date();
-  var offset = 0;
-  try { offset = parseInt(localStorage.getItem('day_offset') || '0'); } catch(e) {}
-  return 'played_' + now.getFullYear() + '_' + (now.getMonth()+1) + '_' + now.getDate() + '_o' + offset;
+    var today = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0');
+  return 'played_' + today;
 }
 
 function hasPlayedToday() {
@@ -4761,7 +541,7 @@ function shuffleArr(a) {
 function getSolvedWords() {
   var w = [];
   solvedColors.forEach(function(c) {
-    var cat = GAMES[gameIdx].cats.find(function(x){ return x.color===c; });
+    var cat = currentGame.cats.find(function(x){ return x.color===c; });
     if (cat) cat.words.forEach(function(word){ w.push(word); });
   });
   return w;
@@ -4782,7 +562,7 @@ function renderGrid() {
 function renderSolved() {
   var c = document.getElementById('solvedCats'); c.innerHTML = '';
   solvedColors.forEach(function(color) {
-    var cat = GAMES[gameIdx].cats.find(function(x){ return x.color===color; });
+    var cat = currentGame.cats.find(function(x){ return x.color===color; });
     var div = document.createElement('div'); div.className = 'solved-cat';
     div.style.background = COLOR_CONFIG[color].bg;
     div.innerHTML = '<div class="cat-name">'+cat.name+'</div><div class="cat-words">'+cat.words.join(', ')+'</div>';
@@ -4817,7 +597,7 @@ function showToast(msg) {
 function submit() {
   if (selectedWords.length!==4) return;
   var matched = null;
-  GAMES[gameIdx].cats.forEach(function(cat) {
+  currentGame.cats.forEach(function(cat) {
     if (solvedColors.indexOf(cat.color)!==-1) return;
     if (selectedWords.every(function(w){ return cat.words.indexOf(w)!==-1; })) matched = cat;
   });
@@ -4834,7 +614,7 @@ function submit() {
     }
   } else {
     var best = 0;
-    GAMES[gameIdx].cats.forEach(function(cat) {
+    currentGame.cats.forEach(function(cat) {
       if (solvedColors.indexOf(cat.color)!==-1) return;
       var n = selectedWords.filter(function(w){ return cat.words.indexOf(w)!==-1; }).length;
       if (n>best) best=n;
@@ -4858,10 +638,10 @@ function showModal(won) {
   document.getElementById('modalEmoji').textContent = won ? '\uD83C\uDF89' : '\uD83D\uDE22';
   document.getElementById('modalTitle').textContent = won ? 'Totally Radical!' : 'Bogus!';
   document.getElementById('modalMsg').textContent = won
-    ? 'You crushed Day '+(gameIdx+1)+' with '+(4-mistakes)+' mistake'+(4-mistakes===1?'':'s')+'! Come back tomorrow for a new puzzle.'
+    ? currentGame ? 'You crushed Puzzle #'+currentGame.puzzle_num+' with '+(4-mistakes)+' mistake'+(4-mistakes===1?'':'s')+'! Come back tomorrow for a new puzzle.' : 'Great job! Come back tomorrow.'
     : 'Better luck tomorrow! The answers were:';
   var catsEl = document.getElementById('modalCats'); catsEl.innerHTML = '';
-  GAMES[gameIdx].cats.forEach(function(cat) {
+  currentGame.cats.forEach(function(cat) {
     var div = document.createElement('div'); div.className = 'result-cat';
     div.style.background = COLOR_CONFIG[cat.color].bg;
     div.innerHTML = '<div class="rcat-name">'+cat.name+'</div><div class="rcat-words">'+cat.words.join(', ')+'</div>';
@@ -4877,41 +657,91 @@ function showLocked() {
   setInterval(updateCountdown, 1000);
 }
 
-function startGame() {
-  gameIdx = getDayIndex();
-  document.getElementById('dayLabel').textContent = 'Day ' + (gameIdx+1);
-  if (hasPlayedToday()) { showLocked(); return; }
-  selectedWords = []; mistakes = 4; solvedColors = []; gameOver = false;
-  var words = [];
-  GAMES[gameIdx].cats.forEach(function(cat){ cat.words.forEach(function(w){ words.push(w); }); });
-  tiles = shuffleArr(words);
-  renderSolved(); renderGrid(); renderDots(); updateButtons();
+async function startGame() {
+  // Show loading state
+  document.getElementById('gameArea').style.display = 'block';
+  var now = new Date();
+  var localDate = now.getFullYear() + '-' +
+    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+    String(now.getDate()).padStart(2, '0');
+  var utcDate = now.toISOString().split('T')[0];
+  document.getElementById('grid').innerHTML = '<div style="text-align:center;padding:40px;color:var(--teal);font-size:13px;line-height:2">Loading...<br><span style="color:var(--subtext);font-size:11px">Local date: ' + localDate + '<br>UTC date: ' + utcDate + '<br>Fetching from Supabase...</span></div>';
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('shuffleBtn').disabled = true;
+  document.getElementById('deselectBtn').disabled = true;
+
+  try {
+    var row = await fetchTodayPuzzle();
+    if (!row) {
+      var now = new Date();
+    var today = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0');
+      document.getElementById('grid').innerHTML =
+        '<div style="text-align:center;padding:40px;color:var(--subtext);line-height:2">' +
+        'No puzzle found for today (' + today + ').<br>' +
+        '<span style="font-size:12px">Triple-tap the logo to use the dev menu and load any puzzle manually.</span>' +
+        '</div>';
+      return;
+    }
+
+    currentGame = rowToGame(row);
+    devCurrentNum = row.puzzle_num;
+    document.getElementById('dayLabel').textContent = 'Puzzle #' + row.puzzle_num;
+
+    if (hasPlayedToday()) { showLocked(); return; }
+
+    selectedWords = []; mistakes = 4; solvedColors = []; gameOver = false;
+    var words = [];
+    currentGame.cats.forEach(function(cat){ cat.words.forEach(function(w){ words.push(w); }); });
+    tiles = shuffleArr(words);
+    renderSolved(); renderGrid(); renderDots(); updateButtons();
+
+  } catch(e) {
+    document.getElementById('grid').innerHTML =
+      '<div style="text-align:center;padding:40px;color:#ff4466;line-height:2">' +
+      'Could not load puzzle: ' + e.message + '<br>' +
+      '<span style="font-size:12px;color:var(--subtext)">Check your Supabase connection and make sure the puzzles table has data.</span>' +
+      '</div>';
+  }
 }
 
 // ── Dev Menu — triple-tap the logo ─────────────────────────────
 var tapCount = 0, tapTimer = null;
+var devPuzzleList = [];   // [{puzzle_num, play_date}] fetched from Supabase
+var devCurrentNum = null; // puzzle_num currently being tested
 
-function getPlayedSet() {
-  // Return a Set of all day indices (0-based) that have been played
-  var played = new Set();
+function getPlayedKeys() {
+  var keys = new Set();
   try {
     Object.keys(localStorage).forEach(function(k) {
-      if (!k.startsWith('played_')) return;
-      // Key format: played_YYYY_M_D_oN — extract offset N
-      var parts = k.split('_o');
-      if (parts.length < 2) return;
-      var offset = parseInt(parts[1]);
-      var epoch = EPOCH;
-      try { var ov = localStorage.getItem('epoch_override'); if (ov) epoch = parseInt(ov); } catch(e) {}
-      // We need to find which day this offset maps to
-      // Use today's midnight as base
-      var now = new Date();
-      var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-      var baseDay = Math.floor((midnight - epoch) / 86400000);
-      var idx = ((baseDay + offset) % GAMES.length + GAMES.length) % GAMES.length;
-      played.add(idx);
+      if (k.startsWith('played_')) keys.add(k);
     });
   } catch(e) {}
+  return keys;
+}
+
+async function fetchPuzzleList() {
+  // Lightweight fetch — only puzzle_num and play_date
+  try {
+    var res = await fetch(
+      SUPABASE_URL + '/rest/v1/puzzles?select=puzzle_num,play_date&order=puzzle_num.asc',
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+    );
+    if (res.ok) devPuzzleList = await res.json();
+  } catch(e) {}
+}
+
+function getPlayedNums() {
+  // A puzzle is "played" if its play_date key exists in localStorage
+  var played = new Set();
+  var playedKeys = getPlayedKeys();
+  devPuzzleList.forEach(function(p) {
+    if (p.play_date) {
+      var key = 'played_' + p.play_date;
+      if (playedKeys.has(key)) played.add(p.puzzle_num);
+    }
+  });
   return played;
 }
 
@@ -4919,58 +749,66 @@ function buildPipGrid() {
   var grid = document.getElementById('devPipGrid');
   if (!grid) return;
   grid.innerHTML = '';
-  var current = getDayIndex();
-  var played = getPlayedSet();
-  for (var i = 0; i < GAMES.length; i++) {
-    (function(idx) {
-      var pip = document.createElement('div');
-      pip.className = 'dev-pip';
-      if (idx === current) {
-        pip.classList.add('current');
-        pip.title = 'Day ' + (idx+1) + ' (current)';
-        pip.textContent = '★';
-        pip.style.color = '#0a0a1a';
-        pip.style.fontSize = '9px';
-      } else if (played.has(idx)) {
-        pip.classList.add('played');
-        pip.title = 'Day ' + (idx+1) + ' (played)';
-        pip.textContent = '✓';
-        pip.style.color = 'rgba(45,226,230,0.7)';
-        pip.style.fontSize = '9px';
-      } else {
-        pip.title = 'Day ' + (idx+1);
-      }
-      pip.addEventListener('click', function() {
-        jumpToDay(idx);
-      });
-      grid.appendChild(pip);
-    })(i);
+  var now = new Date();
+    var today = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0');
+  var playedNums = getPlayedNums();
+
+  // Determine current puzzle number
+  var currentNum = devCurrentNum || (currentGame ? currentGame.puzzle_num : null);
+
+  if (!devPuzzleList.length) {
+    grid.innerHTML = '<div style="font-size:11px;color:var(--subtext);text-align:center;padding:8px">Loading...</div>';
+    return;
   }
+
+  devPuzzleList.forEach(function(p) {
+    var pip = document.createElement('div');
+    pip.className = 'dev-pip';
+    pip.title = 'Puzzle #' + p.puzzle_num + (p.play_date ? ' (' + p.play_date + ')' : ' (unscheduled)');
+
+    if (p.puzzle_num === currentNum) {
+      pip.classList.add('current');
+      pip.textContent = '★';
+      pip.style.color = '#0a0a1a';
+      pip.style.fontSize = '9px';
+    } else if (playedNums.has(p.puzzle_num)) {
+      pip.classList.add('played');
+      pip.textContent = '✓';
+      pip.style.color = 'rgba(45,226,230,0.8)';
+      pip.style.fontSize = '9px';
+    }
+
+    pip.addEventListener('click', function() { jumpToPuzzle(p.puzzle_num); });
+    grid.appendChild(pip);
+  });
 }
 
 function updateDevDisplay() {
+  var current = devCurrentNum || (currentGame ? currentGame.puzzle_num : '–');
   var el = document.getElementById('devDayDisplay');
-  if (el) el.textContent = 'Day ' + (getDayIndex() + 1);
+  if (el) el.textContent = '#' + current;
   buildPipGrid();
 }
 
-function jumpToDay(targetIdx) {
-  try {
-    markPlayedToday();
-    var epoch = EPOCH;
-    try { var ov = localStorage.getItem('epoch_override'); if (ov) epoch = parseInt(ov); } catch(e2) {}
-    var now = new Date();
-    var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-    var baseDay = Math.floor((midnight - epoch) / 86400000);
-    var newOffset = ((targetIdx % GAMES.length) + GAMES.length) % GAMES.length - baseDay;
-    localStorage.setItem('day_offset', newOffset);
-  } catch(e) {}
+async function jumpToPuzzle(puzzleNum) {
+  // Store the target puzzle num to override today's fetch
+  try { localStorage.setItem('dev_puzzle_override', puzzleNum); } catch(e) {}
+  showToast('Loading Puzzle #' + puzzleNum + '...');
+  document.getElementById('devMenu').classList.remove('open');
+  // Reload to apply the override
+  setTimeout(function() { location.reload(); }, 600);
 }
 
-function shiftDay(delta) {
-  var current = getDayIndex();
-  var newIdx = ((current + delta) % GAMES.length + GAMES.length) % GAMES.length;
-  jumpToDay(newIdx);
+function shiftPuzzle(delta) {
+  var currentNum = devCurrentNum || (currentGame ? currentGame.puzzle_num : 1);
+  var nums = devPuzzleList.map(function(p) { return p.puzzle_num; }).sort(function(a,b){return a-b;});
+  if (!nums.length) return;
+  var idx = nums.indexOf(currentNum);
+  if (idx === -1) idx = 0;
+  var newIdx = ((idx + delta) % nums.length + nums.length) % nums.length;
+  jumpToPuzzle(nums[newIdx]);
 }
 
 document.getElementById('logoBtn').addEventListener('click', function() {
@@ -4981,8 +819,15 @@ document.getElementById('logoBtn').addEventListener('click', function() {
     tapCount = 0;
     soundCheat();
     var menu = document.getElementById('devMenu');
+    var opening = !menu.classList.contains('open');
     menu.classList.toggle('open');
-    if (menu.classList.contains('open')) updateDevDisplay();
+    if (opening) {
+      if (!devPuzzleList.length) {
+        fetchPuzzleList().then(updateDevDisplay);
+      } else {
+        updateDevDisplay();
+      }
+    }
   }
 });
 
@@ -4992,31 +837,21 @@ document.getElementById('devClose').addEventListener('click', function() {
 
 document.getElementById('devNext').addEventListener('click', function() {
   soundCheat();
-  shiftDay(1);
-  showToast('Day ' + (getDayIndex() + 1) + ' →');
-  setTimeout(function() { location.reload(); }, 800);
+  shiftPuzzle(1);
 });
 
 document.getElementById('devPrev').addEventListener('click', function() {
   soundCheat();
-  shiftDay(-1);
-  showToast('← Day ' + (getDayIndex() + 1));
-  setTimeout(function() { location.reload(); }, 800);
+  shiftPuzzle(-1);
 });
 
 document.getElementById('devJumpGo').addEventListener('click', function() {
   var val = parseInt(document.getElementById('devJumpInput').value);
-  if (isNaN(val) || val < 1 || val > 100) {
-    showToast('Enter a number 1–100');
-    return;
-  }
+  if (isNaN(val) || val < 1) { showToast('Enter a valid puzzle number'); return; }
   soundCheat();
-  jumpToDay(val - 1);
-  showToast('Jumping to Day ' + val + '...');
-  setTimeout(function() { location.reload(); }, 800);
+  jumpToPuzzle(val);
 });
 
-// Also allow Enter key in the input
 document.getElementById('devJumpInput').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') document.getElementById('devJumpGo').click();
 });
@@ -5024,14 +859,17 @@ document.getElementById('devJumpInput').addEventListener('keydown', function(e) 
 document.getElementById('devReset').addEventListener('click', function() {
   document.getElementById('devMenu').classList.remove('open');
   try {
-    Object.keys(localStorage).forEach(function(k){ if (k.startsWith('played_')) localStorage.removeItem(k); });
-    localStorage.removeItem('day_offset');
-    localStorage.setItem('epoch_override', new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()).getTime());
+    Object.keys(localStorage).forEach(function(k) {
+      if (k.startsWith('played_')) localStorage.removeItem(k);
+    });
+    localStorage.removeItem('dev_puzzle_override');
   } catch(e) {}
   soundCheat();
-  showToast('Reset! Starting from Day 1');
+  showToast('Reset! Reloading...');
   setTimeout(function() { location.reload(); }, 1500);
 });
+
+// devDisconnect removed (keys now hardcoded)
 
 document.getElementById('submitBtn').addEventListener('click', submit);
 
@@ -5051,7 +889,18 @@ document.getElementById('modalClose').addEventListener('click', function() {
   if (gameOver || solvedColors.length===4) showLocked();
 });
 
-startGame();
+
+// ── Start ─────────────────────────────────────────────────────
+document.getElementById('appHeader').style.display = '';
+startGame().catch(function(e) {
+  console.error('startGame failed:', e);
+  document.getElementById('grid').innerHTML =
+    '<div style="text-align:center;padding:40px;color:#ff4466;line-height:2">' +
+    'Fatal error: ' + e.message + '<br>' +
+    '<span style="font-size:11px;color:var(--subtext)">Check the browser console for details.</span>' +
+    '</div>';
+});
+
 </script>
 </body>
 </html>
