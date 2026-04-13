@@ -497,6 +497,42 @@ function soundWrong()   { playSound('wrong'); }
 function soundOneAway() { playSound('oneaway'); }
 function soundWin()     { playSound('win'); }
 function soundLose()    { playSound('lose'); }
+// ─── Play tracking ──────────────────────────────────────────────────────────
+var playLogId = null; // row id returned after insert
+
+async function logPlay(puzzleNum, playDate) {
+  try {
+    var res = await fetch(SUPABASE_URL + '/rest/v1/plays', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify({ puzzle_num: puzzleNum, play_date: playDate, completed: false, solved_count: 0 })
+    });
+    if (res.ok) {
+      var data = await res.json();
+      playLogId = data && data[0] && data[0].id ? data[0].id : null;
+    }
+  } catch(e) { /* non-fatal */ }
+}
+
+async function logComplete(completed, solvedCount) {
+  if (!playLogId) return;
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/plays?id=eq.' + playLogId, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ completed: completed, solved_count: solvedCount })
+    });
+  } catch(e) { /* non-fatal */ }
+}
 function soundCheat()   { playSound('cheat'); }
 function soundShuffle() { playSound('shuffle'); }
 
@@ -606,8 +642,9 @@ function submit() {
     tiles = tiles.filter(function(w){ return matched.words.indexOf(w)===-1; });
     selectedWords = [];
     renderSolved(); renderGrid(); renderDots(); updateButtons();
+    logPlay(currentGame.puzzle_num, currentGame.play_date);
     if (solvedColors.length===4) {
-      markPlayedToday(); soundWin();
+      markPlayedToday(); soundWin(); logComplete(true, 4);
       setTimeout(function(){ showModal(true); }, 400);
     } else {
       soundCorrect(); showToast('Correct! \uD83C\uDFB6');
@@ -628,7 +665,7 @@ function submit() {
     selectedWords = [];
     setTimeout(function(){ renderGrid(); updateButtons(); }, 600);
     if (mistakes<=0) {
-      gameOver = true; markPlayedToday(); soundLose();
+      gameOver = true; markPlayedToday(); soundLose(); logComplete(false, solvedColors.length);
       setTimeout(function(){ showModal(false); }, 700);
     }
   }
