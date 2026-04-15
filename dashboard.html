@@ -343,10 +343,13 @@ document.getElementById('btnRefresh').addEventListener('click', loadAll);
 
 // ── Fetch all plays ────────────────────────────────────────
 async function fetchPlays() {
-  var res = await fetch(SUPABASE_URL + '/rest/v1/plays?select=*&order=created_at.desc&limit=2000', {
+  var res = await fetch(SUPABASE_URL + '/rest/v1/plays?select=*&order=played_at.desc&limit=2000', {
     headers: { 'apikey': SERVICE_KEY, 'Authorization': 'Bearer ' + SERVICE_KEY }
   });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
+  if (!res.ok) {
+    var body = await res.text();
+    throw new Error('HTTP ' + res.status + ' — ' + body);
+  }
   return res.json();
 }
 
