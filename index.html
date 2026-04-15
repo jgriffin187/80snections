@@ -502,6 +502,17 @@ var playLogId = null; // row id returned after insert
 
 async function logPlay(puzzleNum, playDate) {
   try {
+    // Look up country + city from IP — silent, no permission needed
+    var country = null, city = null;
+    try {
+      var geo = await fetch('https://ipapi.co/json/');
+      if (geo.ok) {
+        var geoData = await geo.json();
+        country = geoData.country_name || null;
+        city    = geoData.city || null;
+      }
+    } catch(e) { /* geolocation optional — ignore if it fails */ }
+
     var res = await fetch(SUPABASE_URL + '/rest/v1/plays', {
       method: 'POST',
       headers: {
@@ -510,7 +521,7 @@ async function logPlay(puzzleNum, playDate) {
         'Content-Type': 'application/json',
         'Prefer': 'return=representation'
       },
-      body: JSON.stringify({ puzzle_num: puzzleNum, play_date: playDate, completed: false, solved_count: 0 })
+      body: JSON.stringify({ puzzle_num: puzzleNum, play_date: playDate, completed: false, solved_count: 0, country: country, city: city })
     });
     if (res.ok) {
       var data = await res.json();
