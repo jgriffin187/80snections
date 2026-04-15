@@ -642,7 +642,6 @@ function submit() {
     tiles = tiles.filter(function(w){ return matched.words.indexOf(w)===-1; });
     selectedWords = [];
     renderSolved(); renderGrid(); renderDots(); updateButtons();
-    logPlay(currentGame.puzzle_num, currentGame.play_date);
     if (solvedColors.length===4) {
       markPlayedToday(); soundWin(); logComplete(true, 4);
       setTimeout(function(){ showModal(true); }, 400);
@@ -733,6 +732,7 @@ async function startGame() {
     currentGame.cats.forEach(function(cat){ cat.words.forEach(function(w){ words.push(w); }); });
     tiles = shuffleArr(words);
     renderSolved(); renderGrid(); renderDots(); updateButtons();
+    logPlay(row.puzzle_num, row.play_date);
 
   } catch(e) {
     document.getElementById('grid').innerHTML =
