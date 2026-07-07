@@ -181,142 +181,16 @@
   @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
   @keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
 
-  /* Dev menu */
-  .dev-menu {
-    display: none;
-    position: fixed;
-    bottom: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #12123a;
-    border: 2px solid var(--magenta);
-    border-radius: 12px;
-    padding: 16px 20px;
-    z-index: 500;
-    box-shadow: 0 0 30px rgba(199,36,177,0.5);
-    text-align: center;
-    min-width: 280px;
-  }
-  .dev-menu.open { display: block; }
-  .dev-menu-title { font-family: 'Boogaloo', cursive; color: var(--magenta); font-size: 18px; letter-spacing: 2px; margin-bottom: 4px; text-shadow: 0 0 8px var(--magenta); }
-  .dev-day-display { font-size: 13px; color: var(--teal); margin-bottom: 12px; letter-spacing: 1px; }
-  .dev-nav-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .dev-nav-btn {
-    flex: 1; padding: 10px 6px;
-    border-radius: 6px; border: 1.5px solid var(--teal);
-    background: transparent; color: var(--teal);
-    font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 800;
-    cursor: pointer; transition: all 0.15s;
-  }
-  .dev-nav-btn:hover { background: var(--teal); color: #0a0a1a; }
-  .dev-nav-label { flex: 2; font-size: 11px; color: var(--subtext); letter-spacing: 0.5px; text-transform: uppercase; line-height: 1.4; }
-  .dev-btn {
-    display: block; width: 100%; margin-bottom: 8px; padding: 10px;
-    border-radius: 6px; border: 1.5px solid var(--teal);
-    background: transparent; color: var(--teal);
-    font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 800;
-    cursor: pointer; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.15s;
-  }
-  .dev-btn:hover { background: var(--teal); color: #0a0a1a; }
-  .dev-btn.danger { border-color: var(--magenta); color: var(--magenta); }
-  .dev-btn.danger:hover { background: var(--magenta); color: #fff; }
-  .dev-close { margin-top: 6px; font-size: 12px; color: var(--subtext); cursor: pointer; letter-spacing: 1px; text-transform: uppercase; }
-  .dev-divider { border: none; border-top: 1px solid rgba(45,226,230,0.2); margin: 10px 0; }
-  .dev-jump-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-  .dev-jump-input {
-    flex: 1; padding: 9px 8px; border-radius: 6px;
-    border: 1.5px solid var(--teal); background: rgba(45,226,230,0.08);
-    color: var(--teal); font-family: 'Nunito', sans-serif;
-    font-size: 15px; font-weight: 800; text-align: center;
-    -webkit-appearance: none; outline: none;
-  }
-  .dev-jump-input::placeholder { color: rgba(45,226,230,0.35); font-weight: 600; }
-  .dev-jump-go {
-    padding: 9px 14px; border-radius: 6px;
-    border: 1.5px solid var(--teal); background: var(--teal);
-    color: #0a0a1a; font-family: 'Nunito', sans-serif;
-    font-size: 13px; font-weight: 800; cursor: pointer;
-    text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .dev-played-grid {
-    display: grid; grid-template-columns: repeat(10, 1fr);
-    gap: 3px; margin-bottom: 10px;
-  }
-  .dev-pip {
-    width: 100%; aspect-ratio: 1; border-radius: 3px;
-    border: 1px solid rgba(45,226,230,0.3);
-    background: transparent; cursor: pointer;
-    font-size: 7px; display: flex; align-items: center;
-    justify-content: center; color: transparent;
-    transition: all 0.1s; position: relative;
-  }
-  .dev-pip.current { border-color: var(--yellow); background: var(--yellow); }
-  .dev-pip.played  { background: rgba(45,226,230,0.25); border-color: var(--teal); }
-  .dev-pip:hover   { border-color: var(--teal); background: rgba(45,226,230,0.15); }
-  .dev-pip-label { font-size: 10px; color: var(--subtext); text-align: center; margin-bottom: 4px; letter-spacing: 0.5px; }
-  header {
-    width: 100%; max-width: 600px; padding: 16px 16px 12px;
-    text-align: center; border-bottom: 2px solid var(--teal);
-    position: relative; background: var(--bg);
-  }
-  .logo {
-    font-family: 'Boogaloo', cursive; font-size: 48px; letter-spacing: 2px;
-    line-height: 1; color: var(--teal); cursor: pointer;
-    text-shadow: 0 0 10px var(--teal), 0 0 30px var(--teal), 0 0 60px rgba(45,226,230,0.4);
-  }
-  .logo .apos, .logo .eight { color: var(--magenta); text-shadow: 0 0 10px var(--magenta), 0 0 30px var(--magenta); }
-  .tagline { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--subtext); margin-top: 4px; }
-  .day-label { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--teal); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
-  .instructions { text-align: center; padding: 10px 16px 6px; font-size: 14px; color: var(--subtext); max-width: 600px; width: 100%; background: var(--bg); letter-spacing: 0.5px; }
-  .main { width: 100%; max-width: 600px; padding: 0 16px 24px; flex: 1; background: var(--bg); }
-  .solved-categories { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
-  .solved-cat { border-radius: 6px; padding: 12px 16px; text-align: center; animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1); border: 1px solid rgba(255,255,255,0.15); }
-  .solved-cat .cat-name { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; color: #0a0a1a; }
-  .solved-cat .cat-words { font-size: 13px; font-weight: 700; color: #0a0a1a; }
-  .grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 20px; }
-  .tile {
-    background: var(--tile-bg); border: 1px solid var(--border); border-radius: 6px;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    font-weight: 800; font-size: 11px; letter-spacing: 0.3px; text-transform: uppercase;
-    cursor: pointer; padding: 6px 4px; min-height: 76px; transition: all 0.15s;
-    user-select: none; -webkit-user-select: none; line-height: 1.25; color: var(--text); word-break: break-word;
-  }
-  .tile:hover { background: var(--tile-hover); border-color: var(--teal); color: var(--teal); box-shadow: 0 0 8px rgba(45,226,230,0.3); }
-  .tile.selected { background: var(--teal); border-color: var(--teal); color: #0a0a1a; box-shadow: 0 0 16px rgba(45,226,230,0.6); }
-  .tile.shake { animation: shake 0.5s; }
-  .mistakes-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; justify-content: center; font-size: 13px; font-weight: 700; color: var(--subtext); letter-spacing: 0.5px; text-transform: uppercase; }
-  .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--magenta); display: inline-block; box-shadow: 0 0 6px var(--magenta); transition: opacity 0.3s; }
-  .dot.used { opacity: 0.15; box-shadow: none; }
-  .controls { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
-  .btn { border: 1.5px solid var(--teal); background: transparent; color: var(--teal); border-radius: 999px; padding: 10px 22px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: 'Nunito', sans-serif; letter-spacing: 0.5px; text-transform: uppercase; transition: all 0.15s; }
-  .btn:hover { background: var(--teal); color: #0a0a1a; box-shadow: 0 0 12px rgba(45,226,230,0.5); }
-  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .btn.submit { background: var(--magenta); border-color: var(--magenta); color: #fff; box-shadow: 0 0 10px rgba(199,36,177,0.4); }
-  .btn.submit:hover { background: #e030c8; box-shadow: 0 0 20px rgba(199,36,177,0.7); }
-  .btn.submit:disabled { background: var(--magenta); opacity: 0.3; }
-  .toast { position: fixed; top: 80px; left: 50%; transform: translateX(-50%) translateY(-20px); background: var(--magenta); color: #fff; padding: 10px 24px; border-radius: 6px; font-weight: 800; font-size: 14px; letter-spacing: 0.5px; text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 100; white-space: nowrap; box-shadow: 0 0 20px rgba(199,36,177,0.6); }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .locked-screen { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; gap: 16px; flex: 1; background: var(--bg); width: 100%; max-width: 600px; }
-  .locked-screen.show { display: flex; }
-  .locked-icon { font-size: 56px; }
-  .locked-title { font-family: 'Boogaloo', cursive; font-size: 32px; color: var(--teal); text-shadow: 0 0 10px var(--teal); }
-  .locked-msg { color: var(--subtext); font-size: 15px; line-height: 1.5; max-width: 320px; }
-  .countdown { font-family: 'Boogaloo', cursive; font-size: 48px; color: var(--magenta); text-shadow: 0 0 10px var(--magenta), 0 0 30px var(--magenta); letter-spacing: 4px; }
-  .countdown-label { font-size: 12px; color: var(--subtext); letter-spacing: 2px; text-transform: uppercase; }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 200; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: #12123a; border: 2px solid var(--teal); border-radius: 12px; padding: 32px 24px; max-width: 400px; width: 90%; text-align: center; animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 0 40px rgba(45,226,230,0.3); }
-  .modal .emoji { font-size: 48px; margin-bottom: 12px; }
-  .modal h2 { font-family: 'Boogaloo', cursive; font-size: 32px; color: var(--teal); margin-bottom: 8px; text-shadow: 0 0 10px var(--teal); }
-  .modal p { color: var(--subtext); font-size: 14px; margin-bottom: 16px; line-height: 1.5; }
-  .modal .result-cats { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; text-align: left; }
-  .result-cat { border-radius: 6px; padding: 10px 14px; }
-  .result-cat .rcat-name { font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; color: #0a0a1a; }
-  .result-cat .rcat-words { margin-top: 2px; font-weight: 700; font-size: 12px; color: #0a0a1a; }
-  .modal-btns { display: flex; gap: 10px; justify-content: center; }
-  footer { text-align: center; padding: 12px; font-size: 11px; color: #444466; border-top: 1px solid rgba(45,226,230,0.15); width: 100%; max-width: 600px; background: var(--bg); letter-spacing: 1px; text-transform: uppercase; }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(4px)} }
-  @keyframes popIn { from{transform:scale(0.85);opacity:0} to{transform:scale(1);opacity:1} }
+  /* Share grid + stats */
+  .share-grid { display: flex; flex-direction: column; gap: 2px; align-items: center; margin-bottom: 16px; font-size: 20px; line-height: 1.25; letter-spacing: 2px; }
+  .stats-block { display: flex; justify-content: center; gap: 6px; margin-bottom: 16px; width: 100%; }
+  .stat { flex: 1; max-width: 84px; background: rgba(45,226,230,0.07); border: 1px solid rgba(45,226,230,0.25); border-radius: 8px; padding: 10px 4px; text-align: center; }
+  .stat-num { font-family: 'Boogaloo', cursive; font-size: 26px; color: var(--teal); text-shadow: 0 0 8px rgba(45,226,230,0.6); line-height: 1; }
+  .stat-num.hot { color: var(--yellow); text-shadow: 0 0 8px rgba(247,215,22,0.6); }
+  .stat-label { font-size: 9px; color: var(--subtext); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .btn.share { background: var(--teal); border-color: var(--teal); color: #0a0a1a; box-shadow: 0 0 10px rgba(45,226,230,0.4); }
+  .btn.share:hover { background: #5ef0f3; box-shadow: 0 0 20px rgba(45,226,230,0.7); }
+  .locked-screen .stats-block { max-width: 360px; }
 
 </style>
 </head>
@@ -351,6 +225,8 @@
   <div class="locked-msg">You've already played today's '80sNections. A new puzzle drops at midnight!</div>
   <div class="countdown-label">Next puzzle in</div>
   <div class="countdown" id="countdown">00:00:00</div>
+  <div class="stats-block" id="lockedStats" style="display:none"></div>
+  <button class="btn share" id="lockedShareBtn" style="display:none">&#x1F4CB; Share Today's Result</button>
 </div>
 
 <div class="dev-menu" id="devMenu">
@@ -389,8 +265,11 @@
     <div class="emoji" id="modalEmoji">&#x1F389;</div>
     <h2 id="modalTitle">Totally Radical!</h2>
     <p id="modalMsg"></p>
+    <div class="share-grid" id="shareGrid"></div>
+    <div class="stats-block" id="modalStats"></div>
     <div class="result-cats" id="modalCats"></div>
     <div class="modal-btns">
+      <button class="btn share" id="shareBtn">&#x1F4CB; Share</button>
       <button class="btn" id="modalClose">Close</button>
     </div>
   </div>
@@ -579,6 +458,122 @@ function updateCountdown() {
 
 // ── Game state ─────────────────────────────────────────────────
 var selectedWords = [], mistakes = 4, solvedColors = [], tiles = [], gameOver = false, gameIdx = 0;
+var guessHistory = []; // one entry per submit: [color, color, color, color]
+
+// ── Stats & share ──────────────────────────────────────────────
+var STATS_KEY = '80s_stats';
+var LAST_RESULT_KEY = '80s_last_result';
+var COLOR_EMOJI = { 1: '\uD83D\uDFE6', 2: '\uD83D\uDFEA', 3: '\uD83D\uDFE8', 4: '\uD83D\uDFE9' }; // teal→🟦 magenta→🟪 yellow→🟨 green→🟩
+
+function localDateStr(d) {
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+function todayStr()     { return localDateStr(new Date()); }
+function yesterdayStr() { var d = new Date(); d.setDate(d.getDate() - 1); return localDateStr(d); }
+
+function loadStats() {
+  var def = { played: 0, wins: 0, currentStreak: 0, maxStreak: 0, lastWinDate: null, dist: { 0:0, 1:0, 2:0, 3:0, fail:0 } };
+  try {
+    var raw = localStorage.getItem(STATS_KEY);
+    if (!raw) return def;
+    var s = JSON.parse(raw);
+    if (!s.dist) s.dist = def.dist;
+    return s;
+  } catch(e) { return def; }
+}
+function saveStats(s) { try { localStorage.setItem(STATS_KEY, JSON.stringify(s)); } catch(e) {} }
+
+function recordResult(won, mistakesMade, solvedCount) {
+  var s = loadStats();
+  s.played++;
+  if (won) {
+    s.wins++;
+    s.dist[mistakesMade] = (s.dist[mistakesMade] || 0) + 1;
+    s.currentStreak = (s.lastWinDate === yesterdayStr()) ? s.currentStreak + 1 : 1;
+    s.lastWinDate = todayStr();
+    if (s.currentStreak > s.maxStreak) s.maxStreak = s.currentStreak;
+  } else {
+    s.dist.fail = (s.dist.fail || 0) + 1;
+    s.currentStreak = 0;
+  }
+  saveStats(s);
+  try {
+    localStorage.setItem(LAST_RESULT_KEY, JSON.stringify({
+      date: todayStr(),
+      puzzleNum: currentGame ? currentGame.puzzle_num : null,
+      won: won, mistakes: mistakesMade, solved: solvedCount,
+      grid: guessHistory
+    }));
+  } catch(e) {}
+  return s;
+}
+
+function getLastResult() {
+  try {
+    var raw = localStorage.getItem(LAST_RESULT_KEY);
+    if (!raw) return null;
+    var r = JSON.parse(raw);
+    return (r && r.date === todayStr()) ? r : null;
+  } catch(e) { return null; }
+}
+
+function buildShareText(r) {
+  var lines = ["'80sNections #" + r.puzzleNum];
+  if (r.won) {
+    lines.push(r.mistakes === 0 ? 'Flawless victory! \uD83C\uDFC6' : 'Solved with ' + r.mistakes + ' mistake' + (r.mistakes === 1 ? '' : 's'));
+  } else {
+    lines.push('Bogus! ' + r.solved + '/4 groups \uD83D\uDE22');
+  }
+  (r.grid || []).forEach(function(row) {
+    lines.push(row.map(function(c) { return COLOR_EMOJI[c] || '\u2B1B'; }).join(''));
+  });
+  lines.push('');
+  lines.push('80snections.com');
+  return lines.join('\n');
+}
+
+function copyShare(r) {
+  var text = buildShareText(r);
+  function done() { showToast('Copied! Go brag \uD83D\uDCCB'); }
+  function fallback() {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      done();
+    } catch(e) { showToast('Copy failed \uD83D\uDE22'); }
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(fallback);
+  } else { fallback(); }
+}
+
+function renderShareGrid(el, grid) {
+  if (!el) return;
+  el.innerHTML = '';
+  (grid || []).forEach(function(row) {
+    var div = document.createElement('div');
+    div.textContent = row.map(function(c) { return COLOR_EMOJI[c] || '\u2B1B'; }).join('');
+    el.appendChild(div);
+  });
+}
+
+function renderStats(el, s) {
+  if (!el) return;
+  var pct = s.played ? Math.round(100 * s.wins / s.played) : 0;
+  var hot = s.currentStreak >= 2;
+  el.innerHTML =
+    '<div class="stat"><div class="stat-num">' + s.played + '</div><div class="stat-label">Played</div></div>' +
+    '<div class="stat"><div class="stat-num">' + pct + '%</div><div class="stat-label">Win Rate</div></div>' +
+    '<div class="stat"><div class="stat-num' + (hot ? ' hot' : '') + '">' + s.currentStreak + (hot ? '\uD83D\uDD25' : '') + '</div><div class="stat-label">Streak</div></div>' +
+    '<div class="stat"><div class="stat-num">' + s.maxStreak + '</div><div class="stat-label">Best</div></div>';
+}
 
 function shuffleArr(a) {
   a = a.slice();
@@ -644,6 +639,12 @@ function showToast(msg) {
 
 function submit() {
   if (selectedWords.length!==4) return;
+  // Record this guess as category colors (for the share grid)
+  guessHistory.push(selectedWords.map(function(w) {
+    var c = 0;
+    currentGame.cats.forEach(function(cat) { if (cat.words.indexOf(w)!==-1) c = cat.color; });
+    return c;
+  }));
   var matched = null;
   currentGame.cats.forEach(function(cat) {
     if (solvedColors.indexOf(cat.color)!==-1) return;
@@ -655,7 +656,8 @@ function submit() {
     selectedWords = [];
     renderSolved(); renderGrid(); renderDots(); updateButtons();
     if (solvedColors.length===4) {
-      markPlayedToday(); soundWin(); logComplete(true, 4);
+      gameOver = true; markPlayedToday(); soundWin(); logComplete(true, 4);
+      recordResult(true, 4 - mistakes, 4);
       setTimeout(function(){ showModal(true); }, 400);
     } else {
       soundCorrect(); showToast('Correct! \uD83C\uDFB6');
@@ -677,6 +679,7 @@ function submit() {
     setTimeout(function(){ renderGrid(); updateButtons(); }, 600);
     if (mistakes<=0) {
       gameOver = true; markPlayedToday(); soundLose(); logComplete(false, solvedColors.length);
+      recordResult(false, 4, solvedColors.length);
       setTimeout(function(){ showModal(false); }, 700);
     }
   }
@@ -695,6 +698,8 @@ function showModal(won) {
     div.innerHTML = '<div class="rcat-name">'+cat.name+'</div><div class="rcat-words">'+cat.words.join(', ')+'</div>';
     catsEl.appendChild(div);
   });
+  renderShareGrid(document.getElementById('shareGrid'), guessHistory);
+  renderStats(document.getElementById('modalStats'), loadStats());
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -703,6 +708,13 @@ function showLocked() {
   document.getElementById('lockedScreen').classList.add('show');
   updateCountdown();
   setInterval(updateCountdown, 1000);
+  // Stats + re-share for returning players
+  var s = loadStats();
+  var statsEl = document.getElementById('lockedStats');
+  if (statsEl && s.played > 0) { renderStats(statsEl, s); statsEl.style.display = ''; }
+  var r = getLastResult();
+  var btn = document.getElementById('lockedShareBtn');
+  if (btn && r) { btn.style.display = ''; btn.onclick = function(){ copyShare(r); }; }
 }
 
 async function startGame() {
@@ -739,7 +751,7 @@ async function startGame() {
 
     if (hasPlayedToday()) { showLocked(); return; }
 
-    selectedWords = []; mistakes = 4; solvedColors = []; gameOver = false;
+    selectedWords = []; mistakes = 4; solvedColors = []; gameOver = false; guessHistory = [];
     var words = [];
     currentGame.cats.forEach(function(cat){ cat.words.forEach(function(w){ words.push(w); }); });
     tiles = shuffleArr(words);
@@ -912,6 +924,8 @@ document.getElementById('devReset').addEventListener('click', function() {
       if (k.startsWith('played_')) localStorage.removeItem(k);
     });
     localStorage.removeItem('dev_puzzle_override');
+    localStorage.removeItem(STATS_KEY);
+    localStorage.removeItem(LAST_RESULT_KEY);
   } catch(e) {}
   soundCheat();
   showToast('Reset! Reloading...');
@@ -936,6 +950,17 @@ document.getElementById('deselectBtn').addEventListener('click', function() {
 document.getElementById('modalClose').addEventListener('click', function() {
   document.getElementById('modalOverlay').classList.remove('open');
   if (gameOver || solvedColors.length===4) showLocked();
+});
+
+document.getElementById('shareBtn').addEventListener('click', function() {
+  var r = getLastResult() || {
+    puzzleNum: currentGame ? currentGame.puzzle_num : '?',
+    won: solvedColors.length === 4,
+    mistakes: 4 - mistakes,
+    solved: solvedColors.length,
+    grid: guessHistory
+  };
+  copyShare(r);
 });
 
 
