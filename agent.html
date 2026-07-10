@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Puzzle Agent — '80sNections</title>
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&display=swap" rel="stylesheet">
+<style>
+  :root { --teal:#2de2e6; --pink:#c724b1; --green:#3ddc97; --red:#ff4466; --subtext:#a0a0cc; }
+  * { box-sizing:border-box; }
+  body { background:#0a0a1a; color:#eee; font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+         margin:0; padding:24px; min-height:100vh; display:flex; align-items:flex-start; justify-content:center; }
+  .card { background:#12123a; border:2px solid var(--teal); border-radius:12px; padding:32px 24px;
+          max-width:440px; width:100%; margin-top:40px; text-align:center;
+          box-shadow:0 0 40px rgba(45,226,230,0.25); }
+  .logo { font-family:'Boogaloo',cursive; font-size:30px; color:var(--teal); text-shadow:0 0 10px var(--teal); margin-bottom:4px; }
+  .sub { color:var(--subtext); font-size:11px; letter-spacing:2px; text-transform:uppercase; margin-bottom:24px; }
+  .emoji { font-size:48px; margin-bottom:10px; }
+  h2 { font-size:22px; margin:0 0 10px; }
+  p { color:var(--subtext); font-size:14px; line-height:1.6; margin:0 0 8px; }
+  .highlight { color:#fff; font-weight:700; }
+  .hint { font-size:12px; color:#666; margin-top:16px; }
+  .reasons { text-align:left; margin:18px 0; }
+  .reasons label { display:flex; align-items:center; gap:10px; padding:9px 10px; margin:6px 0;
+                   background:#ffffff08; border-radius:8px; font-size:14px; cursor:pointer; }
+  .reasons input { accent-color:var(--red); width:17px; height:17px; }
+  textarea { width:100%; background:#0a0a1a; color:#eee; border:1px solid #333; border-radius:8px;
+             padding:10px; font-size:14px; min-height:80px; font-family:inherit; margin-bottom:14px; }
+  button { background:var(--red); color:#fff; border:none; padding:13px 24px; border-radius:8px;
+           font-size:15px; font-weight:800; cursor:pointer; width:100%; letter-spacing:0.5px; }
+  button:disabled { opacity:0.5; }
+  .err-detail { font-family:monospace; font-size:12px; color:var(--red); background:#ff446611;
+                border-radius:6px; padding:10px; margin-top:12px; word-break:break-word; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">'80sNections</div>
+  <div class="sub">Puzzle Agent</div>
+  <div id="content"><p>Loading...</p></div>
+</div>
+
+<script>
+var WEBHOOK = 'https://ufoxrwssrqdwyoziochh.supabase.co/functions/v1/webhook';
+var q = new URLSearchParams(location.search);
+var view = q.get('view') || 'notfound';
+var el = document.getElementById('content');
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render() {
+  if (view === 'accepted') {
+    el.innerHTML =
+      '<div class="emoji">&#x2705;</div>' +
+      '<h2>Puzzle #' + esc(q.get('num')) + ' Scheduled</h2>' +
+      '<p>Play date: <span class="highlight">' + esc(q.get('date')) + '</span></p>' +
+      '<p>Confirmed in the database.</p>' +
+      '<p class="hint">You can close this tab.</p>';
+
+  } else if (view === 'already') {
+    el.innerHTML =
+      '<div class="emoji">&#x2705;</div>' +
+      '<h2>Already Scheduled</h2>' +
+      '<p>This puzzle is <span class="highlight">Puzzle #' + esc(q.get('num')) + '</span>,' +
+      ' playing <span class="highlight">' + esc(q.get('date')) + '</span>.</p>' +
+      '<p class="hint">Confirmed in the database — you can close this tab.</p>';
+
+  } else if (view === 'expired') {
+    el.innerHTML =
+      '<div class="emoji">&#x231B;</div>' +
+      '<h2>This Approval Expired</h2>' +
+      '<p>This puzzle sat unactioned for more than 40 hours, so the agent expired it and generated a fresh puzzle instead.</p>' +
+      '<p class="hint">Check your inbox for the newest approval email.</p>';
+
+  } else if (view === 'error') {
+    el.innerHTML =
+      '<div class="emoji">&#x26A0;&#xFE0F;</div>' +
+      '<h2>Something Went Wrong</h2>' +
+      '<p>The action did not complete. Try the email link again.</p>' +
+      (q.get('msg') ? '<div class="err-detail">' + esc(q.get('msg')) + '</div>' : '');
+
+  } else if (view === 'reject') {
+    var opts = [
+      ['too_easy', 'Too easy / obvious'],
+      ['too_hard', 'Too obscure / difficult'],
+      ['duplicates', 'Duplicate or near-duplicate words'],
+      ['bad_theme', 'Category theme is weak or unclear'],
+      ['not_80s', 'Not 80s enough'],
+      ['wrong_facts', 'Factually incorrect'],
+      ['bad_playlist', 'Playlist tracks are wrong'],
+    ];
+    el.innerHTML =
+      '<div class="emoji">&#x1F6AB;</div>' +
+      '<h2>What was wrong with this puzzle?</h2>' +
+      '<div class="reasons">' + opts.map(function(o) {
+        return '<label><input type="checkbox" value="' + o[0] + '"> ' + o[1] + '</label>';
+      }).join('') + '</div>' +
+      '<textarea id="note" placeholder="Any specific notes for the agent..."></textarea>' +
+      '<button id="submitBtn">Submit Rejection</button>';
+
+    document.getElementById('submitBtn').onclick = function() {
+      var btn = this;
+      btn.disabled = true; btn.textContent = 'Submitting...';
+      var reasons = Array.prototype.map.call(
+        document.querySelectorAll('.reasons input:checked'),
+        function(c) { return c.value; });
+      fetch(WEBHOOK + '/reject-submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: q.get('id'),
+          retry: q.get('retry') || 'tomorrow',
+          reasons: reasons,
+          note: document.getElementById('note').value
+        })
+      }).then(function(r) { return r.json(); }).then(function(data) {
+        if (data.ok) {
+          el.innerHTML =
+            '<div class="emoji">&#x1F5D1;&#xFE0F;</div>' +
+            '<h2>Puzzle Rejected</h2>' +
+            '<p>Feedback saved. ' + (data.retry === 'now'
+              ? 'A new puzzle will be generated shortly.'
+              : 'The agent will try again tomorrow night.') + '</p>' +
+            '<p class="hint">You can close this tab.</p>';
+        } else {
+          btn.disabled = false; btn.textContent = 'Submit Rejection';
+          alert('Rejection failed: ' + (data.error || 'unknown error'));
+        }
+      }).catch(function(e) {
+        btn.disabled = false; btn.textContent = 'Submit Rejection';
+        alert('Network error — try again: ' + e.message);
+      });
+    };
+
+  } else {
+    el.innerHTML =
+      '<div class="emoji">&#x1F50D;</div>' +
+      '<h2>No Puzzle Matched That ID</h2>' +
+      '<p>It may have been rejected, or the link is from an old email.</p>';
+  }
+}
+render();
+</script>
+</body>
+</html>
