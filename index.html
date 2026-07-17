@@ -178,6 +178,9 @@
   .result-cat .rcat-name { font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; font-size: 11px; color: #0a0a1a; }
   .result-cat .rcat-words { margin-top: 2px; font-weight: 700; font-size: 12px; color: #0a0a1a; }
   .modal-btns { display: flex; gap: 10px; justify-content: center; }
+  /* ── Locked-screen answers ── */
+  .locked-cats { display: none; flex-direction: column; gap: 6px; margin: 16px auto 4px; max-width: 400px; text-align: left; }
+  .locked-cats.show { display: flex; }
   /* ── Puzzle Playlist ── */
   .playlist-block { display: none; margin: 0 0 20px; padding: 14px 14px 10px; background: rgba(29,185,84,0.08); border: 1px solid rgba(29,185,84,0.35); border-radius: 10px; text-align: left; }
   .playlist-block.show { display: block; }
@@ -238,6 +241,8 @@
   <div class="countdown-label">Next puzzle in</div>
   <div class="countdown" id="countdown">00:00:00</div>
   <div class="stats-block" id="lockedStats" style="display:none"></div>
+  <button class="btn" id="lockedViewBtn" style="display:none">&#x1F440; View Today's Puzzle</button>
+  <div class="locked-cats" id="lockedCats"></div>
   <div class="playlist-block" id="lockedPlaylist"></div>
   <button class="btn share" id="lockedShareBtn" style="display:none">&#x1F4CB; Share Today's Result</button>
 </div>
@@ -498,6 +503,7 @@ function updateCountdown() {
 // ── Game state ─────────────────────────────────────────────────
 var selectedWords = [], mistakes = 4, solvedColors = [], tiles = [], gameOver = false, gameIdx = 0;
 var guessHistory = []; // one entry per submit: [color, color, color, color]
+var submittedGuesses = []; // normalized word-combos already tried (blocks duplicate guesses)
 
 // ── Stats & share ──────────────────────────────────────────────
 var STATS_KEY = '80s_stats';
@@ -678,6 +684,18 @@ function showToast(msg) {
 
 function submit() {
   if (selectedWords.length!==4) return;
+  // Duplicate-guess guard: same 4 words (any order) can't be submitted twice.
+  // Checked BEFORE recording anything — a blocked repeat costs no mistake and
+  // doesn't appear in the share grid.
+  var guessKey = selectedWords.slice().sort().join('|');
+  if (submittedGuesses.indexOf(guessKey)!==-1) {
+    showToast('Already guessed that! \uD83E\uDD14');
+    document.getElementById('grid').querySelectorAll('.tile.selected').forEach(function(t){
+      t.classList.add('shake'); setTimeout(function(){ t.classList.remove('shake'); }, 500);
+    });
+    return;
+  }
+  submittedGuesses.push(guessKey);
   // Record this guess as category colors (for the share grid)
   guessHistory.push(selectedWords.map(function(w) {
     var c = 0;
@@ -714,8 +732,13 @@ function submit() {
     document.getElementById('grid').querySelectorAll('.tile.selected').forEach(function(t){
       t.classList.add('shake'); setTimeout(function(){ t.classList.remove('shake'); }, 500);
     });
-    selectedWords = [];
-    setTimeout(function(){ renderGrid(); updateButtons(); }, 600);
+    if (best===3) {
+      // One away: KEEP the selection — the player only needs to swap one tile.
+      setTimeout(function(){ updateButtons(); }, 600);
+    } else {
+      selectedWords = [];
+      setTimeout(function(){ renderGrid(); updateButtons(); }, 600);
+    }
     if (mistakes<=0) {
       gameOver = true; markPlayedToday(); soundLose(); logComplete(false, solvedColors.length);
       recordResult(false, 4, solvedColors.length);
@@ -755,6 +778,24 @@ function showLocked() {
   var r = getLastResult();
   var btn = document.getElementById('lockedShareBtn');
   if (btn && r) { btn.style.display = ''; btn.onclick = function(){ copyShare(r); }; }
+  // View today's puzzle — reveal the full answer board for the game just played
+  var viewBtn = document.getElementById('lockedViewBtn');
+  var catsEl = document.getElementById('lockedCats');
+  if (viewBtn && catsEl && currentGame && currentGame.cats) {
+    viewBtn.style.display = '';
+    viewBtn.onclick = function() {
+      var open = catsEl.classList.toggle('show');
+      viewBtn.innerHTML = open ? '&#x1F648; Hide Today\'s Puzzle' : '&#x1F440; View Today\'s Puzzle';
+      if (open && !catsEl.childElementCount) {
+        currentGame.cats.forEach(function(cat) {
+          var div = document.createElement('div'); div.className = 'result-cat';
+          div.style.background = COLOR_CONFIG[cat.color].bg;
+          div.innerHTML = '<div class="rcat-name">'+cat.name+'</div><div class="rcat-words">'+cat.words.join(', ')+'</div>';
+          catsEl.appendChild(div);
+        });
+      }
+    };
+  }
   renderPlaylist(document.getElementById('lockedPlaylist'), currentGame && currentGame.playlist);
 }
 
@@ -792,7 +833,7 @@ async function startGame() {
 
     if (hasPlayedToday()) { showLocked(); return; }
 
-    selectedWords = []; mistakes = 4; solvedColors = []; gameOver = false; guessHistory = [];
+    selectedWords = []; mistakes = 4; solvedColors = []; gameOver = false; guessHistory = []; submittedGuesses = [];
     var words = [];
     currentGame.cats.forEach(function(cat){ cat.words.forEach(function(w){ words.push(w); }); });
     tiles = shuffleArr(words);
