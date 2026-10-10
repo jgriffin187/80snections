@@ -4,6 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>'80sNections</title>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FEGL9B9T07"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-FEGL9B9T07');
+</script>
+<script>
+  // Safe wrapper — ad blockers routinely block gtag.js, so every call site
+  // goes through this instead of assuming gtag exists.
+  function track(eventName, params) {
+    try { if (typeof gtag === 'function') gtag('event', eventName, params || {}); }
+    catch (e) { /* analytics must never break the game */ }
+  }
+</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="'80sNections">
@@ -757,6 +773,9 @@ function submit() {
     renderSolved(); renderGrid(); renderDots(); updateButtons();
     if (solvedColors.length===4) {
       gameOver = true; markPlayedToday(); soundWin(); logComplete(true, 4);
+      track('puzzle_complete', { result: 'win', mistakes_used: 4 - mistakes,
+        categories_solved: 4, puzzle_num: currentGame && currentGame.puzzle_num,
+        traffic_source: (typeof detectSource === 'function' ? detectSource() : 'unknown') });
       recordResult(true, 4 - mistakes, 4);
       setTimeout(function(){ showModal(true); }, 400);
     } else {
@@ -784,6 +803,9 @@ function submit() {
     }
     if (mistakes<=0) {
       gameOver = true; markPlayedToday(); soundLose(); logComplete(false, solvedColors.length);
+      track('puzzle_complete', { result: 'loss', mistakes_used: 4,
+        categories_solved: solvedColors.length, puzzle_num: currentGame && currentGame.puzzle_num,
+        traffic_source: (typeof detectSource === 'function' ? detectSource() : 'unknown') });
       recordResult(false, 4, solvedColors.length);
       setTimeout(function(){ showModal(false); }, 700);
     }
@@ -882,6 +904,8 @@ async function startGame() {
     tiles = shuffleArr(words);
     renderSolved(); renderGrid(); renderDots(); updateButtons();
     logPlay(row.puzzle_num, row.play_date);
+    track('puzzle_start', { puzzle_num: row.puzzle_num,
+      traffic_source: (typeof detectSource === 'function' ? detectSource() : 'unknown') });
 
   } catch(e) {
     document.getElementById('grid').innerHTML =
